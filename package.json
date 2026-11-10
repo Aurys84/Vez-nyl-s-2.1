@@ -1,0 +1,12 @@
+{
+  "name": "matrix-labor-vezenyles",
+  "version": "1.0.0",
+  "main": "index.html",
+  "window": {
+    "title": "Mátrix Labor — Vezénylési Rendszer",
+    "icon": "store_icon.png",
+    "width": 1280,
+    "height": 800,
+    "toolbar": false
+  }
+}
