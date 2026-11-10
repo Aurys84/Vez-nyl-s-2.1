@@ -126,10 +126,10 @@
             top: 19px;
             background-color: #161b22 !important;
             z-index: 4;
-            padding: 4px 2px;
+            padding: 6px 2px;
         }
         .day-row th {
-            top: 42px;
+            top: 46px;
             z-index: 4;
         }
         .name-col {
@@ -480,8 +480,8 @@
                     reqRowHtml += `<th class="${sepClass}" style="background:#1f6feb;">-</th>`;
                 } else {
                     let reqVal = savedRequired[dKey] !== undefined ? savedRequired[dKey] : 2;
-                    // Megnövelt, magasabb, kényelmesen használható input mező
-                    reqRowHtml += `<th class="${sepClass}"><input type="number" min="0" max="20" value="${reqVal}" data-date="${dKey}" onchange="updateRequired(this)" style="width:28px; height:20px; text-align:center; background:#21262d; color:#58a6ff; border:1px solid var(--border-color); border-radius:3px; font-weight:bold; font-size:0.75rem; padding:1px;"></th>`;
+                    // Megnövelt, magas, kényelmesen kezelhető input mező látható gombokkal
+                    reqRowHtml += `<th class="${sepClass}"><input type="number" min="0" max="20" value="${reqVal}" data-date="${dKey}" onchange="updateRequired(this)" style="width:32px; height:32px; text-align:center; background:#21262d; color:#58a6ff; border:1px solid var(--border-color); border-radius:4px; font-weight:bold; font-size:0.85rem; padding:2px;"></th>`;
                 }
                 let headerClass = "day-normal-header";
                 if (isHoliday(d)) {
@@ -748,8 +748,14 @@
                     }
                 });
                 let ledSpan = document.getElementById(`led-${dKey}`);
+                
+                // Deficit: csak akkor számoljuk hiánynak, ha van beosztott őr de kevesebb a célnál, VAGY ha a nap már esedékes (múlt/ma). Ezzel elkerüljük az üres jövőbeli hónapok 30 hibás hiányát.
+                let today = new Date();
+                today.setHours(0,0,0,0);
+                let isPastOrToday = item.date <= today;
+
                 if (ledSpan) {
-                    if (actualCount < requiredCount) {
+                    if (actualCount < requiredCount && (actualCount > 0 || isPastOrToday)) {
                         ledSpan.innerHTML = `<span class="led-alert" title="Hiány: ${actualCount}/${requiredCount}"></span>`;
                         deficitsCount++;
                     } else if (actualCount > requiredCount) {
