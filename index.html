@@ -22,28 +22,28 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0;
-            padding: 8px;
+            padding: 6px;
         }
         h1 {
             text-align: center;
             color: #58a6ff;
             margin-bottom: 2px;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
         }
         .subtitle {
             text-align: center;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: #8b949e;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
         .controls {
             display: flex;
             justify-content: space-between;
             background: var(--panel-bg);
-            padding: 8px;
+            padding: 6px 8px;
             border-radius: 6px;
             border: 1px solid var(--border-color);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             flex-wrap: wrap;
             gap: 6px;
             align-items: center;
@@ -52,9 +52,9 @@
             background: #30363d;
             color: var(--text-color);
             border: 1px solid var(--border-color);
-            padding: 4px 8px;
-            border-radius: 5px;
-            font-size: 0.8rem;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-size: 0.75rem;
         }
         button {
             background: var(--blue);
@@ -74,18 +74,18 @@
         .btn-word:hover { background: #9c6ffe !important; }
         .palette {
             display: flex;
-            gap: 5px;
+            gap: 4px;
             background: var(--panel-bg);
-            padding: 6px 8px;
+            padding: 5px 8px;
             border-radius: 6px;
             border: 1px solid var(--border-color);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             align-items: center;
             flex-wrap: wrap;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
         .palette span { font-weight: bold; color: #8b949e; margin-right: 4px; }
-        .p-btn { padding: 3px 6px; border-radius: 4px; border: none; cursor: pointer; font-weight: bold; font-size: 0.7rem; }
+        .p-btn { padding: 3px 5px; border-radius: 4px; border: none; cursor: pointer; font-weight: bold; font-size: 0.65rem; }
         .btn-np { background: var(--green); color: white; }
         .btn-ep { background: var(--red); color: white; }
         .btn-nep { background: var(--purple); color: white; }
@@ -97,18 +97,18 @@
             background: var(--panel-bg);
             border-radius: 6px;
             border: 1px solid var(--border-color);
-            max-height: 50vh;
-            margin-bottom: 8px;
+            max-height: 48vh;
+            margin-bottom: 6px;
         }
         table {
             width: 100%;
             border-collapse: collapse;
             text-align: center;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
         }
         th, td {
             border: 1px solid var(--border-color);
-            padding: 4px 3px;
+            padding: 3px 2px;
             white-space: nowrap;
         }
         th {
@@ -123,12 +123,12 @@
             z-index: 4;
         }
         .req-row th {
-            top: 21px;
+            top: 19px;
             background-color: #161b22 !important;
             z-index: 4;
         }
         .day-row th {
-            top: 42px;
+            top: 38px;
             z-index: 4;
         }
         .name-col {
@@ -138,8 +138,8 @@
             left: 0;
             background-color: #21262d !important;
             z-index: 3;
-            min-width: 110px;
-            font-size: 0.75rem;
+            min-width: 95px;
+            font-size: 0.7rem;
         }
         th.name-col {
             background-color: #30363d !important;
@@ -154,14 +154,14 @@
             border-left: 2px solid #58a6ff !important;
         }
         td.cell-default, td[class*="pos-"] {
-            font-size: 0.95rem !important;
+            font-size: 0.85rem !important;
             font-weight: bold !important;
         }
         td.cell-default {
             background-color: #ffffff;
             color: #24292e;
             cursor: pointer;
-            min-width: 28px;
+            min-width: 24px;
         }
         td.cell-locked {
             background-color: #1f6feb !important;
@@ -169,7 +169,7 @@
             cursor: not-allowed !important;
             pointer-events: none !important;
             font-weight: bold;
-            font-size: 0.9rem !important;
+            font-size: 0.8rem !important;
         }
         .pos-np { background-color: #238636 !important; color: white !important; cursor: pointer; }
         .pos-ep { background-color: #da3633 !important; color: white !important; cursor: pointer; }
@@ -184,12 +184,12 @@
         .panels-wrapper {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
         }
         .top-panels-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 8px;
+            gap: 6px;
         }
         @media (max-width: 900px) {
             .top-panels-row { grid-template-columns: 1fr; }
@@ -198,28 +198,28 @@
             background: var(--panel-bg);
             border: 1px solid var(--border-color);
             border-radius: 6px;
-            padding: 8px;
-            font-size: 0.8rem;
+            padding: 6px 8px;
+            font-size: 0.75rem;
         }
         .vacation-panel {
             background: var(--panel-bg);
             border: 1px solid var(--border-color);
             border-radius: 6px;
-            padding: 10px;
-            font-size: 0.8rem;
+            padding: 8px;
+            font-size: 0.75rem;
             width: 100%;
             box-sizing: border-box;
         }
         .vacation-panel h3 {
             margin-top: 0;
             color: #58a6ff;
-            font-size: 0.9rem;
-            margin-bottom: 8px;
+            font-size: 0.85rem;
+            margin-bottom: 6px;
         }
         .vacation-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 6px;
+            gap: 5px;
         }
         @media (max-width: 1200px) {
             .vacation-grid { grid-template-columns: repeat(3, 1fr); }
@@ -230,9 +230,9 @@
         .vacation-card {
             background: #161b22;
             border: 1px solid var(--border-color);
-            border-radius: 5px;
-            padding: 6px 8px;
-            font-size: 0.75rem;
+            border-radius: 4px;
+            padding: 5px 6px;
+            font-size: 0.7rem;
             display: flex;
             flex-direction: column;
             gap: 2px;
@@ -241,7 +241,7 @@
             font-weight: bold;
             color: #f0f6fc;
             border-bottom: 1px solid var(--border-color);
-            padding-bottom: 2px;
+            padding-bottom: 1px;
             margin-bottom: 2px;
             white-space: nowrap;
             overflow: hidden;
@@ -252,14 +252,14 @@
             justify-content: space-between;
             align-items: center;
             color: #8b949e;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
         }
         .alert-badge {
             display: inline-block;
-            padding: 2px 5px;
+            padding: 2px 4px;
             border-radius: 3px;
             font-weight: bold;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
         }
         .alert-ok { background: var(--green); color: white; }
         .alert-error { background: var(--red); color: white; }
@@ -271,32 +271,32 @@
         }
         .led-ok {
             display: inline-block;
-            width: 8px;
-            height: 8px;
+            width: 7px;
+            height: 7px;
             background-color: #2ea043;
             border-radius: 50%;
-            margin-left: 3px;
-            box-shadow: 0 0 6px #2ea043;
+            margin-left: 2px;
+            box-shadow: 0 0 5px #2ea043;
         }
         .led-alert {
             display: inline-block;
-            width: 8px;
-            height: 8px;
+            width: 7px;
+            height: 7px;
             background-color: #ff3b30;
             border-radius: 50%;
-            margin-left: 3px;
+            margin-left: 2px;
             animation: blinkLed 0.5s infinite;
-            box-shadow: 0 0 10px #ff3b30;
+            box-shadow: 0 0 8px #ff3b30;
         }
         .led-warning {
             display: inline-block;
-            width: 8px;
-            height: 8px;
+            width: 7px;
+            height: 7px;
             background-color: #ffd700;
             border-radius: 50%;
-            margin-left: 3px;
+            margin-left: 2px;
             animation: blinkLed 0.5s infinite;
-            box-shadow: 0 0 10px #ffd700;
+            box-shadow: 0 0 8px #ffd700;
         }
         .day-saturday-header {
             background-color: #1f4f29 !important;
@@ -316,9 +316,9 @@
 </head>
 <body id="mainBody">
     <h1>Mátrix Labor — Vezénylési Rendszer</h1>
-    <div class="subtitle">Univerzális Modul & Mobilbarát Office Export</div>
+    <div class="subtitle">Univerzális Modul & PC Word Export</div>
     <div class="controls">
-        <div style="display: flex; gap: 8px; align-items: center;">
+        <div style="display: flex; gap: 6px; align-items: center;">
             <div>
                 <label for="yearSelect">Év:</label>
                 <select id="yearSelect" onchange="generateCalendar()">
@@ -349,21 +349,21 @@
         </div>
         <div style="display: flex; gap: 6px;">
             <button class="btn-save" onclick="manualSave()">💾 Adatok Mentése</button>
-            <button class="btn-word" onclick="downloadOfficeFile()">📥 Word Fájl Mentése</button>
+            <button class="btn-word" onclick="downloadWordFile()">📥 Word Fájl Mentése</button>
         </div>
     </div>
     <div class="palette">
         <span>Gyorskitöltés:</span>
         <button class="p-btn btn-np" onclick="applyServiceWithPos('Np', 'pos-np', 'np')">Nappal:</button>
-        <select id="npNum" style="padding: 1px 3px; font-size:0.7rem;">
+        <select id="npNum" style="padding: 1px 3px; font-size:0.65rem;">
             <script>for(let i=1; i<=20; i++) document.write(`<option value="${i}">${i}</option>`);</script>
         </select>
         <button class="p-btn btn-ep" onclick="applyServiceWithPos('Ép', 'pos-ep', 'ep')">Éjjel:</button>
-        <select id="epNum" style="padding: 1px 3px; font-size:0.7rem;">
+        <select id="epNum" style="padding: 1px 3px; font-size:0.65rem;">
             <script>for(let i=1; i<=20; i++) document.write(`<option value="${i}">${i}</option>`);</script>
         </select>
         <button class="p-btn btn-nep" onclick="applyServiceWithPos('NÉp', 'pos-nep', 'nep')">24h:</button>
-        <select id="nepNum" style="padding: 1px 3px; font-size:0.7rem;">
+        <select id="nepNum" style="padding: 1px 3px; font-size:0.65rem;">
             <script>for(let i=1; i<=20; i++) document.write(`<option value="${i}">${i}</option>`);</script>
         </select>
         <button class="p-btn btn-szb" onclick="applyService('SZB', 'pos-szb', 'szb')">Szabadság (SZB)</button>
@@ -384,11 +384,11 @@
         <div class="top-panels-row">
             <div class="audit-panel">
                 <h3>🔍 Létszám Figyelőmotor</h3>
-                <div id="auditReport" style="font-size:0.75rem;">Elemzés...</div>
+                <div id="auditReport" style="font-size:0.7rem;">Elemzés...</div>
             </div>
             <div class="holiday-panel">
                 <h3>🎉 Havi Ünnepnapok Számláló</h3>
-                <div id="holidayReport" style="font-size:0.75rem;">Ünnepnapok ellenőrzése...</div>
+                <div id="holidayReport" style="font-size:0.7rem;">Ünnepnapok ellenőrzése...</div>
             </div>
         </div>
     </div>
@@ -471,7 +471,7 @@
                     reqRowHtml += `<th class="${sepClass}" style="background:#1f6feb;">-</th>`;
                 } else {
                     let reqVal = savedRequired[dKey] !== undefined ? savedRequired[dKey] : 2;
-                    reqRowHtml += `<th class="${sepClass}"><input type="number" min="0" max="20" value="${reqVal}" data-date="${dKey}" onchange="updateRequired(this)" style="width:24px; text-align:center; background:#21262d; color:#58a6ff; border:1px solid var(--border-color); border-radius:3px; font-weight:bold; font-size:0.7rem;"></th>`;
+                    reqRowHtml += `<th class="${sepClass}"><input type="number" min="0" max="20" value="${reqVal}" data-date="${dKey}" onchange="updateRequired(this)" style="width:22px; text-align:center; background:#21262d; color:#58a6ff; border:1px solid var(--border-color); border-radius:3px; font-weight:bold; font-size:0.65rem;"></th>`;
                 }
                 let headerClass = "day-normal-header";
                 if (isHoliday(d)) {
@@ -484,13 +484,13 @@
                 }
                 let extraHeaderStyle = item.isExtra && headerClass === "day-normal-header" ? 'background:#1f6feb; color:white;' : '';
                 let ledHtml = item.isExtra ? '' : `<span id="led-${dKey}"><span class="led-ok" title="Létszám rendben"></span></span>`;
-                dayRowHtml += `<th id="th-day-${dKey}" class="${sepClass} ${headerClass}" style="${extraHeaderStyle}">${dateStr}<br><small style="font-size:0.7rem; font-weight:bold;">${dayLetter}</small>${ledHtml}</th>`;
+                dayRowHtml += `<th id="th-day-${dKey}" class="${sepClass} ${headerClass}" style="${extraHeaderStyle}">${dateStr}<br><small style="font-size:0.65rem; font-weight:bold;">${dayLetter}</small>${ledHtml}</th>`;
             });
             weekRowHtml += '<th class="name-col">Óra</th></tr>';
             reqRowHtml += '<th class="name-col">Cél</th></tr>';
             dayRowHtml += '<th class="name-col">Keret</th></tr>';
             document.getElementById('tableHeader').innerHTML = weekRowHtml + reqRowHtml + dayRowHtml;
-            document.getElementById('holidayReport').innerHTML = `<b>Ebben a hónapban:</b> <span style="color:#ff8182; font-weight:bold; font-size:0.85rem;">${holidayCount} db</span> hivatalos ünnepnap esik.`;
+            document.getElementById('holidayReport').innerHTML = `<b>Ebben a hónapban:</b> <span style="color:#ff8182; font-weight:bold; font-size:0.8rem;">${holidayCount} db</span> hivatalos ünnepnap esik.`;
             
             let currentGuards = getGlobalGuards();
             let prevMonthSchedule = JSON.parse(localStorage.getItem(`matrix_schedule_${pYear}_${pMonth}`)) || {};
@@ -498,7 +498,7 @@
             let tbodyHtml = '';
             currentGuards.forEach((guardName, gIndex) => {
                 tbodyHtml += `<tr>`;
-                tbodyHtml += `<td class="name-col"><input type="text" id="guard-name-${gIndex}" value="${guardName}" placeholder="Őr ${gIndex+1}" style="width:100px; background:transparent; border:none; color:inherit; font-weight:bold; font-size:0.75rem;" oninput="autoSave()"></td>`;
+                tbodyHtml += `<td class="name-col"><input type="text" id="guard-name-${gIndex}" value="${guardName}" placeholder="Őr ${gIndex+1}" style="width:90px; background:transparent; border:none; color:inherit; font-weight:bold; font-size:0.7rem;" oninput="autoSave()"></td>`;
                 
                 days.forEach((item, dIndex) => {
                     let d = item.date;
@@ -705,9 +705,9 @@
                     <div class="vacation-card">
                         <div class="vacation-card-header">${guardName}</div>
                         <div class="vacation-card-body">
-                            <span>Alap: <input type="number" value="${baseVal}" min="0" max="100" style="width:36px; text-align:center; background:#161b22; color:#58a6ff; border:1px solid var(--border-color); border-radius:3px; font-weight:bold; font-size:0.75rem;" onchange="updateVacationBase(${gIndex}, this)"></span>
-                            <span>Felhasznált: <b style="color:var(--yellow);">${totalUsedUntilNow}</b></span>
-                            <span>Maradék: <b style="color:var(--blue);">${remaining}</b></span>
+                            <span>Alap: <input type="number" value="${baseVal}" min="0" max="100" style="width:32px; text-align:center; background:#161b22; color:#58a6ff; border:1px solid var(--border-color); border-radius:3px; font-weight:bold; font-size:0.65rem;" onchange="updateVacationBase(${gIndex}, this)"></span>
+                            <span>Felh: <b style="color:var(--yellow);">${totalUsedUntilNow}</b></span>
+                            <span>Mar: <b style="color:var(--blue);">${remaining}</b></span>
                         </div>
                     </div>
                 `;
@@ -749,7 +749,7 @@
             } else {
                 let deficits = issues.filter(i => i.type === 'hiány');
                 let surpluses = issues.filter(i => i.type === 'többlet');
-                reportHtml = `<span class="alert-badge alert-error">${deficits.length} hiány (LED)</span> | <span class="alert-badge alert-warning" style="background:#ffd700; color:#000;">${surpluses.length} többlet (LED)</span>`;
+                reportHtml = `<span class="alert-badge alert-error">${deficits.length} hiány</span> | <span class="alert-badge alert-warning" style="background:#ffd700; color:#000;">${surpluses.length} többlet</span>`;
             }
             document.getElementById('auditReport').innerHTML = reportHtml;
         }
@@ -791,7 +791,7 @@
             autoSave();
             alert('💾 A Mátrix Labor adatai és a tiszta névsor sikeresen mentve!');
         }
-        function downloadOfficeFile() {
+        function downloadWordFile() {
             let rows = document.querySelectorAll('#scheduleTable tbody tr:not(.total-row)');
             rows.forEach((row, gIndex) => {
                 let nameInput = row.querySelector(`#guard-name-${gIndex}`);
@@ -813,13 +813,14 @@
                     <meta charset="UTF-8">
                     <title>Mátrix Labor — Vezénylési Jelentés</title>
                     <style>
-                        body { font-family: 'Segoe UI', Arial, sans-serif; background: #ffffff; color: #000000; margin: 20px; font-size: 11px; }
-                        h1 { text-align: center; font-size: 18px; color: #1f6feb; margin-bottom: 4px; }
-                        .subtitle { text-align: center; font-size: 12px; margin-bottom: 20px; color: #555555; }
-                        table { width: 100%; border-collapse: collapse; text-align: center; margin-bottom: 20px; font-size: 9px; }
-                        th, td { border: 1px solid #333333; padding: 5px 3px; }
+                        @page { size: landscape; margin: 1cm; }
+                        body { font-family: 'Segoe UI', Arial, sans-serif; background: #ffffff; color: #000000; margin: 10px; font-size: 10px; }
+                        h1 { text-align: center; font-size: 16px; color: #1f6feb; margin-bottom: 2px; }
+                        .subtitle { text-align: center; font-size: 10px; margin-bottom: 15px; color: #555555; }
+                        table { width: 100%; border-collapse: collapse; text-align: center; margin-bottom: 15px; font-size: 8px; }
+                        th, td { border: 1px solid #333333; padding: 4px 2px; }
                         th { background: #f0f4f8 !important; color: #000000 !important; font-weight: bold; }
-                        .section-title { font-size: 14px; font-weight: bold; margin-top: 20px; margin-bottom: 10px; border-bottom: 2px solid #1f6feb; padding-bottom: 4px; color: #1f6feb; }
+                        .section-title { font-size: 12px; font-weight: bold; margin-top: 15px; margin-bottom: 8px; border-bottom: 2px solid #1f6feb; padding-bottom: 3px; color: #1f6feb; }
                         .total-row td { background-color: #e2e8f0 !important; color: #000000 !important; font-weight: bold; }
                         .day-saturday-header { background-color: #d1fae5 !important; color: #065f46 !important; }
                         .day-sunday-holiday-header { background-color: #fee2e2 !important; color: #991b1b !important; }
@@ -829,13 +830,13 @@
                         .pos-nep { background-color: #8957e5 !important; color: white !important; font-weight: bold; }
                         .pos-szb { background-color: #9e6a03 !important; color: white !important; font-weight: bold; }
                         .pos-szab { background-color: #1f6feb !important; color: white !important; font-weight: bold; }
-                        .vacation-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 20px; }
-                        .vacation-card { border: 1px solid #333333; border-radius: 4px; padding: 8px; font-size: 10px; background: #f9fafb !important; }
-                        .vacation-card-header { font-weight: bold; border-bottom: 1px solid #cccccc; padding-bottom: 2px; margin-bottom: 4px; color: #111111; }
+                        .vacation-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 15px; }
+                        .vacation-card { border: 1px solid #333333; border-radius: 4px; padding: 6px; font-size: 9px; background: #f9fafb !important; }
+                        .vacation-card-header { font-weight: bold; border-bottom: 1px solid #cccccc; padding-bottom: 2px; margin-bottom: 3px; color: #111111; }
                         .vacation-card-body { display: flex; justify-content: space-between; color: #333333; }
-                        .summary-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
-                        .summary-box { border: 1px solid #333333; border-radius: 4px; padding: 10px; font-size: 11px; background: #f9fafb !important; }
-                        .summary-box h3 { margin: 0 0 6px 0; font-size: 12px; color: #1f6feb; }
+                        .summary-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+                        .summary-box { border: 1px solid #333333; border-radius: 4px; padding: 8px; font-size: 10px; background: #f9fafb !important; }
+                        .summary-box h3 { margin: 0 0 5px 0; font-size: 11px; color: #1f6feb; }
                     </style>
                 </head>
                 <body>
@@ -864,11 +865,11 @@
                 </html>
             `;
 
-            let blob = new Blob(['\ufeff' + htmlContent], { type: 'text/html;charset=utf-8' });
+            let blob = new Blob(['\ufeff' + htmlContent], { type: 'application/msword;charset=utf-8' });
             let url = URL.createObjectURL(blob);
             let a = document.createElement('a');
             a.href = url;
-            a.download = 'Matrix_Labor_Vezenyles.html';
+            a.download = 'Matrix_Labor_Vezenyles.doc';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
