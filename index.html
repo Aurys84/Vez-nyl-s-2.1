@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mátrix Labor — Vezénylési Rendszer v2.0</title>
+    <title>Mátrix Labor — Vezénylési Rendszer v2.1</title>
     <style>
         :root {
             --bg-color: #161b22;
@@ -316,7 +316,7 @@
 </head>
 <body id="mainBody">
     <h1>Mátrix Labor — Vezénylési Rendszer</h1>
-    <div class="subtitle">Univerzális Modul & Word-Kompatibilis Export</div>
+    <div class="subtitle">Univerzális Modul & Direkt Word Fájl Export</div>
     <div class="controls">
         <div style="display: flex; gap: 8px; align-items: center;">
             <div>
@@ -349,7 +349,7 @@
         </div>
         <div style="display: flex; gap: 6px;">
             <button class="btn-save" onclick="manualSave()">💾 Adatok Mentése</button>
-            <button class="btn-word" onclick="exportWordReport()">📄 Word Mentés</button>
+            <button class="btn-word" onclick="downloadWordFile()">📥 Word Fájl Letöltése</button>
         </div>
     </div>
     <div class="palette">
@@ -791,10 +791,19 @@
         }
         function manualSave() {
             autoSave();
-            alert('💾 A Mátrix Labor univerzális adatai sikeresen mentve!');
+            alert('💾 A Mátrix Labor adatai sikeresen mentve!');
         }
-        function exportWordReport() {
-            let printWindow = window.open('', '_blank');
+        function downloadWordFile() {
+            // Dinamikusan kigyűjtjük az aktuális input mezőkbe beírt neveket, hogy a Wordbe már az átírt nevek kerüljenek át!
+            let rows = document.querySelectorAll('#scheduleTable tbody tr:not(.total-row)');
+            rows.forEach((row, gIndex) => {
+                let nameInput = row.querySelector(`#guard-name-${gIndex}`);
+                let nameCell = row.querySelector('.name-col');
+                if(nameInput && nameCell) {
+                    nameCell.innerHTML = `<b>${nameInput.value}</b>`;
+                }
+            });
+
             let tableHtml = document.querySelector('.table-container').innerHTML;
             let vacationHtml = document.getElementById('vacationReport').innerHTML;
             let auditHtml = document.getElementById('auditReport').innerHTML;
@@ -805,15 +814,9 @@
                 <html lang="hu">
                 <head>
                     <meta charset="UTF-8">
-                    <title>Mátrix Labor — Word Vezényleti Jelentés</title>
+                    <title>Mátrix Labor — Vezénylési Jelentés</title>
                     <style>
-                        body { 
-                            font-family: 'Segoe UI', Arial, sans-serif; 
-                            background: #ffffff; 
-                            color: #000000; 
-                            margin: 20px; 
-                            font-size: 11px; 
-                        }
+                        body { font-family: 'Segoe UI', Arial, sans-serif; background: #ffffff; color: #000000; margin: 20px; font-size: 11px; }
                         h1 { text-align: center; font-size: 18px; color: #1f6feb; margin-bottom: 4px; }
                         .subtitle { text-align: center; font-size: 12px; margin-bottom: 20px; color: #555555; }
                         table { width: 100%; border-collapse: collapse; text-align: center; margin-bottom: 20px; font-size: 9px; }
@@ -836,23 +839,11 @@
                         .summary-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
                         .summary-box { border: 1px solid #333333; border-radius: 4px; padding: 10px; font-size: 11px; background: #f9fafb !important; }
                         .summary-box h3 { margin: 0 0 6px 0; font-size: 12px; color: #1f6feb; }
-                        .print-instructions {
-                            background: #fff3cd;
-                            border: 1px solid #ffeeba;
-                            padding: 10px;
-                            margin-bottom: 15px;
-                            border-radius: 4px;
-                            font-size: 12px;
-                            color: #856404;
-                        }
                     </style>
                 </head>
                 <body>
-                    <div class="print-instructions">
-                        <b>💡 Word Export Tipp:</b> Kattints a jobb egérgombbal és válaszd a <b>Mentés másként (Save as...)</b> opciót, vagy egyszerűen nyomd meg a <b>Ctrl + P</b> gombot, és mentsd el PDF-ként vagy nyomtasd ki közvetlenül Word dokumentumként!
-                    </div>
-                    <h1>Mátrix Labor — Hivatalos Vezényleti Jelentés</h1>
-                    <div class="subtitle">Generálva a Mátrix Labor Univerzális Rendszerből</div>
+                    <h1>Mátrix Labor — Hivatalos Vezénylési Jelentés</h1>
+                    <div class="subtitle">Univerzális Rendszer Export</div>
                     
                     <div class="section-title">1. Havi Vezénylési Táblázat</div>
                     <div>${tableHtml}</div>
@@ -875,8 +866,22 @@
                 </body>
                 </html>
             `;
-            printWindow.document.write(htmlContent);
-            printWindow.document.close();
+
+            // Létrehozunk egy letölthető .doc fájl blob-ot, ami azonnal elindul letöltésként!
+            let blob = new Blob(['\ufeff' + htmlContent], {
+                type: 'application/msword'
+            });
+            let url = URL.createObjectURL(blob);
+            let a = document.createElement('a');
+            a.href = url;
+            a.download = 'Matrix_Labor_Vezenyles.doc';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            // Újra generáljuk a naptárat, hogy az input mezők a képernyőn is megmaradjanak
+            generateCalendar();
         }
         window.onload = function() {
             generateCalendar();
