@@ -801,8 +801,44 @@
                 }
             });
 
+            // Tisztességesen átvisszük a szabadság kártyák értékeit statikus HTML-be a Word számára
+            let currentGuards = getGlobalGuards();
+            let year = parseInt(document.getElementById('yearSelect').value);
+            let month = parseInt(document.getElementById('monthSelect').value);
+            
+            let cleanVacationHtml = '<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;">';
+            currentGuards.forEach((guardName, gIndex) => {
+                if(!guardName) guardName = `Őr ${gIndex+1}`;
+                let baseVal = localStorage.getItem(`vacation_base_${gIndex}`) !== null ? parseInt(localStorage.getItem(`vacation_base_${gIndex}`)) : 30;
+                let totalUsedUntilNow = 0;
+                for(let m = 0; m <= month; m++) {
+                    let mDays = new Date(year, m + 1, 0).getDate();
+                    let mSavedSchedule = JSON.parse(localStorage.getItem(`matrix_schedule_${year}_${m}`)) || {};
+                    for(let d = 0; d < mDays; d++) {
+                        let cellKey = `g_${gIndex}_d_${d}`;
+                        let dObj = new Date(year, m, d + 1);
+                        let dKey = getDateKey(dObj);
+                        let globalData = JSON.parse(localStorage.getItem(`global_cell_${dKey}_g_${gIndex}`)) || mSavedSchedule[cellKey];
+                        if(globalData && globalData.type === 'szb') {
+                            totalUsedUntilNow++;
+                        }
+                    }
+                }
+                let remaining = baseVal - totalUsedUntilNow;
+                cleanVacationHtml += `
+                    <div style="border: 1px solid #333333; border-radius: 4px; padding: 6px; font-size: 9px; background: #f9fafb; margin-bottom: 6px;">
+                        <div style="font-weight: bold; border-bottom: 1px solid #cccccc; padding-bottom: 2px; margin-bottom: 3px; color: #111111;">${guardName}</div>
+                        <div style="display: flex; justify-content: space-between; color: #333333;">
+                            <span>Alap: <b>${baseVal}</b></span>
+                            <span>Felh: <b style="color:#9e6a03;">${totalUsedUntilNow}</b></span>
+                            <span>Mar: <b style="color:#1f6feb;">${remaining}</b></span>
+                        </div>
+                    </div>
+                `;
+            });
+            cleanVacationHtml += '</div>';
+
             let tableHtml = document.querySelector('.table-container').innerHTML;
-            let vacationHtml = document.getElementById('vacationReport').innerHTML;
             let auditHtml = document.getElementById('auditReport').innerHTML;
             let holidayHtml = document.getElementById('holidayReport').innerHTML;
             
@@ -820,21 +856,21 @@
                         table { width: 100%; border-collapse: collapse; text-align: center; margin-bottom: 15px; font-size: 8px; }
                         th, td { border: 1px solid #333333; padding: 4px 2px; }
                         th { background: #f0f4f8 !important; color: #000000 !important; font-weight: bold; }
-                        .section-title { font-size: 12px; font-weight: bold; margin-top: 15px; margin-bottom: 8px; border-bottom: 2px solid #1f6feb; padding-bottom: 3px; color: #1f6feb; }
-                        .total-row td { background-color: #e2e8f0 !important; color: #000000 !important; font-weight: bold; }
+                        
+                        /* Színek átvitele a Word exportba */
                         .day-saturday-header { background-color: #d1fae5 !important; color: #065f46 !important; }
                         .day-sunday-holiday-header { background-color: #fee2e2 !important; color: #991b1b !important; }
+                        .day-normal-header { background-color: #f0f4f8 !important; color: #000000 !important; }
+
+                        .section-title { font-size: 12px; font-weight: bold; margin-top: 25px; margin-bottom: 8px; border-bottom: 2px solid #1f6feb; padding-bottom: 3px; color: #1f6feb; page-break-before: always; }
+                        .total-row td { background-color: #e2e8f0 !important; color: #000000 !important; font-weight: bold; }
                         .cell-locked { background-color: #bfdbfe !important; color: #1e40af !important; font-weight: bold; }
                         .pos-np { background-color: #238636 !important; color: white !important; font-weight: bold; }
                         .pos-ep { background-color: #da3633 !important; color: white !important; font-weight: bold; }
                         .pos-nep { background-color: #8957e5 !important; color: white !important; font-weight: bold; }
                         .pos-szb { background-color: #9e6a03 !important; color: white !important; font-weight: bold; }
                         .pos-szab { background-color: #1f6feb !important; color: white !important; font-weight: bold; }
-                        .vacation-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 15px; }
-                        .vacation-card { border: 1px solid #333333; border-radius: 4px; padding: 6px; font-size: 9px; background: #f9fafb !important; }
-                        .vacation-card-header { font-weight: bold; border-bottom: 1px solid #cccccc; padding-bottom: 2px; margin-bottom: 3px; color: #111111; }
-                        .vacation-card-body { display: flex; justify-content: space-between; color: #333333; }
-                        .summary-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+                        .summary-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
                         .summary-box { border: 1px solid #333333; border-radius: 4px; padding: 8px; font-size: 10px; background: #f9fafb !important; }
                         .summary-box h3 { margin: 0 0 5px 0; font-size: 11px; color: #1f6feb; }
                     </style>
@@ -843,13 +879,11 @@
                     <h1>Mátrix Labor — Hivatalos Vezénylési Jelentés</h1>
                     <div class="subtitle">Univerzális Rendszer Export</div>
                     
-                    <div class="section-title">1. Havi Vezénylési Táblázat</div>
+                    <div style="font-size: 12px; font-weight: bold; margin-top: 10px; margin-bottom: 8px; border-bottom: 2px solid #1f6feb; padding-bottom: 3px; color: #1f6feb;">1. Havi Vezénylési Táblázat</div>
                     <div>${tableHtml}</div>
                     
                     <div class="section-title">2. Éves Göngyölített Szabadságkezelő</div>
-                    <div class="vacation-grid">
-                        ${vacationHtml}
-                    </div>
+                    <div>${cleanVacationHtml}</div>
                     
                     <div class="summary-row">
                         <div class="summary-box">
