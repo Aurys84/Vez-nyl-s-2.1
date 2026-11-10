@@ -126,9 +126,10 @@
             top: 19px;
             background-color: #161b22 !important;
             z-index: 4;
+            padding: 4px 2px;
         }
         .day-row th {
-            top: 38px;
+            top: 42px;
             z-index: 4;
         }
         .name-col {
@@ -479,7 +480,8 @@
                     reqRowHtml += `<th class="${sepClass}" style="background:#1f6feb;">-</th>`;
                 } else {
                     let reqVal = savedRequired[dKey] !== undefined ? savedRequired[dKey] : 2;
-                    reqRowHtml += `<th class="${sepClass}"><input type="number" min="0" max="20" value="${reqVal}" data-date="${dKey}" onchange="updateRequired(this)" style="width:24px; text-align:center; background:#21262d; color:#58a6ff; border:1px solid var(--border-color); border-radius:3px; font-weight:bold; font-size:0.65rem;"></th>`;
+                    // Megnövelt, magasabb, kényelmesen használható input mező
+                    reqRowHtml += `<th class="${sepClass}"><input type="number" min="0" max="20" value="${reqVal}" data-date="${dKey}" onchange="updateRequired(this)" style="width:28px; height:20px; text-align:center; background:#21262d; color:#58a6ff; border:1px solid var(--border-color); border-radius:3px; font-weight:bold; font-size:0.75rem; padding:1px;"></th>`;
                 }
                 let headerClass = "day-normal-header";
                 if (isHoliday(d)) {
@@ -724,11 +726,12 @@
         }
         function runAuditEngine(days, year, month) {
             let savedRequired = JSON.parse(localStorage.getItem(`matrix_required_${year}_${month}`)) || {};
+            let savedSchedule = JSON.parse(localStorage.getItem(`matrix_schedule_${year}_${month}`)) || {};
             let deficitsCount = 0;
             let surplusesCount = 0;
             let currentGuards = getGlobalGuards();
             
-            days.forEach(item => {
+            days.forEach((item, dIndex) => {
                 if (item.isExtra) return;
                 let dKey = getDateKey(item.date);
                 let requiredCount = savedRequired[dKey] !== undefined ? savedRequired[dKey] : 2;
@@ -736,7 +739,11 @@
                 let actualCount = 0;
                 currentGuards.forEach((_, gIndex) => {
                     let globalData = JSON.parse(localStorage.getItem(`global_cell_${dKey}_g_${gIndex}`));
-                    if (globalData && globalData.type && (globalData.type === 'np' || globalData.type === 'ep' || globalData.type === 'nep')) {
+                    let cellKey = `g_${gIndex}_d_${dIndex}`;
+                    let fallbackData = savedSchedule[cellKey];
+                    let type = (globalData && globalData.type) ? globalData.type : (fallbackData ? fallbackData.type : null);
+                    
+                    if (type && (type === 'np' || type === 'ep' || type === 'nep')) {
                         actualCount++;
                     }
                 });
