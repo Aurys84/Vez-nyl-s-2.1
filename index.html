@@ -801,7 +801,6 @@
                 }
             });
 
-            // Tisztességesen átvisszük a szabadság kártyák értékeit statikus HTML-be a Word számára
             let currentGuards = getGlobalGuards();
             let year = parseInt(document.getElementById('yearSelect').value);
             let month = parseInt(document.getElementById('monthSelect').value);
@@ -843,13 +842,20 @@
             let holidayHtml = document.getElementById('holidayReport').innerHTML;
             
             let htmlContent = `
-                <!DOCTYPE html>
-                <html lang="hu">
+                <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
                 <head>
                     <meta charset="UTF-8">
                     <title>Mátrix Labor — Vezénylési Jelentés</title>
                     <style>
-                        @page { size: landscape; margin: 1cm; }
+                        /* Word specifikus fekvő (landscape) oldalbeállítás XML/CSS szinten */
+                        @page WordSection1 {
+                            size: 842.25pt 595.3pt; /* A4 landscape */
+                            mso-page-orientation: landscape;
+                            margin: 1cm 1cm 1cm 1cm;
+                        }
+                        div.WordSection1 {
+                            page: WordSection1;
+                        }
                         body { font-family: 'Segoe UI', Arial, sans-serif; background: #ffffff; color: #000000; margin: 10px; font-size: 10px; }
                         h1 { text-align: center; font-size: 16px; color: #1f6feb; margin-bottom: 2px; }
                         .subtitle { text-align: center; font-size: 10px; margin-bottom: 15px; color: #555555; }
@@ -862,7 +868,7 @@
                         .day-sunday-holiday-header { background-color: #fee2e2 !important; color: #991b1b !important; }
                         .day-normal-header { background-color: #f0f4f8 !important; color: #000000 !important; }
 
-                        .section-title { font-size: 12px; font-weight: bold; margin-top: 25px; margin-bottom: 8px; border-bottom: 2px solid #1f6feb; padding-bottom: 3px; color: #1f6feb; page-break-before: always; }
+                        .section-title { font-size: 12px; font-weight: bold; margin-top: 25px; margin-bottom: 8px; border-bottom: 2px solid #1f6feb; padding-bottom: 3px; color: #1f6feb; page-break-before: always; mso-break-type: section-break; }
                         .total-row td { background-color: #e2e8f0 !important; color: #000000 !important; font-weight: bold; }
                         .cell-locked { background-color: #bfdbfe !important; color: #1e40af !important; font-weight: bold; }
                         .pos-np { background-color: #238636 !important; color: white !important; font-weight: bold; }
@@ -876,23 +882,26 @@
                     </style>
                 </head>
                 <body>
-                    <h1>Mátrix Labor — Hivatalos Vezénylési Jelentés</h1>
-                    <div class="subtitle">Univerzális Rendszer Export</div>
-                    
-                    <div style="font-size: 12px; font-weight: bold; margin-top: 10px; margin-bottom: 8px; border-bottom: 2px solid #1f6feb; padding-bottom: 3px; color: #1f6feb;">1. Havi Vezénylési Táblázat</div>
-                    <div>${tableHtml}</div>
-                    
-                    <div class="section-title">2. Éves Göngyölített Szabadságkezelő</div>
-                    <div>${cleanVacationHtml}</div>
-                    
-                    <div class="summary-row">
-                        <div class="summary-box">
-                            <h3>🔍 Létszám Figyelőmotor</h3>
-                            <div>${auditHtml}</div>
-                        </div>
-                        <div class="summary-box">
-                            <h3>🎉 Havi Ünnepnapok Számláló</h3>
-                            <div>${holidayHtml}</div>
+                    <div class="WordSection1">
+                        <h1>Mátrix Labor — Hivatalos Vezénylési Jelentés</h1>
+                        <div class="subtitle">Univerzális Rendszer Export</div>
+                        
+                        <div style="font-size: 12px; font-weight: bold; margin-top: 10px; margin-bottom: 8px; border-bottom: 2px solid #1f6feb; padding-bottom: 3px; color: #1f6feb;">1. Havi Vezénylési Táblázat</div>
+                        <div>${tableHtml}</div>
+                        
+                        <div class="section-title">2. Éves Göngyölített Szabadságkezelő</div>
+                        <div>${cleanVacationHtml}</div>
+                        
+                        <div class="summary-row">
+                            <div class="summary-box">
+                                <h3>🔍 Létszám Figyelőmotor</h3>
+                                dataType="${auditHtml}"
+                                <div>${auditHtml}</div>
+                            </div>
+                            <div class="summary-box">
+                                <h3>🎉 Havi Ünnepnapok Számláló</h3>
+                                <div>${holidayHtml}</div>
+                            </div>
                         </div>
                     </div>
                 </body>
