@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mátrix Labor — Vezénylési Rendszer v2.1</title>
+    <title>Mátrix Labor — Vezénylési Rendszer v2.2</title>
     <style>
         :root {
             --bg-color: #161b22;
@@ -316,7 +316,7 @@
 </head>
 <body id="mainBody">
     <h1>Mátrix Labor — Vezénylési Rendszer</h1>
-    <div class="subtitle">Univerzális Modul & Direkt Word Fájl Export</div>
+    <div class="subtitle">Univerzális Modul & Biztos Word Letöltés</div>
     <div class="controls">
         <div style="display: flex; gap: 8px; align-items: center;">
             <div>
@@ -349,7 +349,7 @@
         </div>
         <div style="display: flex; gap: 6px;">
             <button class="btn-save" onclick="manualSave()">💾 Adatok Mentése</button>
-            <button class="btn-word" onclick="downloadWordFile()">📥 Word Fájl Letöltése</button>
+            <button class="btn-word" onclick="downloadWordFile()">📥 Word Fájl Mentése</button>
         </div>
     </div>
     <div class="palette">
@@ -378,7 +378,7 @@
     </div>
     <div class="panels-wrapper">
         <div class="vacation-panel">
-            <h3>🌴 Éves Göngyölített Szabadságkezelő (Univerzális keretek)</h3>
+            <h3>🌴 Éves Göngyölített Szabadságkezelő (Globális Névsor)</h3>
             <div id="vacationReport" class="vacation-grid">Szabadságok számítása...</div>
         </div>
         <div class="top-panels-row">
@@ -400,6 +400,16 @@
         ];
         const dayNames = ['V', 'H', 'K', 'Sze', 'Cs', 'P', 'Szo'];
         let activeCell = null;
+
+        // Globális névkezelő lekérése vagy inicializálása
+        function getGlobalGuards() {
+            let saved = JSON.parse(localStorage.getItem('matrix_global_guards'));
+            if(!saved || saved.length !== 20) {
+                return [...activeGuardsTemplate];
+            }
+            return saved;
+        }
+
         function isHoliday(date) {
             let m = date.getMonth() + 1;
             let d = date.getDate();
@@ -487,11 +497,11 @@
             document.getElementById('tableHeader').innerHTML = weekRowHtml + reqRowHtml + dayRowHtml;
             document.getElementById('holidayReport').innerHTML = `<b>Ebben a hónapban:</b> <span style="color:#ff8182; font-weight:bold; font-size:0.85rem;">${holidayCount} db</span> hivatalos ünnepnap esik.`;
             
-            let savedGuards = JSON.parse(localStorage.getItem(`matrix_guards_${year}_${month}`)) || activeGuardsTemplate;
+            let currentGuards = getGlobalGuards();
             let prevMonthSchedule = JSON.parse(localStorage.getItem(`matrix_schedule_${pYear}_${pMonth}`)) || {};
             let savedData = JSON.parse(localStorage.getItem(`matrix_schedule_${year}_${month}`)) || {};
             let tbodyHtml = '';
-            savedGuards.forEach((guardName, gIndex) => {
+            currentGuards.forEach((guardName, gIndex) => {
                 tbodyHtml += `<tr>`;
                 tbodyHtml += `<td class="name-col"><input type="text" id="guard-name-${gIndex}" value="${guardName}" placeholder="Őr ${gIndex+1}" style="width:100px; background:transparent; border:none; color:inherit; font-weight:bold; font-size:0.75rem;" oninput="autoSave()"></td>`;
                 
@@ -671,11 +681,7 @@
             runVacationEngine(year, month);
         }
         function runVacationEngine(year, month) {
-            let currentGuards = [];
-            for(let i = 0; i < 20; i++) {
-                let nameInput = document.getElementById(`guard-name-${i}`);
-                currentGuards.push(nameInput ? nameInput.value : `Őr ${i+1}`);
-            }
+            let currentGuards = getGlobalGuards();
             let gridHtml = '';
             
             currentGuards.forEach((guardName, gIndex) => {
@@ -716,11 +722,7 @@
         function runAuditEngine(days, year, month) {
             let savedRequired = JSON.parse(localStorage.getItem(`matrix_required_${year}_${month}`)) || {};
             let issues = [];
-            let currentGuards = [];
-            for(let i = 0; i < 20; i++) {
-                let nameInput = document.getElementById(`guard-name-${i}`);
-                currentGuards.push(nameInput ? nameInput.value : `Őr ${i+1}`);
-            }
+            let currentGuards = getGlobalGuards();
             days.forEach(item => {
                 if (item.isExtra) return;
                 let dKey = getDateKey(item.date);
@@ -765,7 +767,9 @@
                 let nameInput = document.getElementById(`guard-name-${i}`);
                 currentGuards.push(nameInput ? nameInput.value : `Őr ${i+1}`);
             }
-            localStorage.setItem(`matrix_guards_${year}_${month}`, JSON.stringify(currentGuards));
+            // Globális mentés, így minden hónapban ugyanazok a nevek maradnek
+            localStorage.setItem('matrix_global_guards', JSON.stringify(currentGuards));
+
             let dataToSave = {};
             document.querySelectorAll('#scheduleTable tbody tr:not(.total-row)').forEach((row, gIndex) => {
                 row.querySelectorAll('td').forEach((cell, cIndex) => {
@@ -791,10 +795,9 @@
         }
         function manualSave() {
             autoSave();
-            alert('💾 A Mátrix Labor adatai sikeresen mentve!');
+            alert('💾 A Mátrix Labor univerzális adatai és a globális névsor sikeresen mentve!');
         }
         function downloadWordFile() {
-            // Dinamikusan kigyűjtjük az aktuális input mezőkbe beírt neveket, hogy a Wordbe már az átírt nevek kerüljenek át!
             let rows = document.querySelectorAll('#scheduleTable tbody tr:not(.total-row)');
             rows.forEach((row, gIndex) => {
                 let nameInput = row.querySelector(`#guard-name-${gIndex}`);
@@ -809,9 +812,9 @@
             let auditHtml = document.getElementById('auditReport').innerHTML;
             let holidayHtml = document.getElementById('holidayReport').innerHTML;
             
+            // Helyes, stabil mhtml / xml struktúra, amit a Word hiba nélkül nyit meg
             let htmlContent = `
-                <!DOCTYPE html>
-                <html lang="hu">
+                <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
                 <head>
                     <meta charset="UTF-8">
                     <title>Mátrix Labor — Vezénylési Jelentés</title>
@@ -867,9 +870,8 @@
                 </html>
             `;
 
-            // Létrehozunk egy letölthető .doc fájl blob-ot, ami azonnal elindul letöltésként!
             let blob = new Blob(['\ufeff' + htmlContent], {
-                type: 'application/msword'
+                type: 'application/msword;charset=utf-8'
             });
             let url = URL.createObjectURL(blob);
             let a = document.createElement('a');
@@ -880,7 +882,6 @@
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
 
-            // Újra generáljuk a naptárat, hogy az input mezők a képernyőn is megmaradjanak
             generateCalendar();
         }
         window.onload = function() {
