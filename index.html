@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mátrix Labor — Vezénylési Rendszer v2.4</title>
+    <title>Mátrix Labor — Vezénylési Rendszer v2.6</title>
     <style>
         :root {
             --bg-color: #161b22;
@@ -316,7 +316,7 @@
 </head>
 <body id="mainBody">
     <h1>Mátrix Labor — Vezénylési Rendszer</h1>
-    <div class="subtitle">Univerzális Modul & Mobilbarát Office Export</div>
+    <div class="subtitle">Univerzális Modul & Word Export</div>
     <div class="controls">
         <div style="display: flex; gap: 8px; align-items: center;">
             <div>
@@ -349,7 +349,7 @@
         </div>
         <div style="display: flex; gap: 6px;">
             <button class="btn-save" onclick="manualSave()">💾 Adatok Mentése</button>
-            <button class="btn-word" onclick="downloadOfficeFile()">📥 Mobil / Office Mentés</button>
+            <button class="btn-word" onclick="downloadWordFile()">📥 Word Fájl Mentése</button>
         </div>
     </div>
     <div class="palette">
@@ -393,13 +393,11 @@
         </div>
     </div>
     <script>
-        // Tiszta univerzális alap Őr 1 - Őr 20 sablon (Nincs benne beégetett név!)
         const defaultGuardsTemplate = Array.from({length: 20}, (_, i) => `Őr ${i + 1}`);
         const dayNames = ['V', 'H', 'K', 'Sze', 'Cs', 'P', 'Szo'];
         let activeCell = null;
 
         function getGlobalGuards() {
-            // Frissített v2 kulcs, hogy ne rántsa be a régi beégetett neveket a localStorage-ból
             let saved = JSON.parse(localStorage.getItem('matrix_global_guards_v2'));
             if(!saved || saved.length !== 20) {
                 return [...defaultGuardsTemplate];
@@ -764,7 +762,6 @@
                 let nameInput = document.getElementById(`guard-name-${i}`);
                 currentGuards.push(nameInput ? nameInput.value : `Őr ${i+1}`);
             }
-            // Mentés az új v2 globális kulcsra
             localStorage.setItem('matrix_global_guards_v2', JSON.stringify(currentGuards));
 
             let dataToSave = {};
@@ -792,9 +789,9 @@
         }
         function manualSave() {
             autoSave();
-            alert('💾 A Mátrix Labor adatai és a tiszta névsor sikeresen mentve!');
+            alert('💾 A Mátrix Labor adatai sikeresen mentve!');
         }
-        async function downloadOfficeFile() {
+        function downloadWordFile() {
             let rows = document.querySelectorAll('#scheduleTable tbody tr:not(.total-row)');
             rows.forEach((row, gIndex) => {
                 let nameInput = row.querySelector(`#guard-name-${gIndex}`);
@@ -810,8 +807,7 @@
             let holidayHtml = document.getElementById('holidayReport').innerHTML;
             
             let htmlContent = `
-                <!DOCTYPE html>
-                <html lang="hu">
+                <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
                 <head>
                     <meta charset="UTF-8">
                     <title>Mátrix Labor — Vezénylési Jelentés</title>
@@ -867,28 +863,13 @@
                 </html>
             `;
 
-            let file = new File([htmlContent], 'Matrix_Labor_Vezenyles.html', { type: 'text/html' });
-
-            // Ha a telefon támogatja a natív megosztást/mentést, akkor felugrik a telefon saját mentési ablaka (így tuti elmentődik a telóra!)
-            if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                try {
-                    await navigator.share({
-                        files: [file],
-                        title: 'Mátrix Labor Vezénylés',
-                        text: 'Íme a hivatalos havi vezénylési jelentés.'
-                    });
-                    generateCalendar();
-                    return;
-                } catch (err) {
-                    console.log('Megosztás megszakítva', err);
-                }
-            }
-
-            // Fallback letöltés
-            let url = URL.createObjectURL(file);
+            let blob = new Blob(['\ufeff' + htmlContent], {
+                type: 'application/msword;charset=utf-8'
+            });
+            let url = URL.createObjectURL(blob);
             let a = document.createElement('a');
             a.href = url;
-            a.download = 'Matrix_Labor_Vezenyles.html';
+            a.download = 'Matrix_Labor_Vezenyles.doc';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -902,4 +883,3 @@
     </script>
 </body>
 </html>
-
