@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mátrix Labor — Vezénylési Rendszer v2.7</title>
+    <title>Mátrix Labor — Vezénylési Rendszer v2.8</title>
     <style>
         :root {
             --bg-color: #161b22;
@@ -316,7 +316,7 @@
 </head>
 <body id="mainBody">
     <h1>Mátrix Labor — Vezénylési Rendszer</h1>
-    <div class="subtitle">Univerzális Modul & Word / Office Mentés</div>
+    <div class="subtitle">Univerzális Modul & Word Fájl Mentés</div>
     <div class="controls">
         <div style="display: flex; gap: 8px; align-items: center;">
             <div>
@@ -807,8 +807,7 @@
             let holidayHtml = document.getElementById('holidayReport').innerHTML;
             
             let htmlContent = `
-                <!DOCTYPE html>
-                <html lang="hu">
+                <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
                 <head>
                     <meta charset="UTF-8">
                     <title>Mátrix Labor — Vezénylési Jelentés</title>
@@ -865,12 +864,12 @@
             `;
 
             let blob = new Blob(['\ufeff' + htmlContent], {
-                type: 'text/html;charset=utf-8'
+                type: 'application/msword;charset=utf-8'
             });
             let url = URL.createObjectURL(blob);
             let a = document.createElement('a');
             a.href = url;
-            a.download = 'Matrix_Labor_Vezenyles.html';
+            a.download = 'Matrix_Labor_Vezenyles.doc';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -884,3 +883,4 @@
     </script>
 </body>
 </html>
+
