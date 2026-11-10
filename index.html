@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mátrix Labor — Vezénylési Rendszer v2.4</title>
+    <title>Mátrix Labor — Vezénylési Rendszer v2.5</title>
     <style>
         :root {
             --bg-color: #161b22;
@@ -312,11 +312,22 @@
             background-color: #30363d !important;
             color: #f0f6fc !important;
         }
+        /* Letöltési sáv stílusa */
+        #downloadBar {
+            display: none;
+            background: #1f2937;
+            border: 2px solid #58a6ff;
+            border-radius: 6px;
+            padding: 10px;
+            margin-bottom: 10px;
+            text-align: center;
+            animation: fadeIn 0.3s ease;
+        }
     </style>
 </head>
 <body id="mainBody">
     <h1>Mátrix Labor — Vezénylési Rendszer</h1>
-    <div class="subtitle">Univerzális Modul & Mobilbarát Office Export</div>
+    <div class="subtitle">Univerzális Modul & Biztos Letöltési Doboz</div>
     <div class="controls">
         <div style="display: flex; gap: 8px; align-items: center;">
             <div>
@@ -349,9 +360,16 @@
         </div>
         <div style="display: flex; gap: 6px;">
             <button class="btn-save" onclick="manualSave()">💾 Adatok Mentése</button>
-            <button class="btn-word" onclick="downloadOfficeFile()">📥 Mobil / Office Mentés</button>
+            <button class="btn-word" onclick="prepareDirectDownload()">📥 Letöltési Link Generálása</button>
         </div>
     </div>
+
+    <!-- Közvetlen Letöltési Doboz (Mobilbarát biztonsági mentéshez) -->
+    <div id="downloadBar">
+        <p style="margin: 0 0 8px 0; font-size: 0.85rem; color: #58a6ff;"><b>Fájl elkészült! Kattints az alábbi gombra a telefonodra mentéshez:</b></p>
+        <a id="directDownloadLink" href="#" download="Matrix_Labor_Vezenyles.html" style="background: #238636; color: white; padding: 8px 16px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 0.9rem; display: inline-block;">📥 Mentés a Telefonra (.html)</a>
+    </div>
+
     <div class="palette">
         <span>Gyorskitöltés:</span>
         <button class="p-btn btn-np" onclick="applyServiceWithPos('Np', 'pos-np', 'np')">Nappal:</button>
@@ -393,13 +411,11 @@
         </div>
     </div>
     <script>
-        // Tiszta univerzális alap Őr 1 - Őr 20 sablon (Nincs benne beégetett név!)
         const defaultGuardsTemplate = Array.from({length: 20}, (_, i) => `Őr ${i + 1}`);
         const dayNames = ['V', 'H', 'K', 'Sze', 'Cs', 'P', 'Szo'];
         let activeCell = null;
 
         function getGlobalGuards() {
-            // Frissített v2 kulcs, hogy ne rántsa be a régi beégetett neveket a localStorage-ból
             let saved = JSON.parse(localStorage.getItem('matrix_global_guards_v2'));
             if(!saved || saved.length !== 20) {
                 return [...defaultGuardsTemplate];
@@ -764,7 +780,6 @@
                 let nameInput = document.getElementById(`guard-name-${i}`);
                 currentGuards.push(nameInput ? nameInput.value : `Őr ${i+1}`);
             }
-            // Mentés az új v2 globális kulcsra
             localStorage.setItem('matrix_global_guards_v2', JSON.stringify(currentGuards));
 
             let dataToSave = {};
@@ -792,9 +807,9 @@
         }
         function manualSave() {
             autoSave();
-            alert('💾 A Mátrix Labor adatai és a tiszta névsor sikeresen mentve!');
+            alert('💾 A Mátrix Labor adatai sikeresen mentve!');
         }
-        async function downloadOfficeFile() {
+        function prepareDirectDownload() {
             let rows = document.querySelectorAll('#scheduleTable tbody tr:not(.total-row)');
             rows.forEach((row, gIndex) => {
                 let nameInput = row.querySelector(`#guard-name-${gIndex}`);
@@ -867,32 +882,17 @@
                 </html>
             `;
 
-            let file = new File([htmlContent], 'Matrix_Labor_Vezenyles.html', { type: 'text/html' });
-
-            // Ha a telefon támogatja a natív megosztást/mentést, akkor felugrik a telefon saját mentési ablaka (így tuti elmentődik a telóra!)
-            if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                try {
-                    await navigator.share({
-                        files: [file],
-                        title: 'Mátrix Labor Vezénylés',
-                        text: 'Íme a hivatalos havi vezénylési jelentés.'
-                    });
-                    generateCalendar();
-                    return;
-                } catch (err) {
-                    console.log('Megosztás megszakítva', err);
-                }
-            }
-
-            // Fallback letöltés
-            let url = URL.createObjectURL(file);
-            let a = document.createElement('a');
-            a.href = url;
-            a.download = 'Matrix_Labor_Vezenyles.html';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+            // Létrehozunk egy Data URI / Blob hivatkozást, amit a felugró dobozban megnyitunk
+            let blob = new Blob(['\ufeff' + htmlContent], { type: 'text/html;charset=utf-8' });
+            let url = URL.createObjectURL(blob);
+            
+            let downloadLink = document.getElementById('directDownloadLink');
+            downloadLink.href = url;
+            downloadLink.download = `Matrix_Vezenyles_${document.getElementById('yearSelect').value}_${parseInt(document.getElementById('monthSelect').value)+1}.html`;
+            
+            // Megjelenítjük a letöltési dobozt a képernyő tetején
+            document.getElementById('downloadBar').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
 
             generateCalendar();
         }
