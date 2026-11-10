@@ -74,9 +74,9 @@
         .btn-word:hover { background: #9c6ffe !important; }
         .palette {
             display: flex;
-            gap: 4px;
+            gap: 6px;
             background: var(--panel-bg);
-            padding: 5px 8px;
+            padding: 9px 12px; /* Megemelt magasság a Gyorskitöltés sávnak */
             border-radius: 6px;
             border: 1px solid var(--border-color);
             margin-bottom: 6px;
@@ -85,7 +85,7 @@
             font-size: 0.75rem;
         }
         .palette span { font-weight: bold; color: #8b949e; margin-right: 4px; }
-        .p-btn { padding: 3px 5px; border-radius: 4px; border: none; cursor: pointer; font-weight: bold; font-size: 0.65rem; }
+        .p-btn { padding: 4px 8px; border-radius: 4px; border: none; cursor: pointer; font-weight: bold; font-size: 0.7rem; }
         .btn-np { background: var(--green); color: white; }
         .btn-ep { background: var(--red); color: white; }
         .btn-nep { background: var(--purple); color: white; }
@@ -121,18 +121,18 @@
             color: #58a6ff;
             font-weight: bold;
             z-index: 4;
-            padding: 5px 2px;
+            padding: 6px 2px;
         }
         .req-row th {
-            top: 22px;
+            top: 24px;
             background-color: #161b22 !important;
             z-index: 4;
-            padding: 8px 4px; /* Megnövelt magasság az Elvárt Létszám sornak */
+            padding: 8px 4px;
         }
         .day-row th {
-            top: 56px;
+            top: 58px;
             z-index: 4;
-            padding: 8px 4px; /* Megnövelt magasság a Dátum sornak */
+            padding: 8px 4px;
         }
         .name-col {
             text-align: left;
@@ -366,15 +366,15 @@
     <div class="palette">
         <span>Gyorskitöltés:</span>
         <button class="p-btn btn-np" onclick="applyServiceWithPos('Np', 'pos-np', 'np')">Nappal:</button>
-        <select id="npNum" style="padding: 1px 3px; font-size:0.65rem;">
+        <select id="npNum" style="padding: 2px 4px; font-size:0.75rem;">
             <script>for(let i=1; i<=20; i++) document.write(`<option value="${i}">${i}</option>`);</script>
         </select>
         <button class="p-btn btn-ep" onclick="applyServiceWithPos('Ép', 'pos-ep', 'ep')">Éjjel:</button>
-        <select id="epNum" style="padding: 1px 3px; font-size:0.65rem;">
+        <select id="epNum" style="padding: 2px 4px; font-size:0.75rem;">
             <script>for(let i=1; i<=20; i++) document.write(`<option value="${i}">${i}</option>`);</script>
         </select>
         <button class="p-btn btn-nep" onclick="applyServiceWithPos('NÉp', 'pos-nep', 'nep')">24h:</button>
-        <select id="nepNum" style="padding: 1px 3px; font-size:0.65rem;">
+        <select id="nepNum" style="padding: 2px 4px; font-size:0.75rem;">
             <script>for(let i=1; i<=20; i++) document.write(`<option value="${i}">${i}</option>`);</script>
         </select>
         <button class="p-btn btn-szb" onclick="applyService('SZB', 'pos-szb', 'szb')">Szabadság (SZB)</button>
@@ -482,7 +482,6 @@
                     reqRowHtml += `<th class="${sepClass}" style="background:#1f6feb;">-</th>`;
                 } else {
                     let reqVal = savedRequired[dKey] !== undefined ? savedRequired[dKey] : 2;
-                    // Megnövelt, magas, kényelmesen kezelhető input mező teljes magassággal és látható nyilakkal
                     reqRowHtml += `<th class="${sepClass}"><input type="number" min="0" max="20" value="${reqVal}" data-date="${dKey}" onchange="updateRequired(this)" style="width:32px; height:32px; text-align:center; background:#21262d; color:#58a6ff; border:1px solid var(--border-color); border-radius:4px; font-weight:bold; font-size:0.85rem; padding:2px;"></th>`;
                 }
                 let headerClass = "day-normal-header";
@@ -888,7 +887,7 @@
                 <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
                 <head>
                     <meta charset="UTF-8">
-                    <title>Mátrix Labor — Vezénylési Jelentés</title>
+                    <title>Mátrix Labor — Hivatalos Vezénylési Jelentés</title>
                     <style>
                         @page WordSection1 {
                             size: 842.25pt 595.3pt;
