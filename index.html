@@ -131,7 +131,7 @@
             top: 38px;
             z-index: 4;
         }
-        /* Név oszlop finomhangolva: nagyobb és picit szélesebb, de kontrollált */
+        /* Megnövelt szélesség a neveknek, hogy a hosszú nevek is tökéletesen látszanak */
         .name-col {
             text-align: left;
             font-weight: bold;
@@ -139,8 +139,8 @@
             left: 0;
             background-color: #21262d !important;
             z-index: 3;
-            min-width: 140px;
-            max-width: 140px;
+            min-width: 180px;
+            max-width: 180px;
             font-size: 0.9rem;
         }
         th.name-col {
@@ -148,7 +148,6 @@
             z-index: 5 !important;
             font-size: 0.85rem;
         }
-        /* Jobb oldali óra/keret oszlop optimalizálva max 4 karakterre */
         .hours-col {
             min-width: 45px;
             max-width: 45px;
@@ -508,7 +507,7 @@
             let tbodyHtml = '';
             currentGuards.forEach((guardName, gIndex) => {
                 tbodyHtml += `<tr>`;
-                tbodyHtml += `<td class="name-col"><input type="text" id="guard-name-${gIndex}" value="${guardName}" placeholder="Őr ${gIndex+1}" style="width:130px; background:transparent; border:none; color:inherit; font-weight:bold; font-size:0.9rem;" oninput="autoSave()"></td>`;
+                tbodyHtml += `<td class="name-col"><input type="text" id="guard-name-${gIndex}" value="${guardName}" placeholder="Őr ${gIndex+1}" style="width:165px; background:transparent; border:none; color:inherit; font-weight:bold; font-size:0.9rem;" oninput="autoSave()"></td>`;
                 
                 days.forEach((item, dIndex) => {
                     let d = item.date;
@@ -847,7 +846,26 @@
             });
             cleanVacationHtml += '</div>';
 
-            let tableHtml = document.querySelector('.table-container').innerHTML;
+            // Klonozzuk és frissítjük a táblázatot, hogy a Wordben a dátumfejlécek fixen megkapják a háttérszíneket
+            let tableContainerClone = document.querySelector('.table-container').cloneNode(true);
+            let dayThs = tableContainerClone.querySelectorAll('.day-row th');
+            dayThs.forEach(th => {
+                let isSat = th.dataset.saturday === '1';
+                let isHol = th.dataset.holiday === '1' || th.classList.contains('day-sunday-holiday-header');
+                let isSun = th.dataset.sunday === '1';
+                
+                if (isHol || isSun) {
+                    th.style.backgroundColor = '#fee2e2';
+                    th.setAttribute('style', th.getAttribute('style') + '; background-color: #fee2e2 !important; mso-shading: #fee2e2; color: #991b1b !important;');
+                } else if (isSat) {
+                    th.style.backgroundColor = '#d1fae5';
+                    th.setAttribute('style', th.getAttribute('style') + '; background-color: #d1fae5 !important; mso-shading: #d1fae5; color: #065f46 !important;');
+                } else {
+                    th.style.backgroundColor = '#f0f4f8';
+                    th.setAttribute('style', th.getAttribute('style') + '; background-color: #f0f4f8 !important; mso-shading: #f0f4f8; color: #000000 !important;');
+                }
+            });
+            let tableHtml = tableContainerClone.innerHTML;
             let auditHtml = document.getElementById('auditReport').innerHTML;
             let holidayHtml = document.getElementById('holidayReport').innerHTML;
             
@@ -872,12 +890,7 @@
                         th, td { border: 1px solid #333333; padding: 4px 1px; }
                         th { background: #f0f4f8 !important; color: #000000 !important; font-weight: bold; }
                         
-                        /* Kényszerített Word háttérszínek a fejléc ünnepnapokhoz és hétvégékhez */
-                        .day-saturday-header { background-color: #d1fae5 !important; mso-shading: #d1fae5; color: #065f46 !important; }
-                        .day-sunday-holiday-header { background-color: #fee2e2 !important; mso-shading: #fee2e2; color: #991b1b !important; }
-                        .day-normal-header { background-color: #f0f4f8 !important; mso-shading: #f0f4f8; color: #000000 !important; }
-
-                        .name-col { min-width: 130px; max-width: 130px; font-size: 11px; font-weight: bold; text-align: left; }
+                        .name-col { min-width: 165px; max-width: 165px; font-size: 11px; font-weight: bold; text-align: left; }
                         .hours-col { min-width: 45px; max-width: 45px; width: 45px; font-size: 9px; font-weight: bold; }
 
                         .section-title { font-size: 12px; font-weight: bold; margin-top: 25px; margin-bottom: 8px; border-bottom: 2px solid #1f6feb; padding-bottom: 3px; color: #1f6feb; page-break-before: always; mso-break-type: section-break; }
