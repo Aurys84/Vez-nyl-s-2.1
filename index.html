@@ -131,7 +131,6 @@
             top: 38px;
             z-index: 4;
         }
-        /* Megnövelt szélesség a neveknek, hogy a hosszú nevek is tökéletesen látszanak */
         .name-col {
             text-align: left;
             font-weight: bold;
@@ -139,8 +138,8 @@
             left: 0;
             background-color: #21262d !important;
             z-index: 3;
-            min-width: 180px;
-            max-width: 180px;
+            min-width: 165px;
+            max-width: 165px;
             font-size: 0.9rem;
         }
         th.name-col {
@@ -725,8 +724,10 @@
         }
         function runAuditEngine(days, year, month) {
             let savedRequired = JSON.parse(localStorage.getItem(`matrix_required_${year}_${month}`)) || {};
-            let issues = [];
+            let deficitsCount = 0;
+            let surplusesCount = 0;
             let currentGuards = getGlobalGuards();
+            
             days.forEach(item => {
                 if (item.isExtra) return;
                 let dKey = getDateKey(item.date);
@@ -743,22 +744,20 @@
                 if (ledSpan) {
                     if (actualCount < requiredCount) {
                         ledSpan.innerHTML = `<span class="led-alert" title="Hiány: ${actualCount}/${requiredCount}"></span>`;
-                        issues.push({ date: `${item.date.getMonth()+1}.${item.date.getDate()}.`, type: 'hiány', diff: requiredCount - actualCount });
+                        deficitsCount++;
                     } else if (actualCount > requiredCount) {
                         ledSpan.innerHTML = `<span class="led-warning" title="Többlet: ${actualCount}/${requiredCount}"></span>`;
-                        issues.push({ date: `${item.date.getMonth()+1}.${item.date.getDate()}.`, type: 'többlet', diff: actualCount - requiredCount });
+                        surplusesCount++;
                     } else {
                         ledSpan.innerHTML = `<span class="led-ok" title="Létszám rendben: ${actualCount}/${requiredCount}"></span>`;
                     }
                 }
             });
             let reportHtml = '';
-            if (issues.length === 0) {
+            if (deficitsCount === 0 && surplusesCount === 0) {
                 reportHtml = `<span class="alert-badge alert-ok">MINDEN PONTOS</span> A létszám keret tökéletesen teljesül!`;
             } else {
-                let deficits = issues.filter(i => i.type === 'hiány');
-                let surpluses = issues.filter(i => i.type === 'többlet');
-                reportHtml = `<span class="alert-badge alert-error">${deficits.length} hiány</span> | <span class="alert-badge alert-warning" style="background:#ffd700; color:#000;">${surpluses.length} többlet</span>`;
+                reportHtml = `<span class="alert-badge alert-error">${deficitsCount} hiány</span> | <span class="alert-badge alert-warning" style="background:#ffd700; color:#000;">${surplusesCount} többlet</span>`;
             }
             document.getElementById('auditReport').innerHTML = reportHtml;
         }
@@ -846,7 +845,6 @@
             });
             cleanVacationHtml += '</div>';
 
-            // Klonozzuk és frissítjük a táblázatot, hogy a Wordben a dátumfejlécek fixen megkapják a háttérszíneket
             let tableContainerClone = document.querySelector('.table-container').cloneNode(true);
             let dayThs = tableContainerClone.querySelectorAll('.day-row th');
             dayThs.forEach(th => {
