@@ -470,7 +470,6 @@
                 days.push({ date: d, isExtra: false });
             }
 
-            // Egyszerűsített, biztonságos heti fejléc generálás (külön sor minden naphoz, de fixen stabil)
             let weekRowHtml = '<tr class="week-row"><th class="name-col">Hét száma</th>';
             let reqRowHtml = '<tr class="req-row"><th class="name-col">Elvárt Létszám</th>';
             let dayRowHtml = '<tr class="day-row"><th class="name-col">Név / Dátum</th>';
@@ -913,15 +912,19 @@
                         body { font-family: 'Segoe UI', Arial, sans-serif; background: #ffffff; color: #000000; margin: 10px; font-size: 10px; }
                         h1 { text-align: center; font-size: 16px; color: #1f6feb; margin-bottom: 2px; }
                         .subtitle { text-align: center; font-size: 10px; margin-bottom: 15px; color: #555555; }
-                        table { width: 100%; border-collapse: collapse; text-align: center; margin-bottom: 15px; font-size: 8px; }
-                        th, td { border: 1px solid #333333; padding: 4px 1px; }
+                        table { width: 100%; border-collapse: collapse; text-align: center; margin-bottom: 15px; font-size: 10px; }
+                        th, td { border: 1px solid #333333; padding: 6px 3px; }
                         th { background: #f0f4f8 !important; color: #000000 !important; font-weight: bold; }
                         
                         .name-col { min-width: 165px; max-width: 165px; font-size: 11px; font-weight: bold; text-align: left; }
-                        .hours-col { min-width: 45px; max-width: 45px; width: 45px; font-size: 9px; font-weight: bold; }
+                        .hours-col { min-width: 55px; max-width: 55px; width: 55px; font-size: 12px; font-weight: 900; }
 
                         .section-title { font-size: 12px; font-weight: bold; margin-top: 25px; margin-bottom: 8px; border-bottom: 2px solid #1f6feb; padding-bottom: 3px; color: #1f6feb; page-break-before: always; mso-break-type: section-break; }
-                        .total-row td { background-color: #e2e8f0 !important; mso-shading: #e2e8f0; color: #000000 !important; font-weight: bold; }
+                        .total-row td { background-color: #e2e8f0 !important; mso-shading: #e2e8f0; color: #000000 !important; font-weight: 900; font-size: 12px; }
+                        
+                        /* Word exportban is kitölti és nagyítva mutatja a kódokat/számokat */
+                        td.cell-default, td[class*="pos-"] { font-size: 12px !important; font-weight: 900 !important; }
+                        
                         .cell-locked { background-color: #bfdbfe !important; mso-shading: #bfdbfe; color: #1e40af !important; font-weight: bold; }
                         .pos-np { background-color: #238636 !important; mso-shading: #238636; color: white !important; font-weight: bold; }
                         .pos-ep { background-color: #da3633 !important; mso-shading: #da3633; color: white !important; font-weight: bold; }
