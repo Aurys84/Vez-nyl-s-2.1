@@ -924,6 +924,16 @@
             cleanVacationHtml += '</table>';
 
             let tableContainerClone = document.querySelector('.table-container').cloneNode(true);
+            
+            // WORD EXPORT FIX: Cseréljük le a legördülő selecteket sima szám szövegre a Word klónban, hogy ne csússzon szét a fejléc!
+            tableContainerClone.querySelectorAll('.req-row select').forEach(sel => {
+                let parentTh = sel.parentElement;
+                if(parentTh) {
+                    parentTh.innerText = sel.value;
+                    parentTh.style.cssText = "background: #f1f5f9 !important; color: #1f6feb !important; font-weight: 900; font-size: 10px; text-align: center; vertical-align: middle;";
+                }
+            });
+
             let tempTable = tableContainerClone.querySelector('table');
             let tempThead = tempTable.querySelector('thead');
             
