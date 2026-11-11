@@ -6,13 +6,13 @@
     <title>Mátrix Labor — Vezénylési Rendszer</title>
     <style>
         :root {
-            --bg-color: #161b22;
-            --panel-bg: #21262d;
-            --text-color: #f0f6fc;
-            --border-color: #30363d;
+            --bg-color: #f0f4f8;
+            --panel-bg: #ffffff;
+            --text-color: #1f2937;
+            --border-color: #cbd5e1;
             --green: #238636;
             --red: #da3633;
-            --yellow-led: #ffd700;
+            --yellow-led: #d97706;
             --purple: #8957e5;
             --yellow: #9e6a03;
             --blue: #1f6feb;
@@ -26,14 +26,14 @@
         }
         h1 {
             text-align: center;
-            color: #58a6ff;
+            color: #1f6feb;
             margin-bottom: 2px;
             font-size: 1.05rem;
         }
         .subtitle {
             text-align: center;
             font-size: 0.7rem;
-            color: #8b949e;
+            color: #64748b;
             margin-bottom: 8px;
         }
         .controls {
@@ -47,9 +47,10 @@
             flex-wrap: wrap;
             gap: 6px;
             align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
         select, input, button {
-            background: #30363d;
+            background: #ffffff;
             color: var(--text-color);
             border: 1px solid var(--border-color);
             padding: 3px 6px;
@@ -58,6 +59,7 @@
         }
         button {
             background: var(--blue);
+            color: white;
             cursor: pointer;
             font-weight: bold;
         }
@@ -83,15 +85,16 @@
             align-items: center;
             flex-wrap: wrap;
             font-size: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
-        .palette span { font-weight: bold; color: #8b949e; margin-right: 4px; }
-        .p-btn { padding: 4px 8px; border-radius: 4px; border: none; cursor: pointer; font-weight: bold; font-size: 0.7rem; }
-        .btn-np { background: var(--green); color: white; }
-        .btn-ep { background: var(--red); color: white; }
-        .btn-nep { background: var(--purple); color: white; }
-        .btn-szb { background: var(--yellow); color: white; }
-        .btn-szab { background: var(--blue); color: white; }
-        .btn-clear { background: #30363d; color: #c9d1d9; border: 1px solid var(--border-color); }
+        .palette span { font-weight: bold; color: #64748b; margin-right: 4px; }
+        .p-btn { padding: 4px 8px; border-radius: 4px; border: none; cursor: pointer; font-weight: bold; font-size: 0.7rem; color: white; }
+        .btn-np { background: var(--green); }
+        .btn-ep { background: var(--red); }
+        .btn-nep { background: var(--purple); }
+        .btn-szb { background: var(--yellow); }
+        .btn-szab { background: var(--blue); }
+        .btn-clear { background: #e2e8f0; color: #1f2937; border: 1px solid var(--border-color); }
         .table-container {
             overflow: auto;
             background: var(--panel-bg);
@@ -99,6 +102,7 @@
             border: 1px solid var(--border-color);
             max-height: 48vh;
             margin-bottom: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
         table {
             width: 100%;
@@ -117,8 +121,8 @@
         }
         .week-row th {
             top: 0;
-            background-color: #21262d !important;
-            color: #58a6ff;
+            background-color: #e2e8f0 !important;
+            color: #1f6feb;
             font-weight: 900;
             font-size: 0.95rem;
             z-index: 4;
@@ -126,7 +130,7 @@
         }
         .req-row th {
             top: 26px;
-            background-color: #161b22 !important;
+            background-color: #f8fafc !important;
             z-index: 4;
             padding: 8px 4px;
         }
@@ -140,16 +144,17 @@
             font-weight: bold;
             position: sticky;
             left: 0;
-            background-color: #21262d !important;
+            background-color: #ffffff !important;
             z-index: 3;
             min-width: 165px;
             max-width: 165px;
             font-size: 0.9rem;
         }
         th.name-col {
-            background-color: #30363d !important;
+            background-color: #e2e8f0 !important;
             z-index: 5 !important;
             font-size: 0.85rem;
+            color: #1f2937;
         }
         .hours-col {
             min-width: 55px;
@@ -157,12 +162,12 @@
             width: 55px;
             font-size: 1.1rem !important;
             font-weight: 900 !important;
-            background-color: #ffeb3b !important;
+            background-color: #fef08a !important;
             color: #000000 !important;
         }
         .total-row td {
-            background-color: #1f2937 !important;
-            color: #58a6ff !important;
+            background-color: #e2e8f0 !important;
+            color: #1f6feb !important;
             font-weight: 900;
             font-size: 1.1rem !important;
         }
@@ -181,8 +186,8 @@
             min-width: 28px;
         }
         td.cell-locked {
-            background-color: #1f6feb !important;
-            color: white !important;
+            background-color: #bfdbfe !important;
+            color: #1e40af !important;
             cursor: not-allowed !important;
             pointer-events: none !important;
             font-weight: bold;
@@ -195,7 +200,7 @@
         .pos-szab { background-color: #1f6feb !important; color: white !important; cursor: pointer; }
         
         td.selected-cell {
-            outline: 2px solid #ff7b72;
+            outline: 2px solid #ef4444;
             outline-offset: -2px;
         }
         .panels-wrapper {
@@ -217,6 +222,7 @@
             border-radius: 6px;
             padding: 6px 8px;
             font-size: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
         .vacation-panel {
             background: var(--panel-bg);
@@ -226,10 +232,11 @@
             font-size: 0.75rem;
             width: 100%;
             box-sizing: border-box;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
         .vacation-panel h3 {
             margin-top: 0;
-            color: #58a6ff;
+            color: #1f6feb;
             font-size: 0.85rem;
             margin-bottom: 6px;
         }
@@ -245,7 +252,7 @@
             .vacation-grid { grid-template-columns: repeat(2, 1fr); }
         }
         .vacation-card {
-            background: #161b22;
+            background: #f8fafc;
             border: 1px solid var(--border-color);
             border-radius: 4px;
             padding: 5px 6px;
@@ -256,7 +263,7 @@
         }
         .vacation-card-header {
             font-weight: bold;
-            color: #f0f6fc;
+            color: #1f2937;
             border-bottom: 1px solid var(--border-color);
             padding-bottom: 1px;
             margin-bottom: 2px;
@@ -268,7 +275,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            color: #8b949e;
+            color: #64748b;
             font-size: 0.65rem;
         }
         .alert-badge {
@@ -280,7 +287,7 @@
         }
         .alert-ok { background: var(--green); color: white; }
         .alert-error { background: var(--red); color: white; }
-        .alert-warning { background: var(--yellow-led); color: #000; }
+        .alert-warning { background: var(--yellow-led); color: #fff; }
         @keyframes blinkLed {
             0% { opacity: 1; transform: scale(1); filter: brightness(1); }
             50% { opacity: 0.15; transform: scale(1.5); filter: brightness(2); }
@@ -309,25 +316,25 @@
             display: inline-block;
             width: 7px;
             height: 7px;
-            background-color: #ffd700;
+            background-color: #d97706;
             border-radius: 50%;
             margin-left: 2px;
             animation: blinkLed 0.5s infinite;
-            box-shadow: 0 0 8px #ffd700;
+            box-shadow: 0 0 8px #d97706;
         }
         .day-saturday-header {
-            background-color: #1f4f29 !important;
-            color: #56d364 !important;
+            background-color: #d1fae5 !important;
+            color: #065f46 !important;
             border-bottom: 2px solid var(--green) !important;
         }
         .day-sunday-holiday-header {
-            background-color: #672528 !important;
-            color: #ff8182 !important;
+            background-color: #fee2e2 !important;
+            color: #991b1b !important;
             border-bottom: 2px solid var(--red) !important;
         }
         .day-normal-header {
-            background-color: #30363d !important;
-            color: #f0f6fc !important;
+            background-color: #f1f5f9 !important;
+            color: #1f2937 !important;
         }
     </style>
 </head>
@@ -498,7 +505,7 @@
                 let sepClass = (wIdx > 0) ? 'week-separator' : '';
                 weekRowHtml += `<th colspan="${w.count}" class="${sepClass}">${w.weekNum}.hét</th>`;
             });
-            weekRowHtml += '<th class="hours-col">Óra</th></tr>';
+            weekRowHtml += '<th class="hours-col">Össz óra</th></tr>';
 
             let reqRowHtml = '<tr class="req-row"><th class="name-col">Elvárt Létszám</th>';
             let dayRowHtml = '<tr class="day-row"><th class="name-col">Név / Dátum</th>';
@@ -516,10 +523,10 @@
                 let sepClass = (isMonday && index > 0) ? 'week-separator' : '';
                 
                 if (item.isExtra) {
-                    reqRowHtml += `<th class="${sepClass}" style="background:#1f6feb;">-</th>`;
+                    reqRowHtml += `<th class="${sepClass}" style="background:#1f6feb; color:white;">-</th>`;
                 } else {
                     let reqVal = savedRequired[dKey] !== undefined ? savedRequired[dKey] : 2;
-                    reqRowHtml += `<th class="${sepClass}"><input type="number" min="0" max="20" value="${reqVal}" data-date="${dKey}" onchange="updateRequired(this)" style="width:32px; height:32px; text-align:center; background:#21262d; color:#58a6ff; border:1px solid var(--border-color); border-radius:4px; font-weight:bold; font-size:0.85rem; padding:2px;"></th>`;
+                    reqRowHtml += `<th class="${sepClass}"><input type="number" min="0" max="20" value="${reqVal}" data-date="${dKey}" onchange="updateRequired(this)" style="width:32px; height:32px; text-align:center; background:#ffffff; color:#1f6feb; border:1px solid var(--border-color); border-radius:4px; font-weight:bold; font-size:0.85rem; padding:2px;"></th>`;
                 }
                 let headerClass = "day-normal-header";
                 if (isHoliday(d)) {
@@ -534,11 +541,11 @@
                 let ledHtml = item.isExtra ? '' : `<span id="led-${dKey}"><span class="led-ok" title="Létszám rendben"></span></span>`;
                 dayRowHtml += `<th id="th-day-${dKey}" class="${sepClass} ${headerClass}" style="${extraHeaderStyle}" data-holiday="${isHoliday(d) ? '1' : '0'}" data-saturday="${dayIndex === 6 ? '1' : '0'}" data-sunday="${dayIndex === 0 ? '1' : '0'}">${dateStr}<br><small style="font-size:0.6rem; font-weight:bold;">${dayLetter}</small>${ledHtml}</th>`;
             });
-            reqRowHtml += '<th class="hours-col">Cél</th></tr>';
-            dayRowHtml += '<th class="hours-col">Keret</th></tr>';
+            reqRowHtml += '<th class="hours-col">Össz óra</th></tr>';
+            dayRowHtml += '<th class="hours-col">Össz óra</th></tr>';
             
             document.getElementById('tableHeader').innerHTML = weekRowHtml + reqRowHtml + dayRowHtml;
-            document.getElementById('holidayReport').innerHTML = `<b>Ebben a hónapban:</b> <span style="color:#ff8182; font-weight:bold; font-size:0.8rem;">${holidayCount} db</span> hivatalos ünnepnap esik.`;
+            document.getElementById('holidayReport').innerHTML = `<b>Ebben a hónapban:</b> <span style="color:#991b1b; font-weight:bold; font-size:0.8rem;">${holidayCount} db</span> hivatalos ünnepnap esik.`;
             
             let currentGuards = getGlobalGuards();
             let prevMonthSchedule = JSON.parse(localStorage.getItem(`matrix_schedule_${pYear}_${pMonth}`)) || {};
@@ -592,7 +599,7 @@
                 tbodyHtml += `</tr>`;
             });
             tbodyHtml += `<tr class="total-row">`;
-            tbodyHtml += `<td class="name-col" style="background:#1f2937 !important; color:#58a6ff;">Havi Összesítő</td>`;
+            tbodyHtml += `<td class="name-col" style="background:#e2e8f0 !important; color:#1f6feb;">Havi Összesítő</td>`;
             days.forEach((item, dIndex) => {
                 let d = item.date;
                 let dayIndex = d.getDay();
@@ -753,7 +760,7 @@
                     <div class="vacation-card">
                         <div class="vacation-card-header">${guardName}</div>
                         <div class="vacation-card-body">
-                            <span>Alap: <input type="number" value="${baseVal}" min="0" max="100" style="width:32px; text-align:center; background:#161b22; color:#58a6ff; border:1px solid var(--border-color); border-radius:3px; font-weight:bold; font-size:0.65rem;" onchange="updateVacationBase(${gIndex}, this)"></span>
+                            <span>Alap: <input type="number" value="${baseVal}" min="0" max="100" style="width:32px; text-align:center; background:#ffffff; color:#1f6feb; border:1px solid var(--border-color); border-radius:3px; font-weight:bold; font-size:0.65rem;" onchange="updateVacationBase(${gIndex}, this)"></span>
                             <span>Felh: <b style="color:var(--yellow);">${totalUsedUntilNow}</b></span>
                             <span>Mar: <b style="color:#1f6feb;">${remaining}</b></span>
                         </div>
@@ -809,7 +816,7 @@
             } else {
                 let parts = [];
                 if (deficitsCount > 0) parts.push(`<span class="alert-badge alert-error">${deficitsCount} hiány</span>`);
-                if (surplusesCount > 0) parts.push(`<span class="alert-badge alert-warning" style="background:#ffd700; color:#000;">${surplusesCount} többlet</span>`);
+                if (surplusesCount > 0) parts.push(`<span class="alert-badge alert-warning" style="background:#d97706; color:#fff;">${surplusesCount} többlet</span>`);
                 reportHtml = parts.join(' | ');
             }
             document.getElementById('auditReport').innerHTML = reportHtml;
@@ -951,7 +958,7 @@
                 let sepClass = (wIdx > 0) ? 'border-left: 2px solid #1f6feb !important;' : '';
                 wordWeekRowHtml += `<th colspan="${w.count}" style="font-size:9px; font-weight:bold; background:#f0f4f8 !important; mso-shading: #f0f4f8; color:#000000 !important; border:1px solid #333333; ${sepClass} padding:1px 0px;">${w.weekNum}.hét</th>`;
             });
-            wordWeekRowHtml += '<th class="hours-col" style="font-size:10px; background-color: #ffeb3b !important; mso-shading: #ffeb3b; color: #000000 !important; border-left: 2px solid #1f6feb !important; white-space: nowrap !important;">Óra</th></tr>';
+            wordWeekRowHtml += '<th class="hours-col" style="font-size:10px; background-color: #ffeb3b !important; mso-shading: #ffeb3b; color: #000000 !important; border-left: 2px solid #1f6feb !important; white-space: nowrap !important;">Össz óra</th></tr>';
 
             let originalHeaderRows = tempThead.querySelectorAll('tr');
             if(originalHeaderRows.length >= 3) {
