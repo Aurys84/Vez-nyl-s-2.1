@@ -157,7 +157,6 @@
             width: 55px;
             font-size: 1.1rem !important;
             font-weight: 900 !important;
-            background-color: #332900 !important;
         }
         .total-row td {
             background-color: #1f2937 !important;
@@ -964,7 +963,7 @@
                 }
             });
 
-            // Végigfutunk a táblázat összes során a nyomtatási klónban: kék elválasztók, sárga utolsó oszlop, és szigorú középre igazítás
+            // Végigfutunk a nyomtatási táblázat sorain: kék elválasztók minden sorban, sárga utolsó oszlop, és szigorúan középre igazított karakterek cellaméret-változtatás nélkül!
             let tempRows = tempTable.querySelectorAll('tr');
             tempRows.forEach((row, rIdx) => {
                 let cells = row.querySelectorAll('th, td');
@@ -1014,13 +1013,13 @@
                         .subtitle { text-align: center; font-size: 10px; margin-bottom: 15px; color: #555555; }
                         table { width: 100%; border-collapse: collapse; text-align: center; margin-bottom: 15px; font-size: 8px; }
                         
-                        /* Cella alapbeállítások: szigorúan függőlegesen és vízszintesen is középre, nem nyúlva a cellamérethez */
+                        /* Cella alapbeállítások: szigorúan függőlegesen és vízszintesen is középre, érintetlen cellamérettel */
                         th, td { border: 1px solid #333333; padding: 2px 1px; text-align: center !important; vertical-align: middle !important; }
                         th { background: #f0f4f8 !important; color: #000000 !important; font-weight: bold; font-size: 9px; }
                         
                         .name-col { min-width: 165px; max-width: 165px; font-size: 10px; font-weight: bold; text-align: left !important; padding-left: 4px; vertical-align: middle !important; }
                         
-                        /* Tartalom a cellákban: jól látható, tökéletesen középre igazított karakterméret */
+                        /* Karakterméret és középre igazítás a cellákban */
                         .hours-col { min-width: 45px; max-width: 45px; width: 45px; font-size: 11px !important; font-weight: 900 !important; text-align: center !important; vertical-align: middle !important; background-color: #ffeb3b !important; mso-shading: #ffeb3b; }
                         td.cell-default, td[class*="pos-"] { font-size: 11px !important; font-weight: 900 !important; text-align: center !important; vertical-align: middle !important; }
                         
