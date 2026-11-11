@@ -9,7 +9,7 @@
             --bg-color: #f0f4f8;
             --panel-bg: #ffffff;
             --text-color: #1f2937;
-            --border-color: #cbd5e1;
+            --border-color: #94a3b8;
             --green: #238636;
             --red: #da3633;
             --yellow-led: #d97706;
@@ -111,7 +111,7 @@
             font-size: 0.65rem;
         }
         th, td {
-            border: 1px solid var(--border-color);
+            border: 1.5px solid var(--border-color);
             padding: 5px 2px;
             white-space: nowrap;
         }
@@ -121,7 +121,7 @@
         }
         .week-row th {
             top: 0;
-            background-color: #e2e8f0 !important;
+            background-color: #cbd5e1 !important;
             color: #1f6feb;
             font-weight: 900;
             font-size: 0.95rem;
@@ -130,7 +130,7 @@
         }
         .req-row th {
             top: 26px;
-            background-color: #f8fafc !important;
+            background-color: #f1f5f9 !important;
             z-index: 4;
             padding: 8px 4px;
         }
@@ -151,7 +151,7 @@
             font-size: 0.9rem;
         }
         th.name-col {
-            background-color: #e2e8f0 !important;
+            background-color: #cbd5e1 !important;
             z-index: 5 !important;
             font-size: 0.85rem;
             color: #1f2937;
@@ -166,7 +166,7 @@
             color: #000000 !important;
         }
         .total-row td {
-            background-color: #e2e8f0 !important;
+            background-color: #cbd5e1 !important;
             color: #1f6feb !important;
             font-weight: 900;
             font-size: 1.1rem !important;
@@ -599,7 +599,7 @@
                 tbodyHtml += `</tr>`;
             });
             tbodyHtml += `<tr class="total-row">`;
-            tbodyHtml += `<td class="name-col" style="background:#e2e8f0 !important; color:#1f6feb;">Havi Összesítő</td>`;
+            tbodyHtml += `<td class="name-col" style="background:#cbd5e1 !important; color:#1f6feb;">Havi Összesítő</td>`;
             days.forEach((item, dIndex) => {
                 let d = item.date;
                 let dayIndex = d.getDay();
@@ -1133,15 +1133,13 @@
                         <div class="section-title">2. Éves Göngyölített Szabadságkezelő</div>
                         <div>${cleanVacationHtml}</div>
                         
-                        <div class="summary-row">
-                            <div class="summary-box">
-                                <h3>🔍 Létszám Figyelőmotor</h3>
-                                <div>${auditHtml}</div>
-                            </div>
-                            <div class="summary-box">
-                                <h3>🎉 Havi Ünnepnapok Számláló</h3>
-                                <div>${holidayHtml}</div>
-                            </div>
+                        <div class="summary-box">
+                            <h3>🔍 Létszám Figyelőmotor</h3>
+                            <div>${auditHtml}</div>
+                        </div>
+                        <div class="summary-box">
+                            <h3>🎉 Havi Ünnepnapok Számláló</h3>
+                            <div>${holidayHtml}</div>
                         </div>
                     </div>
                 </body>
