@@ -966,11 +966,8 @@
                 }
             });
 
-            // ITT OSZTJUK SZÉT 2 OLDALRA: Az első 10 őr megy az 1. oldalra, utána beleteszünk egy Word oldaltörést, és a 11-20. őr megy a 2. oldalra!
             let allRows = tempTable.querySelectorAll('tbody tr:not(.total-row)');
-            let totalRowsCount = allRows.length;
             
-            // Készítünk két külön táblázat klónt a két oldalhoz
             let table1Container = tableContainerClone.cloneNode(true);
             let table1 = table1Container.querySelector('table');
             let tbody1 = table1.querySelector('tbody');
@@ -989,19 +986,18 @@
                 }
             });
 
-            // Hozzáadjuk a havi összesítő sort a 2. táblázat aljára is (vagy mindkettőhöz)
             let totalRow = document.querySelector('#scheduleTable tbody tr.total-row');
             if(totalRow) {
                 tbody2.appendChild(totalRow.cloneNode(true));
             }
 
-            // Méretezési beállítások mindkét táblázatra
+            // ITT NÖVELTÉK MEG A NÉV OSZLOPOT 75pt-RŐL 85pt-RE (2-3 mm eltolás jobbra a jobb széli hellyel gazdálkodva)
             [table1, table2].forEach(tbl => {
                 let tempRows = tbl.querySelectorAll('tr');
                 tempRows.forEach((row, rIdx) => {
                     let cells = row.querySelectorAll('th, td');
                     let totalDaysCount = days.length; 
-                    let dayColWidthPt = Math.floor((710 - 75 - 22) / totalDaysCount);
+                    let dayColWidthPt = Math.floor((710 - 85 - 22) / totalDaysCount);
 
                     cells.forEach((cell, cIndex) => {
                         let dObj = days[cIndex - 1];
@@ -1016,7 +1012,7 @@
                             cell.setAttribute('style', curStyle + '; width: 22pt !important; min-width: 22pt !important; max-width: 22pt !important; background-color: #ffeb3b !important; mso-shading: #ffeb3b; color: #000000 !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; font-size: 10px !important; font-weight: 900 !important; white-space: nowrap !important; padding: 1px 0px !important;');
                         } else if (cIndex === 0 || cell.classList.contains('name-col')) {
                             let curStyle = cell.getAttribute('style') || '';
-                            cell.setAttribute('style', curStyle + '; width: 75pt !important; min-width: 75pt !important; max-width: 75pt !important; text-align: left !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; padding: 1px 2px !important;');
+                            cell.setAttribute('style', curStyle + '; width: 85pt !important; min-width: 85pt !important; max-width: 85pt !important; text-align: left !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; padding: 1px 2px !important;');
                         } else {
                             let curStyle = cell.getAttribute('style') || '';
                             cell.setAttribute('style', curStyle + '; width: ' + dayColWidthPt + 'pt !important; min-width: ' + dayColWidthPt + 'pt !important; max-width: ' + dayColWidthPt + 'pt !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; font-size: 10px !important; font-weight: 900 !important; padding: 1px 0px !important;');
@@ -1039,7 +1035,6 @@
                         @page WordSection1 {
                             size: 842.25pt 595.3pt;
                             mso-page-orientation: landscape;
-                            /* ITT ADTUK MEG A JOBB/BAL MARGÓT (balra nagyobb hely a lyukasztáshoz/nyomtatási margóhoz!) */
                             margin: 0.15cm 0.15cm 0.15cm 0.5cm; 
                         }
                         div.WordSection1 {
@@ -1056,7 +1051,7 @@
                         th, td { border: 1px solid #333333; padding: 1px 0px; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; overflow: hidden; }
                         th { background: #f0f4f8 !important; color: #000000 !important; font-weight: bold; font-size: 7px; }
                         
-                        .name-col { width: 75pt !important; font-size: 9px; font-weight: bold; text-align: left !important; padding-left: 2px; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; }
+                        .name-col { width: 85pt !important; font-size: 9px; font-weight: bold; text-align: left !important; padding-left: 2px; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; }
                         
                         .hours-col { width: 22pt !important; font-size: 10px !important; font-weight: 900 !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; background-color: #ffeb3b !important; mso-shading: #ffeb3b; color: #000000 !important; white-space: nowrap !important; }
                         td.cell-default, td[class*="pos-"] { font-size: 10px !important; font-weight: 900 !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; }
@@ -1087,12 +1082,15 @@
                         <div class="month-title">1. <b>${year}. ${currentMonthName}</b> — Havi Vezénylési Táblázat (1. Rész: 1–10. őr)</div>
                         <div>${table1Html}</div>
 
-                        <!-- ITT TÖRTÉNIK A KÉT OLDALRA BONTÁS -->
+                        <!-- 1. OLDALTÖRÉS A 2. TÁBLÁZATHOZ -->
                         <div class="page-break"></div>
 
                         <div class="month-title">1. <b>${year}. ${currentMonthName}</b> — Havi Vezénylési Táblázat (2. Rész: 11–20. őr)</div>
                         <div>${table2Html}</div>
                         
+                        <!-- 2. OLDALTÖRÉS KIZÁRÓLAG A SZABADSÁGKEZELŐNEK EGY ÚJ ÖNÁLLÓ LAPRA -->
+                        <div class="page-break"></div>
+
                         <div class="section-title">2. Éves Göngyölített Szabadságkezelő</div>
                         <div>${cleanVacationHtml}</div>
                         
