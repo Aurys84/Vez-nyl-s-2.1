@@ -867,7 +867,7 @@
             let month = parseInt(document.getElementById('monthSelect').value);
             let currentMonthName = monthNames[month];
             
-            // TELJESEN FIX 5 OSZLOPOS SZABADSÁGKEZELŐ TÁBLÁZAT (710PT)
+            // PONTOSAN SZÁMOLT, FIX 5 OSZLOPOS SZABADSÁGKEZELŐ TÁBLÁZAT (710PT)
             let cleanVacationHtml = '<table style="width: 710pt !important; max-width: 710pt !important; border-collapse: collapse; table-layout: fixed !important; margin-bottom: 6px;">';
             let colWidth = Math.floor(710 / 5);
             
@@ -1003,7 +1003,7 @@
                 tbody2.appendChild(totalRow.cloneNode(true));
             }
 
-            // KÜLÖN TÁBLÁZATOK SZELETElése ÉS IDENTIKUS MÉRETEZÉSE
+            // KÜLÖN TÁBLÁZATOK SZELETELÉSE ÉS IDENTIKUS MÉRETEZÉSE
             [table1, table2].forEach(tbl => {
                 let tempRows = tbl.querySelectorAll('tr');
                 tempRows.forEach((row, rIdx) => {
@@ -1105,6 +1105,9 @@
                         <div>${table1Html}</div>
                     </div>
 
+                    <!-- KŐKEMÉNY WORD OLDALTÖRÉS -->
+                    <br clear="all" style="page-break-before:always">
+
                     <!-- 2. OLDAL: 11-20. ŐR TÁBLÁZATA -->
                     <div class="WordSection2">
                         <div class="header-container">
@@ -1113,6 +1116,9 @@
                         <div class="month-title">1. <b>${year}. ${currentMonthName}</b> — Havi Vezénylési Táblázat (2. Rész: 11–20. őr)</div>
                         <div>${table2Html}</div>
                     </div>
+
+                    <!-- KŐKEMÉNY WORD OLDALTÖRÉS -->
+                    <br clear="all" style="page-break-before:always">
 
                     <!-- 3. OLDAL: SZABADSÁGKEZELŐ ÉS FIGYELŐK -->
                     <div class="WordSection3">
