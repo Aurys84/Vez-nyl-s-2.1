@@ -528,7 +528,11 @@
                     reqRowHtml += `<th class="${sepClass}" style="background:#1f6feb; color:white;">-</th>`;
                 } else {
                     let reqVal = savedRequired[dKey] !== undefined ? savedRequired[dKey] : 2;
-                    reqRowHtml += `<th class="${sepClass}"><select data-date="${dKey}" onchange="updateRequiredSelect(this)" style="width: 100% !important; min-width: 24px !important; height: 26px; text-align: center; background: #ffffff !important; color: #1f6feb !important; border: 1.5px solid #1f6feb !important; border-radius: 4px; font-weight: 900; font-size: 0.8rem; padding: 0px; box-sizing: border-box; cursor: pointer;"><script>for(let i=0; i<=20; i++) document.write('<option value="' + i + '"' + (${reqVal} === i ? ' selected' : '') + '>' + i + '</option>');</script></select></th>`;
+                    let optionsHtml = '';
+                    for(let i = 0; i <= 20; i++) {
+                        optionsHtml += `<option value="${i}"${reqVal === i ? ' selected' : ''}>${i}</option>`;
+                    }
+                    reqRowHtml += `<th class="${sepClass}"><select data-date="${dKey}" onchange="updateRequiredSelect(this)" style="width: 100% !important; min-width: 24px !important; height: 26px; text-align: center; background: #ffffff !important; color: #1f6feb !important; border: 1.5px solid #1f6feb !important; border-radius: 4px; font-weight: 900; font-size: 0.8rem; padding: 0px; box-sizing: border-box; cursor: pointer;">${optionsHtml}</select></th>`;
                 }
                 let headerClass = "day-normal-header";
                 if (isHoliday(d)) {
