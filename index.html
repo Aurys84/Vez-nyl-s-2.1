@@ -123,6 +123,7 @@
             font-size: 0.95rem;
             z-index: 4;
             padding: 6px 2px;
+            border-left: 1px solid var(--border-color);
         }
         .req-row th {
             top: 26px;
@@ -470,21 +471,31 @@
                 days.push({ date: d, isExtra: false });
             }
 
-            // Hetek csoportosítása colspan-nel a fejlécben
+            // Hetek csoportosítása colspan-nel a fejlécben, figyelembe véve a hétfői elválasztásokat
             let weeksMap = [];
-            days.forEach((item) => {
-                let wNum = getISOWeekNumber(item.date);
-                let lastGroup = weeksMap[weeksMap.length - 1];
-                if(lastGroup && lastGroup.weekNum === wNum) {
-                    lastGroup.count++;
-                } else {
+            days.forEach((item, index) => {
+                let d = item.date;
+                let wNum = getISOWeekNumber(d);
+                let dayIndex = d.getDay();
+                let isMonday = (dayIndex === 1);
+                
+                // Ha hétfő van (és nem az első elem), akkor új hét csoportot kezdünk, hogy a kék elválasztó pontosan illeszkedjen
+                if(isMonday && index > 0) {
                     weeksMap.push({ weekNum: wNum, count: 1 });
+                } else {
+                    let lastGroup = weeksMap[weeksMap.length - 1];
+                    if(lastGroup && lastGroup.weekNum === wNum && !isMonday) {
+                        lastGroup.count++;
+                    } else {
+                        weeksMap.push({ weekNum: wNum, count: 1 });
+                    }
                 }
             });
 
             let weekRowHtml = '<tr class="week-row"><th class="name-col">Hét száma</th>';
-            weeksMap.forEach(w => {
-                weekRowHtml += `<th colspan="${w.count}">${w.weekNum}.hét</th>`;
+            weeksMap.forEach((w, wIdx) => {
+                let sepClass = (wIdx > 0) ? 'week-separator' : '';
+                weekRowHtml += `<th colspan="${w.count}" class="${sepClass}">${w.weekNum}.hét</th>`;
             });
             weekRowHtml += '<th class="hours-col">Óra</th></tr>';
 
@@ -886,12 +897,12 @@
             });
             cleanVacationHtml += '</div>';
 
-            // Klónozzuk a táblázatot a Word exportra
+            // Klónozzuk a táblázatot a Word exporthoz
             let tableContainerClone = document.querySelector('.table-container').cloneNode(true);
             let tempTable = tableContainerClone.querySelector('table');
             let tempThead = tempTable.querySelector('thead');
             
-            // Újraépítjük a Word exportban is a heti fejlécet colspan-nel, hogy pontosan illeszkedjen
+            // Újraépítjük a Word exportban is a heti fejlécet colspan-nel és kék elválasztókkal
             let days = [];
             let currentMonthDays = new Date(year, month + 1, 0).getDate();
             let pYear = month === 0 ? year - 1 : year;
@@ -905,19 +916,28 @@
             }
 
             let weeksMap = [];
-            days.forEach((item) => {
-                let wNum = getISOWeekNumber(item.date);
-                let lastGroup = weeksMap[weeksMap.length - 1];
-                if(lastGroup && lastGroup.weekNum === wNum) {
-                    lastGroup.count++;
-                } else {
+            days.forEach((item, index) => {
+                let d = item.date;
+                let wNum = getISOWeekNumber(d);
+                let dayIndex = d.getDay();
+                let isMonday = (dayIndex === 1);
+                
+                if(isMonday && index > 0) {
                     weeksMap.push({ weekNum: wNum, count: 1 });
+                } else {
+                    let lastGroup = weeksMap[weeksMap.length - 1];
+                    if(lastGroup && lastGroup.weekNum === wNum && !isMonday) {
+                        lastGroup.count++;
+                    } else {
+                        weeksMap.push({ weekNum: wNum, count: 1 });
+                    }
                 }
             });
 
             let wordWeekRowHtml = '<tr class="week-row"><th class="name-col" style="font-size:9px;">Hét száma</th>';
-            weeksMap.forEach(w => {
-                wordWeekRowHtml += `<th colspan="${w.count}" style="font-size:10px; font-weight:bold; background:#f0f4f8 !important; mso-shading: #f0f4f8; color:#000000 !important; border:1px solid #333333; padding:3px 1px;">${w.weekNum}.hét</th>`;
+            weeksMap.forEach((w, wIdx) => {
+                let sepClass = (wIdx > 0) ? 'border-left: 2px solid #1f6feb !important;' : '';
+                wordWeekRowHtml += `<th colspan="${w.count}" style="font-size:10px; font-weight:bold; background:#f0f4f8 !important; mso-shading: #f0f4f8; color:#000000 !important; border:1px solid #333333; ${sepClass} padding:3px 1px;">${w.weekNum}.hét</th>`;
             });
             wordWeekRowHtml += '<th class="hours-col" style="font-size:9px;">Óra</th></tr>';
 
@@ -969,19 +989,19 @@
                         .subtitle { text-align: center; font-size: 10px; margin-bottom: 15px; color: #555555; }
                         table { width: 100%; border-collapse: collapse; text-align: center; margin-bottom: 15px; font-size: 8px; }
                         
-                        /* A cellák mérete fix és pici marad, hogy kényelmesen elférjen a lapon */
-                        th, td { border: 1px solid #333333; padding: 2px 1px; height: 16px; }
+                        /* Fix pici cellák, de középre igazítva és dupla betűmérettel kitöltve */
+                        th, td { border: 1px solid #333333; padding: 2px 1px; height: 16px; text-align: center; vertical-align: middle; }
                         th { background: #f0f4f8 !important; color: #000000 !important; font-weight: bold; font-size: 8px; }
                         
-                        .name-col { min-width: 165px; max-width: 165px; font-size: 10px; font-weight: bold; text-align: left; padding-left: 4px; }
+                        .name-col { min-width: 165px; max-width: 165px; font-size: 10px; font-weight: bold; text-align: left !important; padding-left: 4px; }
                         
-                        /* Itt növeljük a betűméretet 13px-re a naptárcellákban és az óráknál, hogy kitöltsék a fix cellát */
-                        .hours-col { min-width: 45px; max-width: 45px; width: 45px; font-size: 13px !important; font-weight: 900 !important; }
-                        td.cell-default, td[class*="pos-"] { font-size: 13px !important; font-weight: 900 !important; }
+                        /* Naptárcellák és óra oszlop: középre igazított, dupla betűméret */
+                        .hours-col { min-width: 45px; max-width: 45px; width: 45px; font-size: 13px !important; font-weight: 900 !important; text-align: center !important; }
+                        td.cell-default, td[class*="pos-"] { font-size: 13px !important; font-weight: 900 !important; text-align: center !important; }
                         
-                        .total-row td { background-color: #e2e8f0 !important; mso-shading: #e2e8f0; color: #000000 !important; font-weight: 900; font-size: 13px !important; }
+                        .total-row td { background-color: #e2e8f0 !important; mso-shading: #e2e8f0; color: #000000 !important; font-weight: 900; font-size: 13px !important; text-align: center !important; }
                         
-                        .cell-locked { background-color: #bfdbfe !important; mso-shading: #bfdbfe; color: #1e40af !important; font-weight: bold; font-size: 11px !important; }
+                        .cell-locked { background-color: #bfdbfe !important; mso-shading: #bfdbfe; color: #1e40af !important; font-weight: bold; font-size: 11px !important; text-align: center !important; }
                         .pos-np { background-color: #238636 !important; mso-shading: #238636; color: white !important; font-weight: bold; }
                         .pos-ep { background-color: #da3633 !important; mso-shading: #da3633; color: white !important; font-weight: bold; }
                         .pos-nep { background-color: #8957e5 !important; mso-shading: #8957e5; color: white !important; font-weight: bold; }
