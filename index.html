@@ -966,10 +966,14 @@
                 }
             });
 
-            // ITT A MEGOLDÁS: Eltávolítottam minden fix oszlopszélességet, így a Word automatikusan, gyönyörűen, tördelés nélkül besajtolja az EGÉSZ táblázatot (beleértve a végét is) a fekvő lapra!
+            // VÉGLEGES MEGOLDÁS A TÚLLÓGÁSRA: Minden cellára milliméter-alapú pontszélességet adunk, amivel a teljes táblázat pontosan 780 pont széles lesz, így tökéletesen kifér a fekvő A4-es lapra margóstul!
             let tempRows = tempTable.querySelectorAll('tr');
             tempRows.forEach((row, rIdx) => {
                 let cells = row.querySelectorAll('th, td');
+                let totalDaysCount = days.length; // pl. 34 oszlop
+                // 780 pontból vonjuk ki a nevet (90pt) meg az órát (26pt) = 664pt marad a napoknak
+                let dayColWidthPt = Math.floor(664 / totalDaysCount);
+
                 cells.forEach((cell, cIndex) => {
                     let dObj = days[cIndex - 1];
                     if (dObj && dObj.date && dObj.date.getDay() === 1 && cIndex > 0 && cIndex < cells.length - 1) {
@@ -979,15 +983,17 @@
                     }
                     
                     if (cIndex === cells.length - 1) {
-                        cell.style.backgroundColor = '#ffeb3b';
+                        // Utolsó sárga Óra oszlop: fix 26pt
                         let curStyle = cell.getAttribute('style') || '';
-                        cell.setAttribute('style', curStyle + '; background-color: #ffeb3b !important; mso-shading: #ffeb3b; color: #000000 !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; font-size: 12px !important; font-weight: 900 !important; white-space: nowrap !important;');
+                        cell.setAttribute('style', curStyle + '; width: 26pt !important; min-width: 26pt !important; max-width: 26pt !important; background-color: #ffeb3b !important; mso-shading: #ffeb3b; color: #000000 !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; font-size: 11px !important; font-weight: 900 !important; white-space: nowrap !important;');
                     } else if (cIndex === 0 || cell.classList.contains('name-col')) {
+                        // Név oszlop: fix 90pt
                         let curStyle = cell.getAttribute('style') || '';
-                        cell.setAttribute('style', curStyle + '; text-align: left !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important;');
+                        cell.setAttribute('style', curStyle + '; width: 90pt !important; min-width: 90pt !important; max-width: 90pt !important; text-align: left !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important;');
                     } else {
+                        // Naptári napok oszlopai: egyenletes osztott pontszélesség
                         let curStyle = cell.getAttribute('style') || '';
-                        cell.setAttribute('style', curStyle + '; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; font-size: 12px !important; font-weight: 900 !important;');
+                        cell.setAttribute('style', curStyle + '; width: ' + dayColWidthPt + 'pt !important; min-width: ' + dayColWidthPt + 'pt !important; max-width: ' + dayColWidthPt + 'pt !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; font-size: 11px !important; font-weight: 900 !important;');
                     }
                 });
             });
@@ -1005,40 +1011,40 @@
                         @page WordSection1 {
                             size: 842.25pt 595.3pt;
                             mso-page-orientation: landscape;
-                            margin: 0.15cm 0.15cm 0.15cm 0.15cm;
+                            margin: 0.2cm 0.2cm 0.2cm 0.2cm;
                         }
                         div.WordSection1 {
                             page: WordSection1;
                         }
-                        body { font-family: 'Segoe UI', Arial, sans-serif; background: #ffffff; color: #000000; margin: 0px; font-size: 12px; }
+                        body { font-family: 'Segoe UI', Arial, sans-serif; background: #ffffff; color: #000000; margin: 0px; font-size: 11px; }
                         .header-container { width: 100% !important; text-align: center !important; margin-bottom: 4px; }
-                        h1 { text-align: center !important; font-size: 14px; color: #1f6feb; margin: 0 0 2px 0; width: 100%; }
-                        .subtitle { text-align: center !important; font-size: 9px; margin-bottom: 4px; color: #555555; width: 100%; }
-                        .month-title { font-size: 11px; font-weight: bold; margin-top: 2px; margin-bottom: 3px; border-bottom: 2px solid #1f6feb; padding-bottom: 2px; color: #1f6feb; text-align: left; }
+                        h1 { text-align: center !important; font-size: 13px; color: #1f6feb; margin: 0 0 2px 0; width: 100%; }
+                        .subtitle { text-align: center !important; font-size: 8px; margin-bottom: 4px; color: #555555; width: 100%; }
+                        .month-title { font-size: 10px; font-weight: bold; margin-top: 2px; margin-bottom: 3px; border-bottom: 2px solid #1f6feb; padding-bottom: 2px; color: #1f6feb; text-align: left; }
                         
-                        table { width: 100% !important; table-layout: auto !important; border-collapse: collapse; text-align: center; margin-bottom: 6px; }
+                        table { width: 780pt !important; max-width: 780pt !important; table-layout: fixed !important; border-collapse: collapse; text-align: center; margin-bottom: 6px; }
                         
-                        th, td { border: 1px solid #333333; padding: 2px 1px; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; overflow: hidden; }
+                        th, td { border: 1px solid #333333; padding: 2px 0px; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; overflow: hidden; }
                         th { background: #f0f4f8 !important; color: #000000 !important; font-weight: bold; font-size: 8px; }
                         
-                        .name-col { font-size: 11px; font-weight: bold; text-align: left !important; padding-left: 3px; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; }
+                        .name-col { width: 90pt !important; font-size: 10px; font-weight: bold; text-align: left !important; padding-left: 3px; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; }
                         
-                        .hours-col { font-size: 12px !important; font-weight: 900 !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; background-color: #ffeb3b !important; mso-shading: #ffeb3b; color: #000000 !important; white-space: nowrap !important; }
-                        td.cell-default, td[class*="pos-"] { font-size: 12px !important; font-weight: 900 !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; }
+                        .hours-col { width: 26pt !important; font-size: 11px !important; font-weight: 900 !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; background-color: #ffeb3b !important; mso-shading: #ffeb3b; color: #000000 !important; white-space: nowrap !important; }
+                        td.cell-default, td[class*="pos-"] { font-size: 11px !important; font-weight: 900 !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; }
                         
-                        .total-row td { background-color: #e2e8f0 !important; mso-shading: #e2e8f0; color: #000000 !important; font-weight: 900; font-size: 12px !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; white-space: nowrap !important; }
+                        .total-row td { background-color: #e2e8f0 !important; mso-shading: #e2e8f0; color: #000000 !important; font-weight: 900; font-size: 11px !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; white-space: nowrap !important; }
                         
-                        .cell-locked { background-color: #bfdbfe !important; mso-shading: #bfdbfe; color: #1e40af !important; font-weight: bold; font-size: 11px !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; }
+                        .cell-locked { background-color: #bfdbfe !important; mso-shading: #bfdbfe; color: #1e40af !important; font-weight: bold; font-size: 10px !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; }
                         .pos-np { background-color: #238636 !important; mso-shading: #238636; color: white !important; font-weight: bold; }
                         .pos-ep { background-color: #da3633 !important; mso-shading: #da3633; color: white !important; font-weight: bold; }
                         .pos-nep { background-color: #8957e5 !important; mso-shading: #8957e5; color: white !important; font-weight: bold; }
                         .pos-szb { background-color: #9e6a03 !important; mso-shading: #9e6a03; color: white !important; font-weight: bold; }
                         .pos-szab { background-color: #1f6feb !important; mso-shading: #1f6feb; color: white !important; font-weight: bold; }
 
-                        .section-title { font-size: 11px; font-weight: bold; margin-top: 10px; margin-bottom: 3px; border-bottom: 2px solid #1f6feb; padding-bottom: 2px; color: #1f6feb; page-break-before: always; mso-break-type: section-break; text-align: left; }
+                        .section-title { font-size: 10px; font-weight: bold; margin-top: 10px; margin-bottom: 3px; border-bottom: 2px solid #1f6feb; padding-bottom: 2px; color: #1f6feb; page-break-before: always; mso-break-type: section-break; text-align: left; }
                         .summary-row { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 6px; }
                         .summary-box { border: 1px solid #333333; border-radius: 4px; padding: 4px; font-size: 9px; background: #f9fafb !important; }
-                        .summary-box h3 { margin: 0 0 2px 0; font-size: 10px; color: #1f6feb; }
+                        .summary-box h3 { margin: 0 0 2px 0; font-size: 9px; color: #1f6feb; }
                     </style>
                 </head>
                 <body>
