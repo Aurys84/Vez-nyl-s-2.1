@@ -867,8 +867,8 @@
             let month = parseInt(document.getElementById('monthSelect').value);
             let currentMonthName = monthNames[month];
             
-            // TELJESEN RÖGZÍTETT, 5 OSZLOPOS TÁBLÁZAT A SZABADSÁGOKHOZ (MIND A 20 ŐRRE, EGYMÁS MELLETT 5-ÖSÉVEL)
-            let cleanVacationHtml = '<table style="width: 710pt !important; max-width: 710pt !important; border-collapse: collapse; table-layout: fixed !important; margin-bottom: 4px;">';
+            // TELJESEN BIZTOS 5 OSZLOPOS TÁBLÁZAT A SZABADSÁGOKHOZ (MIND A 20 ŐRRE, SORONKÉNT 5-ÖSÉVEL)
+            let cleanVacationHtml = '<table style="width: 710pt !important; max-width: 710pt !important; border-collapse: collapse; table-layout: fixed !important; margin-bottom: 6px;">';
             let colWidth = Math.floor(710 / 5);
             
             for (let i = 0; i < currentGuards.length; i += 5) {
@@ -894,8 +894,8 @@
                         }
                         let remaining = baseVal - totalUsedUntilNow;
                         cleanVacationHtml += `
-                            <td style="width: ${colWidth}pt !important; min-width: ${colWidth}pt !important; max-width: ${colWidth}pt !important; border: 1px solid #333333; padding: 3px 4px; font-size: 8px; background: #f9fafb !important; mso-shading: #f9fafb; vertical-align: top; text-align: left;">
-                                <div style="font-weight: bold; border-bottom: 1px solid #cccccc; padding-bottom: 1px; margin-bottom: 2px; color: #111111; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${guardName}</div>
+                            <td style="width: ${colWidth}pt !important; min-width: ${colWidth}pt !important; max-width: ${colWidth}pt !important; border: 1px solid #333333; padding: 4px; font-size: 8px; background: #f9fafb !important; mso-shading: #f9fafb; vertical-align: top; text-align: left;">
+                                <div style="font-weight: bold; border-bottom: 1px solid #cccccc; padding-bottom: 2px; margin-bottom: 2px; color: #111111; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${guardName}</div>
                                 <div style="display: flex; justify-content: space-between; color: #333333; font-size: 7px;">
                                     <span>Alap:<b>${baseVal}</b></span>
                                     <span>Felh:<b style="color:#9e6a03;">${totalUsedUntilNow}</b></span>
@@ -904,7 +904,7 @@
                             </td>
                         `;
                     } else {
-                        cleanVacationHtml += `<td style="width: ${colWidth}pt !important; border: 1px solid #333333; padding: 3px 4px; background: #ffffff;"></td>`;
+                        cleanVacationHtml += `<td style="width: ${colWidth}pt !important; border: 1px solid #333333; padding: 4px; background: #ffffff;"></td>`;
                     }
                 }
                 cleanVacationHtml += '</tr>';
