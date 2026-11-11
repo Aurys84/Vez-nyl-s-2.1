@@ -934,12 +934,12 @@
                 }
             });
 
-            let wordWeekRowHtml = '<tr class="week-row"><th class="name-col" style="width:11%; font-size:9px;">Hét száma</th>';
+            let wordWeekRowHtml = '<tr class="week-row"><th class="name-col" style="width:11% !important; font-size:9px;">Hét száma</th>';
             weeksMap.forEach((w, wIdx) => {
                 let sepClass = (wIdx > 0) ? 'border-left: 2px solid #1f6feb !important;' : '';
                 wordWeekRowHtml += `<th colspan="${w.count}" style="font-size:9px; font-weight:bold; background:#f0f4f8 !important; mso-shading: #f0f4f8; color:#000000 !important; border:1px solid #333333; ${sepClass} padding:2px 1px;">${w.weekNum}.hét</th>`;
             });
-            wordWeekRowHtml += '<th class="hours-col" style="width:4%; font-size:11px; background-color: #ffeb3b !important; mso-shading: #ffeb3b; color: #000000 !important; border-left: 2px solid #1f6feb !important; white-space: nowrap !important;">Óra</th></tr>';
+            wordWeekRowHtml += '<th class="hours-col" style="width:4% !important; font-size:11px; background-color: #ffeb3b !important; mso-shading: #ffeb3b; color: #000000 !important; border-left: 2px solid #1f6feb !important; white-space: nowrap !important;">Óra</th></tr>';
 
             let originalHeaderRows = tempThead.querySelectorAll('tr');
             if(originalHeaderRows.length >= 3) {
@@ -966,7 +966,7 @@
                 }
             });
 
-            // NYOMTATÁSI FELÜLET: 12-es betűméret, két soros változat érintetlenül, és pontosan 85% a napoknak, hogy a legvége is teljes egészében rajta legyen a lapon!
+            // ITT A LÉNYEG: explicit inline szélességek kényszerítése, hogy a végrehajtás során a hónap összes napja és a sárga óra oszlop is garantáltan beférjen a fekvő A4-es lapra!
             let tempRows = tempTable.querySelectorAll('tr');
             tempRows.forEach((row, rIdx) => {
                 let cells = row.querySelectorAll('th, td');
@@ -984,13 +984,13 @@
                     if (cIndex === cells.length - 1) {
                         cell.style.backgroundColor = '#ffeb3b';
                         let curStyle = cell.getAttribute('style') || '';
-                        cell.setAttribute('style', curStyle + '; width: 4% !important; background-color: #ffeb3b !important; mso-shading: #ffeb3b; color: #000000 !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; font-size: 12px !important; font-weight: 900 !important; white-space: nowrap !important;');
+                        cell.setAttribute('style', curStyle + '; width: 4% !important; min-width: 4% !important; max-width: 4% !important; background-color: #ffeb3b !important; mso-shading: #ffeb3b; color: #000000 !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; font-size: 12px !important; font-weight: 900 !important; white-space: nowrap !important;');
                     } else if (cIndex === 0 || cell.classList.contains('name-col')) {
                         let curStyle = cell.getAttribute('style') || '';
-                        cell.setAttribute('style', curStyle + '; width: 11% !important; text-align: left !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important;');
+                        cell.setAttribute('style', curStyle + '; width: 11% !important; min-width: 11% !important; max-width: 11% !important; text-align: left !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important;');
                     } else {
                         let curStyle = cell.getAttribute('style') || '';
-                        cell.setAttribute('style', curStyle + '; width: ' + dayCellWidthPercent + ' !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; font-size: 12px !important; font-weight: 900 !important;');
+                        cell.setAttribute('style', curStyle + '; width: ' + dayCellWidthPercent + ' !important; min-width: ' + dayCellWidthPercent + ' !important; max-width: ' + dayCellWidthPercent + ' !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; font-size: 12px !important; font-weight: 900 !important;');
                     }
                 });
             });
@@ -1008,16 +1008,16 @@
                         @page WordSection1 {
                             size: 842.25pt 595.3pt;
                             mso-page-orientation: landscape;
-                            margin: 0.25cm 0.25cm 0.25cm 0.25cm;
+                            margin: 0.2cm 0.2cm 0.2cm 0.2cm;
                         }
                         div.WordSection1 {
                             page: WordSection1;
                         }
                         body { font-family: 'Segoe UI', Arial, sans-serif; background: #ffffff; color: #000000; margin: 0px; font-size: 12px; }
-                        .header-container { width: 100% !important; text-align: center !important; margin-bottom: 5px; }
-                        h1 { text-align: center !important; font-size: 15px; color: #1f6feb; margin: 0 0 2px 0; width: 100%; }
-                        .subtitle { text-align: center !important; font-size: 9px; margin-bottom: 5px; color: #555555; width: 100%; }
-                        .month-title { font-size: 11px; font-weight: bold; margin-top: 3px; margin-bottom: 3px; border-bottom: 2px solid #1f6feb; padding-bottom: 2px; color: #1f6feb; text-align: left; }
+                        .header-container { width: 100% !important; text-align: center !important; margin-bottom: 4px; }
+                        h1 { text-align: center !important; font-size: 14px; color: #1f6feb; margin: 0 0 2px 0; width: 100%; }
+                        .subtitle { text-align: center !important; font-size: 9px; margin-bottom: 4px; color: #555555; width: 100%; }
+                        .month-title { font-size: 11px; font-weight: bold; margin-top: 2px; margin-bottom: 3px; border-bottom: 2px solid #1f6feb; padding-bottom: 2px; color: #1f6feb; text-align: left; }
                         
                         table { width: 100% !important; table-layout: fixed !important; border-collapse: collapse; text-align: center; margin-bottom: 6px; }
                         
