@@ -887,7 +887,7 @@
                         let totalUsedUntilNow = 0;
                         for(let m = 0; m <= month; m++) {
                             let mDays = new Date(year, m + 1, 0).getDate();
-                            let mSavedSchedule = JSON.parse(localStorage.getItem(`matrix_schedule_${year_${m}`)) || {};
+                            let mSavedSchedule = JSON.parse(localStorage.getItem(`matrix_schedule_${year}_${m}`)) || {};
                             for(let d = 0; d < mDays; d++) {
                                 let cellKey = `g_${gIndex}_d_${d}`;
                                 let dObj = new Date(year, m, d + 1);
