@@ -874,7 +874,6 @@
             let month = parseInt(document.getElementById('monthSelect').value);
             let currentMonthName = monthNames[month];
             
-            // PONTOSAN SZÁMOLT, FIX 5 OSZLOPOS SZABADSÁGKEZELŐ TÁBLÁZAT (710PT)
             let cleanVacationHtml = '<table style="width: 710pt !important; max-width: 710pt !important; border-collapse: collapse; table-layout: fixed !important; margin-bottom: 6px;">';
             let colWidth = Math.floor(710 / 5);
             
@@ -1010,7 +1009,6 @@
                 tbody2.appendChild(totalRow.cloneNode(true));
             }
 
-            // KÜLÖN TÁBLÁZATOK SZELETELÉSE ÉS IDENTIKUS MÉRETEZÉSE
             [table1, table2].forEach(tbl => {
                 let tempRows = tbl.querySelectorAll('tr');
                 tempRows.forEach((row, rIdx) => {
