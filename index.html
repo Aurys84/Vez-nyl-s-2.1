@@ -528,7 +528,7 @@
                     reqRowHtml += `<th class="${sepClass}" style="background:#1f6feb; color:white;">-</th>`;
                 } else {
                     let reqVal = savedRequired[dKey] !== undefined ? savedRequired[dKey] : 2;
-                    reqRowHtml += `<th class="${sepClass}"><input type="number" min="0" max="20" value="${reqVal}" data-date="${dKey}" onchange="updateRequired(this)" style="width: 100% !important; min-width: 24px !important; height: 24px; text-align: center; background: #ffffff !important; color: #1f6feb !important; border: 1.5px solid #1f6feb !important; border-radius: 4px; font-weight: 900; font-size: 0.85rem; padding: 0px; box-sizing: border-box;"></th>`;
+                    reqRowHtml += `<th class="${sepClass}"><select data-date="${dKey}" onchange="updateRequiredSelect(this)" style="width: 100% !important; min-width: 24px !important; height: 26px; text-align: center; background: #ffffff !important; color: #1f6feb !important; border: 1.5px solid #1f6feb !important; border-radius: 4px; font-weight: 900; font-size: 0.8rem; padding: 0px; box-sizing: border-box; cursor: pointer;"><script>for(let i=0; i<=20; i++) document.write('<option value="' + i + '"' + (${reqVal} === i ? ' selected' : '') + '>' + i + '</option>');</script></select></th>`;
                 }
                 let headerClass = "day-normal-header";
                 if (isHoliday(d)) {
@@ -619,13 +619,13 @@
             runAuditEngine(days, year, month);
             runVacationEngine(year, month);
         }
-        function updateRequired(input) {
+        function updateRequiredSelect(select) {
             const year = document.getElementById('yearSelect').value;
             const month = document.getElementById('monthSelect').value;
-            let dKey = input.dataset.date;
+            let dKey = select.dataset.date;
             
             let savedRequired = JSON.parse(localStorage.getItem(`matrix_required_${year}_${month}`)) || {};
-            savedRequired[dKey] = parseInt(input.value) || 0;
+            savedRequired[dKey] = parseInt(select.value) || 0;
             localStorage.setItem(`matrix_required_${year}_${month}`, JSON.stringify(savedRequired));
             generateCalendar();
         }
