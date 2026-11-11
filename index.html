@@ -157,19 +157,21 @@
             color: #1f2937;
         }
         .hours-col {
-            min-width: 48px;
-            max-width: 48px;
-            width: 48px;
-            font-size: 1.05rem !important;
+            min-width: 44px;
+            max-width: 44px;
+            width: 44px;
+            font-size: 1rem !important;
             font-weight: 900 !important;
             background-color: #fef08a !important;
             color: #000000 !important;
+            white-space: nowrap;
+            overflow: hidden;
         }
         .total-row td {
             background-color: #cbd5e1 !important;
             color: #1f6feb !important;
             font-weight: 900;
-            font-size: 1.05rem !important;
+            font-size: 1rem !important;
         }
         .week-separator {
             border-left: 3px solid #1f6feb !important;
@@ -595,7 +597,7 @@
                         tbodyHtml += `<td class="${cellInfo.className} ${prevWeekCheck}" onclick="selectCell(this)" data-type="${cellInfo.type}" data-key="${cellKey}" data-date="${dKey}" data-guard="${gIndex}">${cellInfo.text}</td>`;
                     }
                 });
-                tbodyHtml += `<td id="total-hours-${gIndex}" class="hours-col" style="font-weight: 900; color: #000000; font-size: 1.05rem;">0h</td>`;
+                tbodyHtml += `<td id="total-hours-${gIndex}" class="hours-col" style="font-weight: 900; color: #000000; font-size: 1rem;">0h</td>`;
                 tbodyHtml += `</tr>`;
             });
             tbodyHtml += `<tr class="total-row">`;
@@ -607,7 +609,7 @@
                 let prevWeekCheck = (isMonday && dIndex > 0) ? 'week-separator' : '';
                 tbodyHtml += `<td id="col-total-${dIndex}" class="${prevWeekCheck}">0h</td>`;
             });
-            tbodyHtml += `<td id="grand-total-hours" class="hours-col" style="color:#000000; font-weight:900; font-size:1.05rem;">0h</td>`;
+            tbodyHtml += `<td id="grand-total-hours" class="hours-col" style="color:#000000; font-weight:900; font-size:1rem;">0h</td>`;
             tbodyHtml += `</tr>`;
             document.getElementById('tableBody').innerHTML = tbodyHtml;
             document.querySelectorAll('#scheduleTable tbody tr:not(.total-row)').forEach(row => {
