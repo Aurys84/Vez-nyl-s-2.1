@@ -1047,32 +1047,32 @@
                         @page WordSection1 {
                             size: 842.25pt 595.3pt;
                             mso-page-orientation: landscape;
-                            margin: 0.15cm 0.15cm 0.15cm 0.5cm; 
+                            margin: 2.2cm 0.5cm 1.5cm 0.5cm; 
                         }
                         div.WordSection1 { page: WordSection1; mso-break-type: section-break; }
 
                         @page WordSection2 {
                             size: 842.25pt 595.3pt;
                             mso-page-orientation: landscape;
-                            margin: 0.15cm 0.15cm 0.15cm 0.5cm; 
+                            margin: 2.2cm 0.5cm 1.5cm 0.5cm; 
                         }
                         div.WordSection2 { page: WordSection2; mso-break-type: section-break; }
 
                         @page WordSection3 {
                             size: 842.25pt 595.3pt;
                             mso-page-orientation: landscape;
-                            margin: 0.15cm 0.15cm 0.15cm 0.5cm; 
+                            margin: 1.5cm 0.5cm 1.0cm 0.5cm; 
                         }
                         div.WordSection3 { page: WordSection3; }
 
                         body { font-family: 'Segoe UI', Arial, sans-serif; background: #ffffff; color: #000000; margin: 0px; font-size: 10px; }
-                        .header-container { width: 100% !important; text-align: center !important; margin-bottom: 2px; }
-                        h1 { text-align: center !important; font-size: 12px; color: #1f6feb; margin: 0 0 1px 0; width: 100%; }
-                        .month-title { font-size: 10px; font-weight: bold; margin-top: 2px; margin-bottom: 2px; border-bottom: 2px solid #1f6feb; padding-bottom: 1px; color: #1f6feb; text-align: left; }
+                        .header-container { width: 100% !important; text-align: center !important; margin-bottom: 4px; }
+                        h1 { text-align: center !important; font-size: 12px; color: #1f6feb; margin: 0 0 2px 0; width: 100%; }
+                        .month-title { font-size: 10px; font-weight: bold; margin-top: 4px; margin-bottom: 4px; border-bottom: 2px solid #1f6feb; padding-bottom: 2px; color: #1f6feb; text-align: left; }
                         
                         table { width: 710pt !important; max-width: 710pt !important; table-layout: fixed !important; border-collapse: collapse; text-align: center; margin-bottom: 4px; }
                         
-                        th, td { border: 1px solid #333333; padding: 1px 0px; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; overflow: hidden; }
+                        th, td { border: 1px solid #333333; padding: 2px 0px; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; overflow: hidden; }
                         th { background: #f0f4f8 !important; color: #000000 !important; font-weight: bold; font-size: 7px; }
                         
                         .name-col { width: 85pt !important; min-width: 85pt !important; max-width: 85pt !important; font-size: 9px; font-weight: bold; text-align: left !important; padding-left: 2px; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -1090,13 +1090,13 @@
                         .pos-szab { background-color: #1f6feb !important; mso-shading: #1f6feb; color: white !important; font-weight: bold; }
 
                         .section-title { font-size: 10px; font-weight: bold; margin-top: 4px; margin-bottom: 2px; border-bottom: 2px solid #1f6feb; padding-bottom: 1px; color: #1f6feb; text-align: left; }
-                        .summary-row { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 4px; }
-                        .summary-box { border: 1px solid #333333; border-radius: 4px; padding: 3px; font-size: 8px; background: #f9fafb !important; }
-                        .summary-box h3 { margin: 0 0 1px 0; font-size: 8px; color: #1f6feb; }
+                        .summary-row { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 6px; }
+                        .summary-box { border: 1px solid #333333; border-radius: 4px; padding: 4px; font-size: 8px; background: #f9fafb !important; }
+                        .summary-box h3 { margin: 0 0 2px 0; font-size: 8px; color: #1f6feb; }
                     </style>
                 </head>
                 <body>
-                    <!-- 1. OLDAL: 1-10. ŐR TÁBLÁZATA -->
+                    <!-- 1. OLDAL: 1-10. ŐR TÁBLÁZATA (FÜGGŐLEGESEN KÖZÉPRE IGAZÍTVA) -->
                     <div class="WordSection1">
                         <div class="header-container">
                             <h1>Mátrix Labor — Vezénylés Tervezet</h1>
@@ -1108,7 +1108,7 @@
                     <!-- KŐKEMÉNY WORD OLDALTÖRÉS -->
                     <br clear="all" style="page-break-before:always">
 
-                    <!-- 2. OLDAL: 11-20. ŐR TÁBLÁZATA -->
+                    <!-- 2. OLDAL: 11-20. ŐR TÁBLÁZATA (FÜGGŐLEGESEN KÖZÉPRE IGAZÍTVA) -->
                     <div class="WordSection2">
                         <div class="header-container">
                             <h1>Mátrix Labor — Vezénylés Tervezet</h1>
@@ -1120,7 +1120,7 @@
                     <!-- KŐKEMÉNY WORD OLDALTÖRÉS -->
                     <br clear="all" style="page-break-before:always">
 
-                    <!-- 3. OLDAL: SZABADSÁGKEZELŐ ÉS FIGYELŐK -->
+                    <!-- 3. OLDAL: SZABADSÁGKEZELŐ ÉS FIGYELŐK (FÜGGŐLEGESEN KÖZÉPRE IGAZÍTVA) -->
                     <div class="WordSection3">
                         <div class="header-container">
                             <h1>Mátrix Labor — Vezénylés Tervezet</h1>
@@ -1161,7 +1161,7 @@
             let savedMonth = localStorage.getItem('matrix_last_month');
 
             if (savedYear !== null && document.getElementById('yearSelect')) {
-                document.getElementById('yearSelect').value = savedYear;
+                document.getElementById('yearSelect'].value = savedYear;
             }
             if (savedMonth !== null && document.getElementById('monthSelect')) {
                 document.getElementById('monthSelect').value = savedMonth;
