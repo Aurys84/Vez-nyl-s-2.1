@@ -108,7 +108,7 @@
         }
         th, td {
             border: 1px solid var(--border-color);
-            padding: 3px 1px;
+            padding: 5px 2px; /* Kicsit megnövelt belső margó, hogy kitöltse a cellát */
             white-space: nowrap;
         }
         th {
@@ -164,15 +164,17 @@
         .week-separator {
             border-left: 2px solid #58a6ff !important;
         }
+        /* Itt növeltük a betűméretet, hogy kitöltse a 4 karakteres tartalmat a cellában */
         td.cell-default, td[class*="pos-"] {
-            font-size: 0.8rem !important;
-            font-weight: bold !important;
+            font-size: 0.95rem !important; 
+            font-weight: 900 !important;
+            letter-spacing: -0.5px;
         }
         td.cell-default {
             background-color: #ffffff;
             color: #24292e;
             cursor: pointer;
-            min-width: 21px;
+            min-width: 28px; /* Biztosítja, hogy kényelmesen elférjen a 4 karakter */
         }
         td.cell-locked {
             background-color: #1f6feb !important;
@@ -180,7 +182,7 @@
             cursor: not-allowed !important;
             pointer-events: none !important;
             font-weight: bold;
-            font-size: 0.75rem !important;
+            font-size: 0.85rem !important;
         }
         .pos-np { background-color: #238636 !important; color: white !important; cursor: pointer; }
         .pos-ep { background-color: #da3633 !important; color: white !important; cursor: pointer; }
