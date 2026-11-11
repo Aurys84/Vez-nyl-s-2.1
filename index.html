@@ -803,7 +803,7 @@
             let dataToSave = {};
             document.querySelectorAll('#scheduleTable tbody tr:not(.total-row)').forEach((row, gIndex) => {
                 row.querySelectorAll('td').forEach((cell, cIndex) => {
-                    if(cIndex > 0 && cIndex < row.querySelectorAll('td'].length - 1) {
+                    if(cIndex > 0 && cIndex < row.querySelectorAll('td').length - 1) {
                         let cellKey = cell.dataset.key;
                         let dKey = cell.dataset.date;
                         if(cellKey && !cell.classList.contains('cell-locked')) {
@@ -914,7 +914,7 @@
                         .subtitle { text-align: center; font-size: 10px; margin-bottom: 15px; color: #555555; }
                         table { width: 100%; border-collapse: collapse; text-align: center; margin-bottom: 15px; font-size: 8px; }
                         
-                        /* A cellák mérete fix marad és keskeny (padding pici), hogy ráférjen a papírra */
+                        /* A cellák mérete fix marad és pici, hogy kényelmesen elférjen a papíron */
                         th, td { border: 1px solid #333333; padding: 2px 1px; height: 16px; }
                         th { background: #f0f4f8 !important; color: #000000 !important; font-weight: bold; font-size: 8px; }
                         
@@ -924,7 +924,7 @@
                         .section-title { font-size: 12px; font-weight: bold; margin-top: 25px; margin-bottom: 8px; border-bottom: 2px solid #1f6feb; padding-bottom: 3px; color: #1f6feb; page-break-before: always; mso-break-type: section-break; }
                         .total-row td { background-color: #e2e8f0 !important; mso-shading: #e2e8f0; color: #000000 !important; font-weight: 900; font-size: 11px; }
                         
-                        /* Itt növeljük a betűméretet 13px-re, hogy a cella méretének megváltoztatása nélkül kitöltse a betű a teret */
+                        /* Itt csak a betűméret nő meg 13px-re, így a kis cellákban nagyméretű, kitöltő betűk lesznek szétnyomósodás nélkül */
                         td.cell-default, td[class*="pos-"] { font-size: 13px !important; font-weight: 900 !important; }
                         
                         .cell-locked { background-color: #bfdbfe !important; mso-shading: #bfdbfe; color: #1e40af !important; font-weight: bold; font-size: 10px !important; }
