@@ -867,37 +867,49 @@
             let month = parseInt(document.getElementById('monthSelect').value);
             let currentMonthName = monthNames[month];
             
-            let cleanVacationHtml = '<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;">';
-            currentGuards.forEach((guardName, gIndex) => {
-                if(!guardName) guardName = `Őr ${gIndex+1}`;
-                let baseVal = localStorage.getItem(`vacation_base_${gIndex}`) !== null ? parseInt(localStorage.getItem(`vacation_base_${gIndex}`)) : 30;
-                let totalUsedUntilNow = 0;
-                for(let m = 0; m <= month; m++) {
-                    let mDays = new Date(year, m + 1, 0).getDate();
-                    let mSavedSchedule = JSON.parse(localStorage.getItem(`matrix_schedule_${year}_${m}`)) || {};
-                    for(let d = 0; d < mDays; d++) {
-                        let cellKey = `g_${gIndex}_d_${d}`;
-                        let dObj = new Date(year, m, d + 1);
-                        let dKey = getDateKey(dObj);
-                        let globalData = JSON.parse(localStorage.getItem(`global_cell_${dKey}_g_${gIndex}`)) || mSavedSchedule[cellKey];
-                        if(globalData && globalData.type === 'szb') {
-                            totalUsedUntilNow++;
+            // 5 OSZLOPOS TÁBLÁZAT A SZABADSÁGOKHOZ (HOGY NE EGYMÁS ALATT, HANEM EGYMÁS MELLETT 5-ÖSÉVEL LEGYENEK)
+            let cleanVacationHtml = '<table style="width: 710pt !important; max-width: 710pt !important; border-collapse: collapse; table-layout: fixed !important; margin-bottom: 6px;">';
+            let colWidth = Math.floor(710 / 5);
+            
+            for (let i = 0; i < currentGuards.length; i += 5) {
+                cleanVacationHtml += '<tr>';
+                for (let j = 0; j < 5; j++) {
+                    let gIndex = i + j;
+                    if (gIndex < currentGuards.length) {
+                        let guardName = currentGuards[gIndex] || `Őr ${gIndex+1}`;
+                        let baseVal = localStorage.getItem(`vacation_base_${gIndex}`) !== null ? parseInt(localStorage.getItem(`vacation_base_${gIndex}`)) : 30;
+                        let totalUsedUntilNow = 0;
+                        for(let m = 0; m <= month; m++) {
+                            let mDays = new Date(year, m + 1, 0).getDate();
+                            let mSavedSchedule = JSON.parse(localStorage.getItem(`matrix_schedule_${year}_${m}`)) || {};
+                            for(let d = 0; d < mDays; d++) {
+                                let cellKey = `g_${gIndex}_d_${d}`;
+                                let dObj = new Date(year, m, d + 1);
+                                let dKey = getDateKey(dObj);
+                                let globalData = JSON.parse(localStorage.getItem(`global_cell_${dKey}_g_${gIndex}`)) || mSavedSchedule[cellKey];
+                                if(globalData && globalData.type === 'szb') {
+                                    totalUsedUntilNow++;
+                                }
+                            }
                         }
+                        let remaining = baseVal - totalUsedUntilNow;
+                        cleanVacationHtml += `
+                            <td style="width: ${colWidth}pt !important; min-width: ${colWidth}pt !important; max-width: ${colWidth}pt !important; border: 1px solid #333333; padding: 4px; font-size: 8px; background: #f9fafb !important; mso-shading: #f9fafb; vertical-align: top; text-align: left;">
+                                <div style="font-weight: bold; border-bottom: 1px solid #cccccc; padding-bottom: 2px; margin-bottom: 2px; color: #111111; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${guardName}</div>
+                                <div style="display: flex; justify-content: space-between; color: #333333; font-size: 7px;">
+                                    <span>Alap:<b>${baseVal}</b></span>
+                                    <span>Felh:<b style="color:#9e6a03;">${totalUsedUntilNow}</b></span>
+                                    <span>Mar:<b style="color:#1f6feb;">${remaining}</b></span>
+                                </div>
+                            </td>
+                        `;
+                    } else {
+                        cleanVacationHtml += `<td style="width: ${colWidth}pt !important; border: 1px solid #333333; padding: 4px; background: #ffffff;"></td>`;
                     }
                 }
-                let remaining = baseVal - totalUsedUntilNow;
-                cleanVacationHtml += `
-                    <div style="border: 1px solid #333333; border-radius: 4px; padding: 6px; font-size: 9px; background: #f9fafb; margin-bottom: 6px;">
-                        <div style="font-weight: bold; border-bottom: 1px solid #cccccc; padding-bottom: 2px; margin-bottom: 3px; color: #111111;">${guardName}</div>
-                        <div style="display: flex; justify-content: space-between; color: #333333;">
-                            <span>Alap: <b>${baseVal}</b></span>
-                            <span>Felh: <b style="color:#9e6a03;">${totalUsedUntilNow}</b></span>
-                            <span>Mar: <b style="color:#1f6feb;">${remaining}</b></span>
-                        </div>
-                    </div>
-                `;
-            });
-            cleanVacationHtml += '</div>';
+                cleanVacationHtml += '</tr>';
+            }
+            cleanVacationHtml += '</table>';
 
             let tableContainerClone = document.querySelector('.table-container').cloneNode(true);
             let tempTable = tableContainerClone.querySelector('table');
@@ -991,7 +1003,6 @@
                 tbody2.appendChild(totalRow.cloneNode(true));
             }
 
-            // SZIGORÚAN AZONOS OSZLOPSZÉLESSÉG MINDKÉT TÁBLÁZATNAK
             [table1, table2].forEach(tbl => {
                 let tempRows = tbl.querySelectorAll('tr');
                 tempRows.forEach((row, rIdx) => {
@@ -1077,7 +1088,7 @@
                         .pos-szb { background-color: #9e6a03 !important; mso-shading: #9e6a03; color: white !important; font-weight: bold; }
                         .pos-szab { background-color: #1f6feb !important; mso-shading: #1f6feb; color: white !important; font-weight: bold; }
 
-                        .section-title { font-size: 10px; font-weight: bold; margin-top: 8px; margin-bottom: 2px; border-bottom: 2px solid #1f6feb; padding-bottom: 1px; color: #1f6feb; text-align: left; }
+                        .section-title { font-size: 10px; font-weight: bold; margin-top: 4px; margin-bottom: 2px; border-bottom: 2px solid #1f6feb; padding-bottom: 1px; color: #1f6feb; text-align: left; }
                         .summary-row { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 4px; }
                         .summary-box { border: 1px solid #333333; border-radius: 4px; padding: 3px; font-size: 8px; background: #f9fafb !important; }
                         .summary-box h3 { margin: 0 0 1px 0; font-size: 8px; color: #1f6feb; }
@@ -1102,8 +1113,11 @@
                         <div>${table2Html}</div>
                     </div>
 
-                    <!-- 3. SZEKCIÓ: SZABADSÁGKEZELŐ KÜLÖN LAPON -->
+                    <!-- 3. SZEKCIÓ: SZABADSÁGKEZELŐ ÉS FIGYELŐK KÜLÖN LAPON -->
                     <div class="WordSection3">
+                        <div class="header-container">
+                            <h1>Mátrix Labor — Vezénylés Tervezet</h1>
+                        </div>
                         <div class="section-title">2. Éves Göngyölített Szabadságkezelő</div>
                         <div>${cleanVacationHtml}</div>
                         
