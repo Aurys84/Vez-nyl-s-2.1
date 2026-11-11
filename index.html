@@ -160,7 +160,7 @@
             min-width: 44px;
             max-width: 44px;
             width: 44px;
-            font-size: 1rem !important;
+            font-size: 12px !important;
             font-weight: 900 !important;
             background-color: #fef08a !important;
             color: #000000 !important;
@@ -171,7 +171,7 @@
             background-color: #cbd5e1 !important;
             color: #1f6feb !important;
             font-weight: 900;
-            font-size: 1rem !important;
+            font-size: 12px !important;
         }
         .week-separator {
             border-left: 3px solid #1f6feb !important;
@@ -507,7 +507,7 @@
                 let sepClass = (wIdx > 0) ? 'week-separator' : '';
                 weekRowHtml += `<th colspan="${w.count}" class="${sepClass}">${w.weekNum}.hét</th>`;
             });
-            weekRowHtml += '<th class="hours-col">Össz óra</th></tr>';
+            weekRowHtml += '<th class="hours-col"></th></tr>';
 
             let reqRowHtml = '<tr class="req-row"><th class="name-col">Elvárt Létszám</th>';
             let dayRowHtml = '<tr class="day-row"><th class="name-col">Név / Dátum</th>';
@@ -543,7 +543,7 @@
                 let ledHtml = item.isExtra ? '' : `<span id="led-${dKey}"><span class="led-ok" title="Létszám rendben"></span></span>`;
                 dayRowHtml += `<th id="th-day-${dKey}" class="${sepClass} ${headerClass}" style="${extraHeaderStyle}" data-holiday="${isHoliday(d) ? '1' : '0'}" data-saturday="${dayIndex === 6 ? '1' : '0'}" data-sunday="${dayIndex === 0 ? '1' : '0'}">${dateStr}<br><small style="font-size:0.55rem; font-weight:bold;">${dayLetter}</small>${ledHtml}</th>`;
             });
-            reqRowHtml += '<th class="hours-col">Össz óra</th></tr>';
+            reqRowHtml += '<th class="hours-col"></th></tr>';
             dayRowHtml += '<th class="hours-col">Össz óra</th></tr>';
             
             document.getElementById('tableHeader').innerHTML = weekRowHtml + reqRowHtml + dayRowHtml;
@@ -597,7 +597,7 @@
                         tbodyHtml += `<td class="${cellInfo.className} ${prevWeekCheck}" onclick="selectCell(this)" data-type="${cellInfo.type}" data-key="${cellKey}" data-date="${dKey}" data-guard="${gIndex}">${cellInfo.text}</td>`;
                     }
                 });
-                tbodyHtml += `<td id="total-hours-${gIndex}" class="hours-col" style="font-weight: 900; color: #000000; font-size: 1rem;">0h</td>`;
+                tbodyHtml += `<td id="total-hours-${gIndex}" class="hours-col" style="font-weight: 900; color: #000000; font-size: 12px;">0</td>`;
                 tbodyHtml += `</tr>`;
             });
             tbodyHtml += `<tr class="total-row">`;
@@ -607,9 +607,9 @@
                 let dayIndex = d.getDay();
                 let isMonday = (dayIndex === 1);
                 let prevWeekCheck = (isMonday && dIndex > 0) ? 'week-separator' : '';
-                tbodyHtml += `<td id="col-total-${dIndex}" class="${prevWeekCheck}">0h</td>`;
+                tbodyHtml += `<td id="col-total-${dIndex}" class="${prevWeekCheck}">0</td>`;
             });
-            tbodyHtml += `<td id="grand-total-hours" class="hours-col" style="color:#000000; font-weight:900; font-size:1rem;">0h</td>`;
+            tbodyHtml += `<td id="grand-total-hours" class="hours-col" style="color:#000000; font-weight:900; font-size:12px;">0</td>`;
             tbodyHtml += `</tr>`;
             document.getElementById('tableBody').innerHTML = tbodyHtml;
             document.querySelectorAll('#scheduleTable tbody tr:not(.total-row)').forEach(row => {
@@ -690,7 +690,7 @@
                 }
             }
             let hoursCell = cells[cells.length - 1];
-            hoursCell.innerHTML = `<b>${totalHours}h</b>`;
+            hoursCell.innerHTML = `<b>${totalHours}</b>`;
         }
         function calculateColumnTotals(days) {
             let colCount = days.length;
@@ -711,7 +711,7 @@
             for(let i = 0; i < colCount; i++) {
                 let colCell = document.getElementById(`col-total-${i}`);
                 if(colCell) {
-                    colCell.innerText = colTotals[i] > 0 ? colTotals[i] + 'h' : '0h';
+                    colCell.innerText = colTotals[i] > 0 ? colTotals[i] : '0';
                 }
             }
             rows.forEach(row => {
@@ -722,7 +722,7 @@
             });
             let grandCell = document.getElementById('grand-total-hours');
             if(grandCell) {
-                grandCell.innerHTML = `<b>${grandTotal}h</b>`;
+                grandCell.innerHTML = `<b>${grandTotal}</b>`;
             }
         }
         function updateVacationBase(gIndex, input) {
@@ -959,7 +959,7 @@
                 let sepClass = (wIdx > 0) ? 'border-left: 2px solid #1f6feb !important;' : '';
                 wordWeekRowHtml += `<th colspan="${w.count}" style="font-size:9px; font-weight:bold; background:#f0f4f8 !important; mso-shading: #f0f4f8; color:#000000 !important; border:1px solid #333333; ${sepClass} padding:1px 0px;">${w.weekNum}.hét</th>`;
             });
-            wordWeekRowHtml += '<th class="hours-col" style="font-size:10px; background-color: #ffeb3b !important; mso-shading: #ffeb3b; color: #000000 !important; border-left: 2px solid #1f6feb !important; white-space: nowrap !important;">Össz óra</th></tr>';
+            wordWeekRowHtml += '<th class="hours-col" style="font-size:12px; background-color: #ffeb3b !important; mso-shading: #ffeb3b; color: #000000 !important; border-left: 2px solid #1f6feb !important; white-space: nowrap !important;"></th></tr>';
 
             let originalHeaderRows = tempThead.querySelectorAll('tr');
             if(originalHeaderRows.length >= 3) {
@@ -1028,7 +1028,7 @@
                         
                         if (cIndex === cells.length - 1) {
                             let curStyle = cell.getAttribute('style') || '';
-                            cell.setAttribute('style', curStyle + '; width: 20pt !important; min-width: 20pt !important; max-width: 20pt !important; background-color: #ffeb3b !important; mso-shading: #ffeb3b; color: #000000 !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; font-size: 10px !important; font-weight: 900 !important; white-space: nowrap !important; padding: 1px 0px !important;');
+                            cell.setAttribute('style', curStyle + '; width: 20pt !important; min-width: 20pt !important; max-width: 20pt !important; background-color: #ffeb3b !important; mso-shading: #ffeb3b; color: #000000 !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; font-size: 12px !important; font-weight: 900 !important; white-space: nowrap !important; padding: 1px 0px !important;');
                         } else if (cIndex === 0 || cell.classList.contains('name-col')) {
                             let curStyle = cell.getAttribute('style') || '';
                             cell.setAttribute('style', curStyle + '; width: 80pt !important; min-width: 80pt !important; max-width: 80pt !important; text-align: left !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; padding: 1px 2px !important; overflow: hidden; text-overflow: ellipsis;');
@@ -1084,10 +1084,10 @@
                         
                         .name-col { width: 80pt !important; min-width: 80pt !important; max-width: 80pt !important; font-size: 9px; font-weight: bold; text-align: left !important; padding-left: 2px; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
                         
-                        .hours-col { width: 20pt !important; font-size: 10px !important; font-weight: 900 !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; background-color: #ffeb3b !important; mso-shading: #ffeb3b; color: #000000 !important; white-space: nowrap !important; }
+                        .hours-col { width: 20pt !important; font-size: 12px !important; font-weight: 900 !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; background-color: #ffeb3b !important; mso-shading: #ffeb3b; color: #000000 !important; white-space: nowrap !important; }
                         td.cell-default, td[class*="pos-"] { font-size: 10px !important; font-weight: 900 !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; }
                         
-                        .total-row td { background-color: #e2e8f0 !important; mso-shading: #e2e8f0; color: #000000 !important; font-weight: 900; font-size: 10px !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; white-space: nowrap !important; }
+                        .total-row td { background-color: #e2e8f0 !important; mso-shading: #e2e8f0; color: #000000 !important; font-weight: 900; font-size: 12px !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; white-space: nowrap !important; }
                         
                         .cell-locked { background-color: #bfdbfe !important; mso-shading: #bfdbfe; color: #1e40af !important; font-weight: bold; font-size: 9px !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; }
                         .pos-np { background-color: #238636 !important; mso-shading: #238636; color: white !important; font-weight: bold; }
