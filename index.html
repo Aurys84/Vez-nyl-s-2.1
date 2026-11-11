@@ -991,6 +991,7 @@
                 tbody2.appendChild(totalRow.cloneNode(true));
             }
 
+            // SZIGORÚAN AZONOS OSZLOPSZÉLESSÉG MINDKÉT TÁBLÁZATNAK
             [table1, table2].forEach(tbl => {
                 let tempRows = tbl.querySelectorAll('tr');
                 tempRows.forEach((row, rIdx) => {
@@ -1083,7 +1084,7 @@
                     </style>
                 </head>
                 <body>
-                    <!-- 1. SZEKCIÓ: 1-10. ŐR -->
+                    <!-- 1. SZEKCIÓ: 1-10. ŐR KÜLÖN LAPON -->
                     <div class="WordSection1">
                         <div class="header-container">
                             <h1>Mátrix Labor — Vezénylés Tervezet</h1>
