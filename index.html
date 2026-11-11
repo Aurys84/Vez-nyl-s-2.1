@@ -157,6 +157,7 @@
             width: 55px;
             font-size: 1.1rem !important;
             font-weight: 900 !important;
+            background-color: #332900 !important;
         }
         .total-row td {
             background-color: #1f2937 !important;
@@ -470,6 +471,7 @@
                 days.push({ date: d, isExtra: false });
             }
 
+            // Heti összevonások a munkafelületen (eredeti, tökéletes struktúra)
             let weeksMap = [];
             days.forEach((item, index) => {
                 let d = item.date;
@@ -911,7 +913,7 @@
                 days.push({ date: new Date(year, month, i), isExtra: false });
             }
 
-            // Word-specifikus heti fejléc építése colspan-nel
+            // Word-specifikus heti fejléc építése colspan-nel a nyomtatási verzióhoz
             let weeksMap = [];
             days.forEach((item, index) => {
                 let d = item.date;
@@ -963,7 +965,7 @@
                 }
             });
 
-            // Végigfutunk a nyomtatási táblázat sorain: kék elválasztók minden sorban, sárga utolsó oszlop, és szigorúan középre igazított karakterek cellaméret-változtatás nélkül!
+            // Végigfutunk a nyomtatási klón sorain: kék elválasztók, sárga utolsó oszlop, ÉRINTETLEN CELLAMÉRET, de felnagyított és pontosan középre igazított karakterek!
             let tempRows = tempTable.querySelectorAll('tr');
             tempRows.forEach((row, rIdx) => {
                 let cells = row.querySelectorAll('th, td');
@@ -985,7 +987,8 @@
                         cell.style.textAlign = 'center';
                         cell.style.verticalAlign = 'middle';
                         let curStyle = cell.getAttribute('style') || '';
-                        cell.setAttribute('style', curStyle + '; text-align: center !important; vertical-align: middle !important; font-size: 11px !important; font-weight: 900 !important;');
+                        // Itt csak a karakter méretét növeljük (13px), a cellát magát NEM nagyítjuk fel!
+                        cell.setAttribute('style', curStyle + '; text-align: center !important; vertical-align: middle !important; font-size: 13px !important; font-weight: 900 !important;');
                     }
                 });
             });
@@ -1013,19 +1016,19 @@
                         .subtitle { text-align: center; font-size: 10px; margin-bottom: 15px; color: #555555; }
                         table { width: 100%; border-collapse: collapse; text-align: center; margin-bottom: 15px; font-size: 8px; }
                         
-                        /* Cella alapbeállítások: szigorúan függőlegesen és vízszintesen is középre, érintetlen cellamérettel */
+                        /* Cella alapbeállítások: változatlan, stabil méretek, függőlegesen és vízszintesen is szigorúan középre */
                         th, td { border: 1px solid #333333; padding: 2px 1px; text-align: center !important; vertical-align: middle !important; }
                         th { background: #f0f4f8 !important; color: #000000 !important; font-weight: bold; font-size: 9px; }
                         
                         .name-col { min-width: 165px; max-width: 165px; font-size: 10px; font-weight: bold; text-align: left !important; padding-left: 4px; vertical-align: middle !important; }
                         
-                        /* Karakterméret és középre igazítás a cellákban */
-                        .hours-col { min-width: 45px; max-width: 45px; width: 45px; font-size: 11px !important; font-weight: 900 !important; text-align: center !important; vertical-align: middle !important; background-color: #ffeb3b !important; mso-shading: #ffeb3b; }
-                        td.cell-default, td[class*="pos-"] { font-size: 11px !important; font-weight: 900 !important; text-align: center !important; vertical-align: middle !important; }
+                        /* Karakterméret 13px (tökéletesen belefér a cellába), szigorúan középre igazítva */
+                        .hours-col { min-width: 45px; max-width: 45px; width: 45px; font-size: 13px !important; font-weight: 900 !important; text-align: center !important; vertical-align: middle !important; background-color: #ffeb3b !important; mso-shading: #ffeb3b; }
+                        td.cell-default, td[class*="pos-"] { font-size: 13px !important; font-weight: 900 !important; text-align: center !important; vertical-align: middle !important; }
                         
-                        .total-row td { background-color: #e2e8f0 !important; mso-shading: #e2e8f0; color: #000000 !important; font-weight: 900; font-size: 11px !important; text-align: center !important; vertical-align: middle !important; }
+                        .total-row td { background-color: #e2e8f0 !important; mso-shading: #e2e8f0; color: #000000 !important; font-weight: 900; font-size: 13px !important; text-align: center !important; vertical-align: middle !important; }
                         
-                        .cell-locked { background-color: #bfdbfe !important; mso-shading: #bfdbfe; color: #1e40af !important; font-weight: bold; font-size: 10px !important; text-align: center !important; vertical-align: middle !important; }
+                        .cell-locked { background-color: #bfdbfe !important; mso-shading: #bfdbfe; color: #1e40af !important; font-weight: bold; font-size: 11px !important; text-align: center !important; vertical-align: middle !important; }
                         .pos-np { background-color: #238636 !important; mso-shading: #238636; color: white !important; font-weight: bold; }
                         .pos-ep { background-color: #da3633 !important; mso-shading: #da3633; color: white !important; font-weight: bold; }
                         .pos-nep { background-color: #8957e5 !important; mso-shading: #8957e5; color: white !important; font-weight: bold; }
