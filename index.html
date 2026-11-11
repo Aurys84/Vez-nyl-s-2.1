@@ -108,7 +108,7 @@
         }
         th, td {
             border: 1px solid var(--border-color);
-            padding: 5px 2px; /* Kicsit megnövelt belső margó, hogy kitöltse a cellát */
+            padding: 5px 2px;
             white-space: nowrap;
         }
         th {
@@ -119,18 +119,19 @@
             top: 0;
             background-color: #21262d !important;
             color: #58a6ff;
-            font-weight: bold;
+            font-weight: 900;
+            font-size: 0.95rem; /* Megnövelt betűméret a heteknél */
             z-index: 4;
-            padding: 6px 2px;
+            padding: 8px 2px;
         }
         .req-row th {
-            top: 24px;
+            top: 28px;
             background-color: #161b22 !important;
             z-index: 4;
             padding: 8px 4px;
         }
         .day-row th {
-            top: 58px;
+            top: 62px;
             z-index: 4;
             padding: 8px 4px;
         }
@@ -150,21 +151,23 @@
             z-index: 5 !important;
             font-size: 0.85rem;
         }
+        /* Jobb oldali Óra / Keret oszlop betűméretének duplázása */
         .hours-col {
-            min-width: 45px;
-            max-width: 45px;
-            width: 45px;
-            font-size: 0.8rem !important;
+            min-width: 55px;
+            max-width: 55px;
+            width: 55px;
+            font-size: 1.1rem !important;
+            font-weight: 900 !important;
         }
         .total-row td {
             background-color: #1f2937 !important;
             color: #58a6ff !important;
-            font-weight: bold;
+            font-weight: 900;
+            font-size: 1.1rem !important;
         }
         .week-separator {
             border-left: 2px solid #58a6ff !important;
         }
-        /* Itt növeltük a betűméretet, hogy kitöltse a 4 karakteres tartalmat a cellában */
         td.cell-default, td[class*="pos-"] {
             font-size: 0.95rem !important; 
             font-weight: 900 !important;
@@ -174,7 +177,7 @@
             background-color: #ffffff;
             color: #24292e;
             cursor: pointer;
-            min-width: 28px; /* Biztosítja, hogy kényelmesen elférjen a 4 karakter */
+            min-width: 28px;
         }
         td.cell-locked {
             background-color: #1f6feb !important;
@@ -467,22 +470,39 @@
                 let d = new Date(year, month, i);
                 days.push({ date: d, isExtra: false });
             }
+
+            // Hetek csoportosítása colspan-hez
+            let weeksMap = [];
+            days.forEach((item, index) => {
+                let wNum = getISOWeekNumber(item.date);
+                let lastGroup = weeksMap[weeksMap.length - 1];
+                if(lastGroup && lastGroup.weekNum === wNum) {
+                    lastGroup.count++;
+                } else {
+                    weeksMap.push({ weekNum: wNum, count: 1 });
+                }
+            });
+
             let weekRowHtml = '<tr class="week-row"><th class="name-col">Hét száma</th>';
+            weeksMap.forEach(w => {
+                weekRowHtml += `<th colspan="${w.count}">${w.weekNum}.hét</th>`;
+            });
+            weekRowHtml += '<th class="hours-col">Óra</th></tr>';
+
             let reqRowHtml = '<tr class="req-row"><th class="name-col">Elvárt Létszám</th>';
             let dayRowHtml = '<tr class="day-row"><th class="name-col">Név / Dátum</th>';
             let savedRequired = JSON.parse(localStorage.getItem(`matrix_required_${year}_${month}`)) || {};
             let holidayCount = 0;
+
             days.forEach((item, index) => {
                 let d = item.date;
                 let dayIndex = d.getDay();
                 let dayLetter = dayNames[dayIndex];
-                let weekNum = getISOWeekNumber(d);
                 let dateStr = `${d.getMonth()+1}.${d.getDate()}.`;
                 let dKey = getDateKey(d);
                 
                 let isMonday = (dayIndex === 1);
                 let sepClass = (isMonday && index > 0) ? 'week-separator' : '';
-                weekRowHtml += `<th class="${sepClass}">${weekNum}.hét</th>`;
                 
                 if (item.isExtra) {
                     reqRowHtml += `<th class="${sepClass}" style="background:#1f6feb;">-</th>`;
@@ -503,9 +523,9 @@
                 let ledHtml = item.isExtra ? '' : `<span id="led-${dKey}"><span class="led-ok" title="Létszám rendben"></span></span>`;
                 dayRowHtml += `<th id="th-day-${dKey}" class="${sepClass} ${headerClass}" style="${extraHeaderStyle}" data-holiday="${isHoliday(d) ? '1' : '0'}" data-saturday="${dayIndex === 6 ? '1' : '0'}" data-sunday="${dayIndex === 0 ? '1' : '0'}">${dateStr}<br><small style="font-size:0.6rem; font-weight:bold;">${dayLetter}</small>${ledHtml}</th>`;
             });
-            weekRowHtml += '<th class="hours-col">Óra</th></tr>';
             reqRowHtml += '<th class="hours-col">Cél</th></tr>';
             dayRowHtml += '<th class="hours-col">Keret</th></tr>';
+            
             document.getElementById('tableHeader').innerHTML = weekRowHtml + reqRowHtml + dayRowHtml;
             document.getElementById('holidayReport').innerHTML = `<b>Ebben a hónapban:</b> <span style="color:#ff8182; font-weight:bold; font-size:0.8rem;">${holidayCount} db</span> hivatalos ünnepnap esik.`;
             
@@ -557,7 +577,7 @@
                         tbodyHtml += `<td class="${cellInfo.className} ${prevWeekCheck}" onclick="selectCell(this)" data-type="${cellInfo.type}" data-key="${cellKey}" data-date="${dKey}" data-guard="${gIndex}">${cellInfo.text}</td>`;
                     }
                 });
-                tbodyHtml += `<td id="total-hours-${gIndex}" class="hours-col" style="font-weight: bold; color: #58a6ff;">0h</td>`;
+                tbodyHtml += `<td id="total-hours-${gIndex}" class="hours-col" style="font-weight: 900; color: #58a6ff; font-size: 1.1rem;">0h</td>`;
                 tbodyHtml += `</tr>`;
             });
             tbodyHtml += `<tr class="total-row">`;
@@ -569,7 +589,7 @@
                 let prevWeekCheck = (isMonday && dIndex > 0) ? 'week-separator' : '';
                 tbodyHtml += `<td id="col-total-${dIndex}" class="${prevWeekCheck}">0h</td>`;
             });
-            tbodyHtml += `<td id="grand-total-hours" class="hours-col" style="color:#58a6ff;">0h</td>`;
+            tbodyHtml += `<td id="grand-total-hours" class="hours-col" style="color:#58a6ff; font-weight:900; font-size:1.1rem;">0h</td>`;
             tbodyHtml += `</tr>`;
             document.getElementById('tableBody').innerHTML = tbodyHtml;
             document.querySelectorAll('#scheduleTable tbody tr:not(.total-row)').forEach(row => {
@@ -970,6 +990,7 @@
             let savedMonth = localStorage.getItem('matrix_last_month');
 
             if (savedYear !== null && document.getElementById('yearSelect')) {
+                document.getElementById('yearSelect'.value) = savedYear; // javítva: .value property beállítás
                 document.getElementById('yearSelect').value = savedYear;
             }
             if (savedMonth !== null && document.getElementById('monthSelect')) {
