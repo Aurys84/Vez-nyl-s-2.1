@@ -867,7 +867,7 @@
             let month = parseInt(document.getElementById('monthSelect').value);
             let currentMonthName = monthNames[month];
             
-            // TELJESEN BIZTOS 5 OSZLOPOS TÁBLÁZAT A SZABADSÁGOKHOZ (MIND A 20 ŐRRE, SORONKÉNT 5-ÖSÉVEL)
+            // PONTOSAN SZÁMOLT, FIX 5 OSZLOPOS SZABADSÁGKEZELŐ TÁBLÁZAT (710PT ÖSSZSZÉLESSÉGBEN, HOGY PONTOSAN IGAZODJON)
             let cleanVacationHtml = '<table style="width: 710pt !important; max-width: 710pt !important; border-collapse: collapse; table-layout: fixed !important; margin-bottom: 6px;">';
             let colWidth = Math.floor(710 / 5);
             
@@ -894,7 +894,7 @@
                         }
                         let remaining = baseVal - totalUsedUntilNow;
                         cleanVacationHtml += `
-                            <td style="width: ${colWidth}pt !important; min-width: ${colWidth}pt !important; max-width: ${colWidth}pt !important; border: 1px solid #333333; padding: 4px; font-size: 8px; background: #f9fafb !important; mso-shading: #f9fafb; vertical-align: top; text-align: left;">
+                            <td style="width: ${colWidth}pt !important; min-width: ${colWidth}pt !important; max-width: ${colWidth}pt !important; border: 1px solid #333333; padding: 4px; font-size: 8px; background: #f9fafb !important; mso-shading: #f9fafb; vertical-align: top; text-align: left; overflow: hidden;">
                                 <div style="font-weight: bold; border-bottom: 1px solid #cccccc; padding-bottom: 2px; margin-bottom: 2px; color: #111111; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${guardName}</div>
                                 <div style="display: flex; justify-content: space-between; color: #333333; font-size: 7px;">
                                     <span>Alap:<b>${baseVal}</b></span>
@@ -1003,6 +1003,7 @@
                 tbody2.appendChild(totalRow.cloneNode(true));
             }
 
+            // SZIGORÚAN AZONOS OSZLOPSZÉLESSÉG ÉS NÉVCELLÁK BEÁLLÍTÁSA MINDKÉT TÁBLÁZATBAN
             [table1, table2].forEach(tbl => {
                 let tempRows = tbl.querySelectorAll('tr');
                 tempRows.forEach((row, rIdx) => {
@@ -1023,7 +1024,7 @@
                             cell.setAttribute('style', curStyle + '; width: 22pt !important; min-width: 22pt !important; max-width: 22pt !important; background-color: #ffeb3b !important; mso-shading: #ffeb3b; color: #000000 !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; font-size: 10px !important; font-weight: 900 !important; white-space: nowrap !important; padding: 1px 0px !important;');
                         } else if (cIndex === 0 || cell.classList.contains('name-col')) {
                             let curStyle = cell.getAttribute('style') || '';
-                            cell.setAttribute('style', curStyle + '; width: 85pt !important; min-width: 85pt !important; max-width: 85pt !important; text-align: left !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; padding: 1px 2px !important;');
+                            cell.setAttribute('style', curStyle + '; width: 85pt !important; min-width: 85pt !important; max-width: 85pt !important; text-align: left !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; padding: 1px 2px !important; overflow: hidden; text-overflow: ellipsis;');
                         } else {
                             let curStyle = cell.getAttribute('style') || '';
                             cell.setAttribute('style', curStyle + '; width: ' + dayColWidthPt + 'pt !important; min-width: ' + dayColWidthPt + 'pt !important; max-width: ' + dayColWidthPt + 'pt !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; font-size: 10px !important; font-weight: 900 !important; padding: 1px 0px !important;');
@@ -1074,7 +1075,7 @@
                         th, td { border: 1px solid #333333; padding: 1px 0px; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; overflow: hidden; }
                         th { background: #f0f4f8 !important; color: #000000 !important; font-weight: bold; font-size: 7px; }
                         
-                        .name-col { width: 85pt !important; font-size: 9px; font-weight: bold; text-align: left !important; padding-left: 2px; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; }
+                        .name-col { width: 85pt !important; min-width: 85pt !important; max-width: 85pt !important; font-size: 9px; font-weight: bold; text-align: left !important; padding-left: 2px; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
                         
                         .hours-col { width: 22pt !important; font-size: 10px !important; font-weight: 900 !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; background-color: #ffeb3b !important; mso-shading: #ffeb3b; color: #000000 !important; white-space: nowrap !important; }
                         td.cell-default, td[class*="pos-"] { font-size: 10px !important; font-weight: 900 !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; }
