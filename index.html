@@ -68,7 +68,7 @@
         }
         .btn-save:hover { background: #2ea043 !important; }
         .btn-word {
-            background: #8957e5 !important;
+            background: var(--purple) !important;
             color: white !important;
         }
         .btn-word:hover { background: #9c6ffe !important; }
@@ -332,7 +332,7 @@
     </style>
 </head>
 <body id="mainBody">
-    <h1>Mátrix Labor — Vezénylési Rendszer</h1>
+    <h1>Mátrix Labor — Vezénylés Tervezet</h1>
     <div class="subtitle">Univerzális Modul & PC Word Export</div>
     <div class="controls">
         <div style="display: flex; gap: 6px; align-items: center;">
@@ -1025,7 +1025,6 @@
             let auditHtml = document.getElementById('auditReport').innerHTML;
             let holidayHtml = document.getElementById('holidayReport').innerHTML;
             
-            // ITT HOZZÁNK LÉTRE A VALÓDI, KÜLÖNÁLLÓ WORD SZAKASZOK (@page / div.WordSection) STRUKTÚRA
             let htmlContent = `
                 <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
                 <head>
@@ -1037,14 +1036,14 @@
                             mso-page-orientation: landscape;
                             margin: 0.15cm 0.15cm 0.15cm 0.5cm; 
                         }
-                        div.WordSection1 { page: WordSection1; }
+                        div.WordSection1 { page: WordSection1; mso-break-type: section-break; }
 
                         @page WordSection2 {
                             size: 842.25pt 595.3pt;
                             mso-page-orientation: landscape;
                             margin: 0.15cm 0.15cm 0.15cm 0.5cm; 
                         }
-                        div.WordSection2 { page: WordSection2; }
+                        div.WordSection2 { page: WordSection2; mso-break-type: section-break; }
 
                         @page WordSection3 {
                             size: 842.25pt 595.3pt;
@@ -1056,7 +1055,6 @@
                         body { font-family: 'Segoe UI', Arial, sans-serif; background: #ffffff; color: #000000; margin: 0px; font-size: 10px; }
                         .header-container { width: 100% !important; text-align: center !important; margin-bottom: 2px; }
                         h1 { text-align: center !important; font-size: 12px; color: #1f6feb; margin: 0 0 1px 0; width: 100%; }
-                        .subtitle { text-align: center !important; font-size: 8px; margin-bottom: 2px; color: #555555; width: 100%; }
                         .month-title { font-size: 10px; font-weight: bold; margin-top: 2px; margin-bottom: 2px; border-bottom: 2px solid #1f6feb; padding-bottom: 1px; color: #1f6feb; text-align: left; }
                         
                         table { width: 710pt !important; max-width: 710pt !important; table-layout: fixed !important; border-collapse: collapse; text-align: center; margin-bottom: 4px; }
@@ -1088,8 +1086,7 @@
                     <!-- 1. SZEKCIÓ: 1-10. ŐR -->
                     <div class="WordSection1">
                         <div class="header-container">
-                            <h1>Mátrix Labor — Hivatalos Vezénylési Jelentés</h1>
-                            <div class="subtitle">Univerzális Rendszer Export</div>
+                            <h1>Mátrix Labor — Vezénylés Tervezet</h1>
                         </div>
                         <div class="month-title">1. <b>${year}. ${currentMonthName}</b> — Havi Vezénylési Táblázat (1. Rész: 1–10. őr)</div>
                         <div>${table1Html}</div>
@@ -1098,8 +1095,7 @@
                     <!-- 2. SZEKCIÓ: 11-20. ŐR KÜLÖN LAPON -->
                     <div class="WordSection2">
                         <div class="header-container">
-                            <h1>Mátrix Labor — Hivatalos Vezénylési Jelentés</h1>
-                            <div class="subtitle">Univerzális Rendszer Export</div>
+                            <h1>Mátrix Labor — Vezénylés Tervezet</h1>
                         </div>
                         <div class="month-title">1. <b>${year}. ${currentMonthName}</b> — Havi Vezénylési Táblázat (2. Rész: 11–20. őr)</div>
                         <div>${table2Html}</div>
@@ -1129,7 +1125,7 @@
             let url = URL.createObjectURL(blob);
             let a = document.createElement('a');
             a.href = url;
-            a.download = `Matrix_Labor_Vezenyles_${year}_${currentMonthName}.doc`;
+            a.download = `Matrix_Labor_Vezenyles_Tervezet_${year}_${currentMonthName}.doc`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
