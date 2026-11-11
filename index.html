@@ -867,7 +867,7 @@
             let month = parseInt(document.getElementById('monthSelect').value);
             let currentMonthName = monthNames[month];
             
-            // PONTOSAN SZÁMOLT, FIX 5 OSZLOPOS SZABADSÁGKEZELŐ TÁBLÁZAT (710PT ÖSSZSZÉLESSÉGBEN, HOGY PONTOSAN IGAZODJON)
+            // TELJESEN FIX 5 OSZLOPOS SZABADSÁGKEZELŐ TÁBLÁZAT (710PT)
             let cleanVacationHtml = '<table style="width: 710pt !important; max-width: 710pt !important; border-collapse: collapse; table-layout: fixed !important; margin-bottom: 6px;">';
             let colWidth = Math.floor(710 / 5);
             
@@ -1003,7 +1003,7 @@
                 tbody2.appendChild(totalRow.cloneNode(true));
             }
 
-            // SZIGORÚAN AZONOS OSZLOPSZÉLESSÉG ÉS NÉVCELLÁK BEÁLLÍTÁSA MINDKÉT TÁBLÁZATBAN
+            // KÜLÖN TÁBLÁZATOK SZELETElése ÉS IDENTIKUS MÉRETEZÉSE
             [table1, table2].forEach(tbl => {
                 let tempRows = tbl.querySelectorAll('tr');
                 tempRows.forEach((row, rIdx) => {
@@ -1096,7 +1096,7 @@
                     </style>
                 </head>
                 <body>
-                    <!-- 1. SZEKCIÓ: 1-10. ŐR KÜLÖN LAPON -->
+                    <!-- 1. OLDAL: 1-10. ŐR TÁBLÁZATA -->
                     <div class="WordSection1">
                         <div class="header-container">
                             <h1>Mátrix Labor — Vezénylés Tervezet</h1>
@@ -1105,7 +1105,7 @@
                         <div>${table1Html}</div>
                     </div>
 
-                    <!-- 2. SZEKCIÓ: 11-20. ŐR KÜLÖN LAPON -->
+                    <!-- 2. OLDAL: 11-20. ŐR TÁBLÁZATA -->
                     <div class="WordSection2">
                         <div class="header-container">
                             <h1>Mátrix Labor — Vezénylés Tervezet</h1>
@@ -1114,7 +1114,7 @@
                         <div>${table2Html}</div>
                     </div>
 
-                    <!-- 3. SZEKCIÓ: SZABADSÁGKEZELŐ ÉS FIGYELŐK KÜLÖN LAPON -->
+                    <!-- 3. OLDAL: SZABADSÁGKEZELŐ ÉS FIGYELŐK -->
                     <div class="WordSection3">
                         <div class="header-container">
                             <h1>Mátrix Labor — Vezénylés Tervezet</h1>
