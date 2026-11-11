@@ -411,6 +411,7 @@
     <script>
         const defaultGuardsTemplate = Array.from({length: 20}, (_, i) => `Őr ${i + 1}`);
         const dayNames = ['V', 'H', 'K', 'Sze', 'Cs', 'P', 'Szo'];
+        const monthNames = ['Január', 'Február', 'Március', 'Április', 'Május', 'Június', 'Július', 'Augusztus', 'Szeptember', 'Október', 'November', 'December'];
         let activeCell = null;
 
         function getGlobalGuards() {
@@ -862,6 +863,7 @@
             let currentGuards = getGlobalGuards();
             let year = parseInt(document.getElementById('yearSelect').value);
             let month = parseInt(document.getElementById('monthSelect').value);
+            let currentMonthName = monthNames[month];
             
             let cleanVacationHtml = '<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;">';
             currentGuards.forEach((guardName, gIndex) => {
@@ -962,12 +964,11 @@
                 }
             });
 
-            // NYOMTATÁSI FELÜLET MÓDOSÍTÁSA: explicit százalékos szélességek, hogy garantáltan beleférjen a fekvő A4-es lapba, karakter cellakitöltéssel és sárga utolsó oszlop háttérrel
+            // NYOMTATÁSI FELÜLET MÓDOSÍTÁSA: explicit százalékos szélességek, karakter cellakitöltés, sárga utolsó oszlop háttérrel
             let tempRows = tempTable.querySelectorAll('tr');
             tempRows.forEach((row, rIdx) => {
                 let cells = row.querySelectorAll('th, td');
                 let totalDaysCount = days.length;
-                // Százalékos elosztás: 14% a Név, 4% az Óra, a maradék 82% pontosan elosztva a napok között
                 let dayCellWidthPercent = (82 / totalDaysCount).toFixed(2) + '%';
 
                 cells.forEach((cell, cIndex) => {
@@ -978,17 +979,16 @@
                         cell.setAttribute('style', curStyle + '; border-left: 3px solid #1f6feb !important; mso-border-left-alt: solid #1f6feb 2pt;');
                     }
                     
-                    // Utolsó oszlop (keret / óra) szigorúan citromsárga háttérrel
                     if (cIndex === cells.length - 1) {
                         cell.style.backgroundColor = '#ffeb3b';
                         let curStyle = cell.getAttribute('style') || '';
-                        cell.setAttribute('style', curStyle + '; width: 4% !important; background-color: #ffeb3b !important; mso-shading: #ffeb3b;');
+                        cell.setAttribute('style', curStyle + '; width: 4% !important; background-color: #ffeb3b !important; mso-shading: #ffeb3b; text-align: center !important; vertical-align: middle !important;');
                     } else if (cIndex === 0 || cell.classList.contains('name-col')) {
                         let curStyle = cell.getAttribute('style') || '';
-                        cell.setAttribute('style', curStyle + '; width: 14% !important;');
+                        cell.setAttribute('style', curStyle + '; width: 14% !important; text-align: left !important; vertical-align: middle !important;');
                     } else {
                         let curStyle = cell.getAttribute('style') || '';
-                        cell.setAttribute('style', curStyle + '; width: ' + dayCellWidthPercent + ' !important; text-align: center !important; vertical-align: middle !important; font-size: 10px !important; font-weight: 900 !important;');
+                        cell.setAttribute('style', curStyle + '; width: ' + dayCellWidthPercent + ' !important; text-align: center !important; vertical-align: middle !important; font-size: 10px !important; font-weight: 900 !important; padding: 4px 0px !important;');
                     }
                 });
             });
@@ -1044,7 +1044,7 @@
                         <h1>Mátrix Labor — Hivatalos Vezénylési Jelentés</h1>
                         <div class="subtitle">Univerzális Rendszer Export</div>
                         
-                        <div style="font-size: 11px; font-weight: bold; margin-top: 10px; margin-bottom: 6px; border-bottom: 2px solid #1f6feb; padding-bottom: 2px; color: #1f6feb;">1. Havi Vezénylési Táblázat</div>
+                        <div style="font-size: 11px; font-weight: bold; margin-top: 10px; margin-bottom: 6px; border-bottom: 2px solid #1f6feb; padding-bottom: 2px; color: #1f6feb;">1. <b>${year}. ${currentMonthName}</b> — Havi Vezénylési Táblázat</div>
                         <div>${tableHtml}</div>
                         
                         <div class="section-title">2. Éves Göngyölített Szabadságkezelő</div>
@@ -1069,7 +1069,7 @@
             let url = URL.createObjectURL(blob);
             let a = document.createElement('a');
             a.href = url;
-            a.download = 'Matrix_Labor_Vezenyles.doc';
+            a.download = `Matrix_Labor_Vezenyles_${year}_${currentMonthName}.doc`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
