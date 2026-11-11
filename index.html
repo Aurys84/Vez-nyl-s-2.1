@@ -925,7 +925,6 @@
 
             let tableContainerClone = document.querySelector('.table-container').cloneNode(true);
             
-            // WORD EXPORT FIX: Cseréljük le a legördülő selecteket sima szám szövegre a Word klónban, hogy ne csússzon szét a fejléc!
             tableContainerClone.querySelectorAll('.req-row select').forEach(sel => {
                 let parentTh = sel.parentElement;
                 if(parentTh) {
@@ -1001,7 +1000,8 @@
             });
 
             let allRows = tempTable.querySelectorAll('tbody tr:not(.total-row)');
-            
+            let totalRow = document.querySelector('#scheduleTable tbody tr.total-row');
+
             let table1Container = tableContainerClone.cloneNode(true);
             let table1 = table1Container.querySelector('table');
             let tbody1 = table1.querySelector('tbody');
@@ -1020,8 +1020,9 @@
                 }
             });
 
-            let totalRow = document.querySelector('#scheduleTable tbody tr.total-row');
+            // Mindkét táblázat aljára beillesztjük a Havi Összesítőt!
             if(totalRow) {
+                tbody1.appendChild(totalRow.cloneNode(true));
                 tbody2.appendChild(totalRow.cloneNode(true));
             }
 
@@ -1117,7 +1118,7 @@
                     </style>
                 </head>
                 <body>
-                    <!-- 1. OLDAL: 1-10. ŐR TÁBLÁZATA -->
+                    <!-- 1. OLDAL: 1-10. ŐR TÁBLÁZATA + HAVI ÖSSZESÍTŐ -->
                     <div class="WordSection1">
                         <div class="header-container">
                             <h1>Mátrix Labor — Vezénylés Tervezet</h1>
@@ -1129,7 +1130,7 @@
                     <!-- KŐKEMÉNY WORD OLDALTÖRÉS -->
                     <br clear="all" style="page-break-before:always">
 
-                    <!-- 2. OLDAL: 11-20. ŐR TÁBLÁZATA -->
+                    <!-- 2. OLDAL: 11-20. ŐR TÁBLÁZATA + HAVI ÖSSZESÍTŐ -->
                     <div class="WordSection2">
                         <div class="header-container">
                             <h1>Mátrix Labor — Vezénylés Tervezet</h1>
