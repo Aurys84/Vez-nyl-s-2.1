@@ -966,34 +966,67 @@
                 }
             });
 
-            let tempRows = tempTable.querySelectorAll('tr');
-            tempRows.forEach((row, rIdx) => {
-                let cells = row.querySelectorAll('th, td');
-                let totalDaysCount = days.length; 
-                let dayColWidthPt = Math.floor((710 - 75 - 22) / totalDaysCount);
+            // ITT OSZTJUK SZÉT 2 OLDALRA: Az első 10 őr megy az 1. oldalra, utána beleteszünk egy Word oldaltörést, és a 11-20. őr megy a 2. oldalra!
+            let allRows = tempTable.querySelectorAll('tbody tr:not(.total-row)');
+            let totalRowsCount = allRows.length;
+            
+            // Készítünk két külön táblázat klónt a két oldalhoz
+            let table1Container = tableContainerClone.cloneNode(true);
+            let table1 = table1Container.querySelector('table');
+            let tbody1 = table1.querySelector('tbody');
+            tbody1.innerHTML = '';
+            
+            let table2Container = tableContainerClone.cloneNode(true);
+            let table2 = table2Container.querySelector('table');
+            let tbody2 = table2.querySelector('tbody');
+            tbody2.innerHTML = '';
 
-                cells.forEach((cell, cIndex) => {
-                    let dObj = days[cIndex - 1];
-                    if (dObj && dObj.date && dObj.date.getDay() === 1 && cIndex > 0 && cIndex < cells.length - 1) {
-                        cell.style.borderLeft = '2px solid #1f6feb';
-                        let curStyle = cell.getAttribute('style') || '';
-                        cell.setAttribute('style', curStyle + '; border-left: 2px solid #1f6feb !important; mso-border-left-alt: solid #1f6feb 1.5pt;');
-                    }
-                    
-                    if (cIndex === cells.length - 1) {
-                        let curStyle = cell.getAttribute('style') || '';
-                        cell.setAttribute('style', curStyle + '; width: 22pt !important; min-width: 22pt !important; max-width: 22pt !important; background-color: #ffeb3b !important; mso-shading: #ffeb3b; color: #000000 !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; font-size: 10px !important; font-weight: 900 !important; white-space: nowrap !important; padding: 1px 0px !important;');
-                    } else if (cIndex === 0 || cell.classList.contains('name-col')) {
-                        let curStyle = cell.getAttribute('style') || '';
-                        cell.setAttribute('style', curStyle + '; width: 75pt !important; min-width: 75pt !important; max-width: 75pt !important; text-align: left !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; padding: 1px 2px !important;');
-                    } else {
-                        let curStyle = cell.getAttribute('style') || '';
-                        cell.setAttribute('style', curStyle + '; width: ' + dayColWidthPt + 'pt !important; min-width: ' + dayColWidthPt + 'pt !important; max-width: ' + dayColWidthPt + 'pt !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; font-size: 10px !important; font-weight: 900 !important; padding: 1px 0px !important;');
-                    }
+            allRows.forEach((row, idx) => {
+                if (idx < 10) {
+                    tbody1.appendChild(row.cloneNode(true));
+                } else {
+                    tbody2.appendChild(row.cloneNode(true));
+                }
+            });
+
+            // Hozzáadjuk a havi összesítő sort a 2. táblázat aljára is (vagy mindkettőhöz)
+            let totalRow = document.querySelector('#scheduleTable tbody tr.total-row');
+            if(totalRow) {
+                tbody2.appendChild(totalRow.cloneNode(true));
+            }
+
+            // Méretezési beállítások mindkét táblázatra
+            [table1, table2].forEach(tbl => {
+                let tempRows = tbl.querySelectorAll('tr');
+                tempRows.forEach((row, rIdx) => {
+                    let cells = row.querySelectorAll('th, td');
+                    let totalDaysCount = days.length; 
+                    let dayColWidthPt = Math.floor((710 - 75 - 22) / totalDaysCount);
+
+                    cells.forEach((cell, cIndex) => {
+                        let dObj = days[cIndex - 1];
+                        if (dObj && dObj.date && dObj.date.getDay() === 1 && cIndex > 0 && cIndex < cells.length - 1) {
+                            cell.style.borderLeft = '2px solid #1f6feb';
+                            let curStyle = cell.getAttribute('style') || '';
+                            cell.setAttribute('style', curStyle + '; border-left: 2px solid #1f6feb !important; mso-border-left-alt: solid #1f6feb 1.5pt;');
+                        }
+                        
+                        if (cIndex === cells.length - 1) {
+                            let curStyle = cell.getAttribute('style') || '';
+                            cell.setAttribute('style', curStyle + '; width: 22pt !important; min-width: 22pt !important; max-width: 22pt !important; background-color: #ffeb3b !important; mso-shading: #ffeb3b; color: #000000 !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; font-size: 10px !important; font-weight: 900 !important; white-space: nowrap !important; padding: 1px 0px !important;');
+                        } else if (cIndex === 0 || cell.classList.contains('name-col')) {
+                            let curStyle = cell.getAttribute('style') || '';
+                            cell.setAttribute('style', curStyle + '; width: 75pt !important; min-width: 75pt !important; max-width: 75pt !important; text-align: left !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; padding: 1px 2px !important;');
+                        } else {
+                            let curStyle = cell.getAttribute('style') || '';
+                            cell.setAttribute('style', curStyle + '; width: ' + dayColWidthPt + 'pt !important; min-width: ' + dayColWidthPt + 'pt !important; max-width: ' + dayColWidthPt + 'pt !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; font-size: 10px !important; font-weight: 900 !important; padding: 1px 0px !important;');
+                        }
+                    });
                 });
             });
 
-            let tableHtml = tableContainerClone.innerHTML;
+            let table1Html = table1Container.innerHTML;
+            let table2Html = table2Container.innerHTML;
             let auditHtml = document.getElementById('auditReport').innerHTML;
             let holidayHtml = document.getElementById('holidayReport').innerHTML;
             
@@ -1006,7 +1039,8 @@
                         @page WordSection1 {
                             size: 842.25pt 595.3pt;
                             mso-page-orientation: landscape;
-                            margin: 0.15cm 0.15cm 0.15cm 0.15cm;
+                            /* ITT ADTUK MEG A JOBB/BAL MARGÓT (balra nagyobb hely a lyukasztáshoz/nyomtatási margóhoz!) */
+                            margin: 0.15cm 0.15cm 0.15cm 0.5cm; 
                         }
                         div.WordSection1 {
                             page: WordSection1;
@@ -1036,7 +1070,8 @@
                         .pos-szb { background-color: #9e6a03 !important; mso-shading: #9e6a03; color: white !important; font-weight: bold; }
                         .pos-szab { background-color: #1f6feb !important; mso-shading: #1f6feb; color: white !important; font-weight: bold; }
 
-                        .section-title { font-size: 10px; font-weight: bold; margin-top: 8px; margin-bottom: 2px; border-bottom: 2px solid #1f6feb; padding-bottom: 1px; color: #1f6feb; page-break-before: always; mso-break-type: section-break; text-align: left; }
+                        .page-break { page-break-before: always; mso-break-type: section-break; }
+                        .section-title { font-size: 10px; font-weight: bold; margin-top: 8px; margin-bottom: 2px; border-bottom: 2px solid #1f6feb; padding-bottom: 1px; color: #1f6feb; text-align: left; }
                         .summary-row { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 4px; }
                         .summary-box { border: 1px solid #333333; border-radius: 4px; padding: 3px; font-size: 8px; background: #f9fafb !important; }
                         .summary-box h3 { margin: 0 0 1px 0; font-size: 8px; color: #1f6feb; }
@@ -1049,8 +1084,14 @@
                             <div class="subtitle">Univerzális Rendszer Export</div>
                         </div>
                         
-                        <div class="month-title">1. <b>${year}. ${currentMonthName}</b> — Havi Vezénylési Táblázat</div>
-                        <div>${tableHtml}</div>
+                        <div class="month-title">1. <b>${year}. ${currentMonthName}</b> — Havi Vezénylési Táblázat (1. Rész: 1–10. őr)</div>
+                        <div>${table1Html}</div>
+
+                        <!-- ITT TÖRTÉNIK A KÉT OLDALRA BONTÁS -->
+                        <div class="page-break"></div>
+
+                        <div class="month-title">1. <b>${year}. ${currentMonthName}</b> — Havi Vezénylési Táblázat (2. Rész: 11–20. őr)</div>
+                        <div>${table2Html}</div>
                         
                         <div class="section-title">2. Éves Göngyölített Szabadságkezelő</div>
                         <div>${cleanVacationHtml}</div>
