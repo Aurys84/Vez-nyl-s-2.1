@@ -966,7 +966,6 @@
                 }
             });
 
-            // ABSZOLÚT PONTOSÍTOTT MÉRETEZÉS: Összesen pontosan 710 pontra kényszerítjük a táblázatot! Név = 75pt, Óra = 22pt, a maradék 613pt pedig pontosan elosztva a 34 nap között (~18pt / nap). Így garantáltan nem lóg ki semmi!
             let tempRows = tempTable.querySelectorAll('tr');
             tempRows.forEach((row, rIdx) => {
                 let cells = row.querySelectorAll('th, td');
@@ -1089,7 +1088,7 @@
             let savedMonth = localStorage.getItem('matrix_last_month');
 
             if (savedYear !== null && document.getElementById('yearSelect')) {
-                document.getElementById('yearSelect'].value = savedYear;
+                document.getElementById('yearSelect').value = savedYear;
             }
             if (savedMonth !== null && document.getElementById('monthSelect')) {
                 document.getElementById('monthSelect').value = savedMonth;
