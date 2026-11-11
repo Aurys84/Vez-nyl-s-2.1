@@ -934,7 +934,7 @@
                 }
             });
 
-            let wordWeekRowHtml = '<tr class="week-row"><th class="name-col" style="width:13%; font-size:9px;">Hét száma</th>';
+            let wordWeekRowHtml = '<tr class="week-row"><th class="name-col" style="width:12%; font-size:9px;">Hét száma</th>';
             weeksMap.forEach((w, wIdx) => {
                 let sepClass = (wIdx > 0) ? 'border-left: 2px solid #1f6feb !important;' : '';
                 wordWeekRowHtml += `<th colspan="${w.count}" style="font-size:9px; font-weight:bold; background:#f0f4f8 !important; mso-shading: #f0f4f8; color:#000000 !important; border:1px solid #333333; ${sepClass} padding:2px 1px;">${w.weekNum}.hét</th>`;
@@ -966,12 +966,12 @@
                 }
             });
 
-            // NYOMTATÁSI FELÜLET: 12-es méret, tökéletesen kiférő 83%-os nap szélesség, biztos centre igazítás!
+            // NYOMTATÁSI FELÜLET: 12-es méret, tökéletes két soros változat az elején, és a vége is teljesen behúzva a lapra (Név: 12%, Óra: 4%, Napok: 84%)
             let tempRows = tempTable.querySelectorAll('tr');
             tempRows.forEach((row, rIdx) => {
                 let cells = row.querySelectorAll('th, td');
                 let totalDaysCount = days.length;
-                let dayCellWidthPercent = (83 / totalDaysCount).toFixed(2) + '%';
+                let dayCellWidthPercent = (84 / totalDaysCount).toFixed(2) + '%';
 
                 cells.forEach((cell, cIndex) => {
                     let dObj = days[cIndex - 1];
@@ -987,7 +987,7 @@
                         cell.setAttribute('style', curStyle + '; width: 4% !important; background-color: #ffeb3b !important; mso-shading: #ffeb3b; color: #000000 !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; font-size: 12px !important; font-weight: 900 !important; white-space: nowrap !important;');
                     } else if (cIndex === 0 || cell.classList.contains('name-col')) {
                         let curStyle = cell.getAttribute('style') || '';
-                        cell.setAttribute('style', curStyle + '; width: 13% !important; text-align: left !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important;');
+                        cell.setAttribute('style', curStyle + '; width: 12% !important; text-align: left !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important;');
                     } else {
                         let curStyle = cell.getAttribute('style') || '';
                         cell.setAttribute('style', curStyle + '; width: ' + dayCellWidthPercent + ' !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; font-size: 12px !important; font-weight: 900 !important;');
@@ -1008,23 +1008,23 @@
                         @page WordSection1 {
                             size: 842.25pt 595.3pt;
                             mso-page-orientation: landscape;
-                            margin: 0.4cm 0.4cm 0.4cm 0.4cm;
+                            margin: 0.3cm 0.3cm 0.3cm 0.3cm;
                         }
                         div.WordSection1 {
                             page: WordSection1;
                         }
                         body { font-family: 'Segoe UI', Arial, sans-serif; background: #ffffff; color: #000000; margin: 0px; font-size: 12px; }
-                        .header-container { width: 100% !important; text-align: center !important; margin-bottom: 8px; }
+                        .header-container { width: 100% !important; text-align: center !important; margin-bottom: 6px; }
                         h1 { text-align: center !important; font-size: 15px; color: #1f6feb; margin: 0 0 2px 0; width: 100%; }
-                        .subtitle { text-align: center !important; font-size: 9px; margin-bottom: 8px; color: #555555; width: 100%; }
-                        .month-title { font-size: 11px; font-weight: bold; margin-top: 5px; margin-bottom: 5px; border-bottom: 2px solid #1f6feb; padding-bottom: 2px; color: #1f6feb; text-align: left; }
+                        .subtitle { text-align: center !important; font-size: 9px; margin-bottom: 6px; color: #555555; width: 100%; }
+                        .month-title { font-size: 11px; font-weight: bold; margin-top: 4px; margin-bottom: 4px; border-bottom: 2px solid #1f6feb; padding-bottom: 2px; color: #1f6feb; text-align: left; }
                         
-                        table { width: 100% !important; table-layout: fixed !important; border-collapse: collapse; text-align: center; margin-bottom: 10px; }
+                        table { width: 100% !important; table-layout: fixed !important; border-collapse: collapse; text-align: center; margin-bottom: 8px; }
                         
                         th, td { border: 1px solid #333333; padding: 2px 1px; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; overflow: hidden; }
                         th { background: #f0f4f8 !important; color: #000000 !important; font-weight: bold; font-size: 8px; }
                         
-                        .name-col { width: 13% !important; font-size: 11px; font-weight: bold; text-align: left !important; padding-left: 3px; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; }
+                        .name-col { width: 12% !important; font-size: 11px; font-weight: bold; text-align: left !important; padding-left: 3px; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; }
                         
                         .hours-col { width: 4% !important; font-size: 12px !important; font-weight: 900 !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; background-color: #ffeb3b !important; mso-shading: #ffeb3b; color: #000000 !important; white-space: nowrap !important; }
                         td.cell-default, td[class*="pos-"] { font-size: 12px !important; font-weight: 900 !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; }
@@ -1038,9 +1038,9 @@
                         .pos-szb { background-color: #9e6a03 !important; mso-shading: #9e6a03; color: white !important; font-weight: bold; }
                         .pos-szab { background-color: #1f6feb !important; mso-shading: #1f6feb; color: white !important; font-weight: bold; }
 
-                        .section-title { font-size: 11px; font-weight: bold; margin-top: 15px; margin-bottom: 5px; border-bottom: 2px solid #1f6feb; padding-bottom: 2px; color: #1f6feb; page-break-before: always; mso-break-type: section-break; text-align: left; }
-                        .summary-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
-                        .summary-box { border: 1px solid #333333; border-radius: 4px; padding: 5px; font-size: 9px; background: #f9fafb !important; }
+                        .section-title { font-size: 11px; font-weight: bold; margin-top: 12px; margin-bottom: 4px; border-bottom: 2px solid #1f6feb; padding-bottom: 2px; color: #1f6feb; page-break-before: always; mso-break-type: section-break; text-align: left; }
+                        .summary-row { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
+                        .summary-box { border: 1px solid #333333; border-radius: 4px; padding: 4px; font-size: 9px; background: #f9fafb !important; }
                         .summary-box h3 { margin: 0 0 3px 0; font-size: 10px; color: #1f6feb; }
                     </style>
                 </head>
