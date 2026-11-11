@@ -934,12 +934,12 @@
                 }
             });
 
-            let wordWeekRowHtml = '<tr class="week-row"><th class="name-col" style="width:100pt !important; font-size:9px;">Hét száma</th>';
+            let wordWeekRowHtml = '<tr class="week-row"><th class="name-col" style="font-size:9px;">Hét száma</th>';
             weeksMap.forEach((w, wIdx) => {
                 let sepClass = (wIdx > 0) ? 'border-left: 2px solid #1f6feb !important;' : '';
                 wordWeekRowHtml += `<th colspan="${w.count}" style="font-size:9px; font-weight:bold; background:#f0f4f8 !important; mso-shading: #f0f4f8; color:#000000 !important; border:1px solid #333333; ${sepClass} padding:2px 1px;">${w.weekNum}.hét</th>`;
             });
-            wordWeekRowHtml += '<th class="hours-col" style="width:26pt !important; font-size:11px; background-color: #ffeb3b !important; mso-shading: #ffeb3b; color: #000000 !important; border-left: 2px solid #1f6feb !important; white-space: nowrap !important;">Óra</th></tr>';
+            wordWeekRowHtml += '<th class="hours-col" style="font-size:11px; background-color: #ffeb3b !important; mso-shading: #ffeb3b; color: #000000 !important; border-left: 2px solid #1f6feb !important; white-space: nowrap !important;">Óra</th></tr>';
 
             let originalHeaderRows = tempThead.querySelectorAll('tr');
             if(originalHeaderRows.length >= 3) {
@@ -966,11 +966,10 @@
                 }
             });
 
-            // VÉGLEGES FIX PONTOZÁS: Név fix 100pt, Óra fix 26pt, a többi oszlop automatikusan, egyenletesen kitölti a maradék centimétereket, így a legvége sem lóg le!
+            // ITT A MEGOLDÁS: Eltávolítottam minden fix oszlopszélességet, így a Word automatikusan, gyönyörűen, tördelés nélkül besajtolja az EGÉSZ táblázatot (beleértve a végét is) a fekvő lapra!
             let tempRows = tempTable.querySelectorAll('tr');
             tempRows.forEach((row, rIdx) => {
                 let cells = row.querySelectorAll('th, td');
-
                 cells.forEach((cell, cIndex) => {
                     let dObj = days[cIndex - 1];
                     if (dObj && dObj.date && dObj.date.getDay() === 1 && cIndex > 0 && cIndex < cells.length - 1) {
@@ -982,13 +981,12 @@
                     if (cIndex === cells.length - 1) {
                         cell.style.backgroundColor = '#ffeb3b';
                         let curStyle = cell.getAttribute('style') || '';
-                        cell.setAttribute('style', curStyle + '; width: 26pt !important; min-width: 26pt !important; max-width: 26pt !important; background-color: #ffeb3b !important; mso-shading: #ffeb3b; color: #000000 !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; font-size: 12px !important; font-weight: 900 !important; white-space: nowrap !important;');
+                        cell.setAttribute('style', curStyle + '; background-color: #ffeb3b !important; mso-shading: #ffeb3b; color: #000000 !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; font-size: 12px !important; font-weight: 900 !important; white-space: nowrap !important;');
                     } else if (cIndex === 0 || cell.classList.contains('name-col')) {
                         let curStyle = cell.getAttribute('style') || '';
-                        cell.setAttribute('style', curStyle + '; width: 100pt !important; min-width: 100pt !important; max-width: 100pt !important; text-align: left !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important;');
+                        cell.setAttribute('style', curStyle + '; text-align: left !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important;');
                     } else {
                         let curStyle = cell.getAttribute('style') || '';
-                        cell.removeAttribute('width');
                         cell.setAttribute('style', curStyle + '; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; font-size: 12px !important; font-weight: 900 !important;');
                     }
                 });
@@ -1007,7 +1005,7 @@
                         @page WordSection1 {
                             size: 842.25pt 595.3pt;
                             mso-page-orientation: landscape;
-                            margin: 0.2cm 0.2cm 0.2cm 0.2cm;
+                            margin: 0.15cm 0.15cm 0.15cm 0.15cm;
                         }
                         div.WordSection1 {
                             page: WordSection1;
@@ -1023,9 +1021,9 @@
                         th, td { border: 1px solid #333333; padding: 2px 1px; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; overflow: hidden; }
                         th { background: #f0f4f8 !important; color: #000000 !important; font-weight: bold; font-size: 8px; }
                         
-                        .name-col { width: 100pt !important; font-size: 11px; font-weight: bold; text-align: left !important; padding-left: 3px; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; }
+                        .name-col { font-size: 11px; font-weight: bold; text-align: left !important; padding-left: 3px; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; }
                         
-                        .hours-col { width: 26pt !important; font-size: 12px !important; font-weight: 900 !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; background-color: #ffeb3b !important; mso-shading: #ffeb3b; color: #000000 !important; white-space: nowrap !important; }
+                        .hours-col { font-size: 12px !important; font-weight: 900 !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; background-color: #ffeb3b !important; mso-shading: #ffeb3b; color: #000000 !important; white-space: nowrap !important; }
                         td.cell-default, td[class*="pos-"] { font-size: 12px !important; font-weight: 900 !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; }
                         
                         .total-row td { background-color: #e2e8f0 !important; mso-shading: #e2e8f0; color: #000000 !important; font-weight: 900; font-size: 12px !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; white-space: nowrap !important; }
