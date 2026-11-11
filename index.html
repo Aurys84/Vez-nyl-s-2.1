@@ -932,12 +932,12 @@
                 }
             });
 
-            let wordWeekRowHtml = '<tr class="week-row"><th class="name-col" style="font-size:9px;">Hét száma</th>';
+            let wordWeekRowHtml = '<tr class="week-row"><th class="name-col" style="width:14%; font-size:9px;">Hét száma</th>';
             weeksMap.forEach((w, wIdx) => {
                 let sepClass = (wIdx > 0) ? 'border-left: 3px solid #1f6feb !important;' : '';
                 wordWeekRowHtml += `<th colspan="${w.count}" style="font-size:10px; font-weight:bold; background:#f0f4f8 !important; mso-shading: #f0f4f8; color:#000000 !important; border:1px solid #333333; ${sepClass} padding:3px 1px;">${w.weekNum}.hét</th>`;
             });
-            wordWeekRowHtml += '<th class="hours-col" style="font-size:9px; background-color: #ffeb3b !important; mso-shading: #ffeb3b; border-left: 3px solid #1f6feb !important;">Óra</th></tr>';
+            wordWeekRowHtml += '<th class="hours-col" style="width:4%; font-size:9px; background-color: #ffeb3b !important; mso-shading: #ffeb3b; border-left: 3px solid #1f6feb !important;">Óra</th></tr>';
 
             let originalHeaderRows = tempThead.querySelectorAll('tr');
             if(originalHeaderRows.length >= 3) {
@@ -964,10 +964,13 @@
                 }
             });
 
-            // NYOMTATÁSI FELÜLET: Eredeti betűméret és teljes cellakitöltés + középre igazítás, utolsó oszlop sárga
+            // NYOMTATÁSI FELÜLET: Százalékos méretezés, fixen belefér fekvő A4-be, sárga utolsó oszlop, eredeti betűméret és teljes középre igazítás
             let tempRows = tempTable.querySelectorAll('tr');
             tempRows.forEach((row, rIdx) => {
                 let cells = row.querySelectorAll('th, td');
+                let totalDaysCount = days.length;
+                let dayCellWidthPercent = (82 / totalDaysCount).toFixed(2) + '%';
+
                 cells.forEach((cell, cIndex) => {
                     let dObj = days[cIndex - 1];
                     if (dObj && dObj.date && dObj.date.getDay() === 1 && cIndex > 0 && cIndex < cells.length - 1) {
@@ -979,13 +982,13 @@
                     if (cIndex === cells.length - 1) {
                         cell.style.backgroundColor = '#ffeb3b';
                         let curStyle = cell.getAttribute('style') || '';
-                        cell.setAttribute('style', curStyle + '; background-color: #ffeb3b !important; mso-shading: #ffeb3b; text-align: center !important; vertical-align: middle !important;');
+                        cell.setAttribute('style', curStyle + '; width: 4% !important; background-color: #ffeb3b !important; mso-shading: #ffeb3b; text-align: center !important; vertical-align: middle !important;');
                     } else if (cIndex === 0 || cell.classList.contains('name-col')) {
                         let curStyle = cell.getAttribute('style') || '';
-                        cell.setAttribute('style', curStyle + '; text-align: left !important; vertical-align: middle !important;');
+                        cell.setAttribute('style', curStyle + '; width: 14% !important; text-align: left !important; vertical-align: middle !important;');
                     } else {
                         let curStyle = cell.getAttribute('style') || '';
-                        cell.setAttribute('style', curStyle + '; text-align: center !important; vertical-align: middle !important; width: 100% !important; mso-fit-shape-to-text: t;');
+                        cell.setAttribute('style', curStyle + '; width: ' + dayCellWidthPercent + ' !important; text-align: center !important; vertical-align: middle !important; font-weight: 900 !important;');
                     }
                 });
             });
@@ -1003,37 +1006,37 @@
                         @page WordSection1 {
                             size: 842.25pt 595.3pt;
                             mso-page-orientation: landscape;
-                            margin: 1cm 1cm 1cm 1cm;
+                            margin: 0.8cm 0.8cm 0.8cm 0.8cm;
                         }
                         div.WordSection1 {
                             page: WordSection1;
                         }
-                        body { font-family: 'Segoe UI', Arial, sans-serif; background: #ffffff; color: #000000; margin: 10px; font-size: 10px; }
-                        h1 { text-align: center; font-size: 16px; color: #1f6feb; margin-bottom: 2px; }
-                        .subtitle { text-align: center; font-size: 10px; margin-bottom: 15px; color: #555555; }
-                        table { width: 100%; border-collapse: collapse; text-align: center; margin-bottom: 15px; font-size: 10px; }
+                        body { font-family: 'Segoe UI', Arial, sans-serif; background: #ffffff; color: #000000; margin: 5px; font-size: 9px; }
+                        h1 { text-align: center; font-size: 14px; color: #1f6feb; margin-bottom: 2px; }
+                        .subtitle { text-align: center; font-size: 9px; margin-bottom: 10px; color: #555555; }
+                        table { width: 100% !important; table-layout: fixed !important; border-collapse: collapse; text-align: center; margin-bottom: 15px; }
                         
-                        th, td { border: 1px solid #333333; padding: 4px 2px; text-align: center !important; vertical-align: middle !important; overflow: hidden; }
-                        th { background: #f0f4f8 !important; color: #000000 !important; font-weight: bold; font-size: 10px; }
+                        th, td { border: 1px solid #333333; padding: 2px 1px; text-align: center !important; vertical-align: middle !important; overflow: hidden; word-break: break-all; }
+                        th { background: #f0f4f8 !important; color: #000000 !important; font-weight: bold; font-size: 8px; }
                         
-                        .name-col { font-size: 10px; font-weight: bold; text-align: left !important; padding-left: 6px; vertical-align: middle !important; }
+                        .name-col { width: 14% !important; font-size: 9px; font-weight: bold; text-align: left !important; padding-left: 3px; vertical-align: middle !important; }
                         
-                        .hours-col { font-size: 11px !important; font-weight: 900 !important; text-align: center !important; vertical-align: middle !important; background-color: #ffeb3b !important; mso-shading: #ffeb3b; }
-                        td.cell-default, td[class*="pos-"] { font-size: 11px !important; font-weight: 900 !important; text-align: center !important; vertical-align: middle !important; width: 100% !important; }
+                        .hours-col { width: 4% !important; font-size: 10px !important; font-weight: 900 !important; text-align: center !important; vertical-align: middle !important; background-color: #ffeb3b !important; mso-shading: #ffeb3b; }
+                        td.cell-default, td[class*="pos-"] { font-size: 10px !important; font-weight: 900 !important; text-align: center !important; vertical-align: middle !important; }
                         
-                        .total-row td { background-color: #e2e8f0 !important; mso-shading: #e2e8f0; color: #000000 !important; font-weight: 900; font-size: 11px !important; text-align: center !important; vertical-align: middle !important; }
+                        .total-row td { background-color: #e2e8f0 !important; mso-shading: #e2e8f0; color: #000000 !important; font-weight: 900; font-size: 10px !important; text-align: center !important; vertical-align: middle !important; }
                         
-                        .cell-locked { background-color: #bfdbfe !important; mso-shading: #bfdbfe; color: #1e40af !important; font-weight: bold; font-size: 10px !important; text-align: center !important; vertical-align: middle !important; }
+                        .cell-locked { background-color: #bfdbfe !important; mso-shading: #bfdbfe; color: #1e40af !important; font-weight: bold; font-size: 9px !important; text-align: center !important; vertical-align: middle !important; }
                         .pos-np { background-color: #238636 !important; mso-shading: #238636; color: white !important; font-weight: bold; }
                         .pos-ep { background-color: #da3633 !important; mso-shading: #da3633; color: white !important; font-weight: bold; }
                         .pos-nep { background-color: #8957e5 !important; mso-shading: #8957e5; color: white !important; font-weight: bold; }
                         .pos-szb { background-color: #9e6a03 !important; mso-shading: #9e6a03; color: white !important; font-weight: bold; }
                         .pos-szab { background-color: #1f6feb !important; mso-shading: #1f6feb; color: white !important; font-weight: bold; }
 
-                        .section-title { font-size: 12px; font-weight: bold; margin-top: 25px; margin-bottom: 8px; border-bottom: 2px solid #1f6feb; padding-bottom: 3px; color: #1f6feb; page-break-before: always; mso-break-type: section-break; }
-                        .summary-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
-                        .summary-box { border: 1px solid #333333; border-radius: 4px; padding: 8px; font-size: 10px; background: #f9fafb !important; }
-                        .summary-box h3 { margin: 0 0 5px 0; font-size: 11px; color: #1f6feb; }
+                        .section-title { font-size: 11px; font-weight: bold; margin-top: 20px; margin-bottom: 6px; border-bottom: 2px solid #1f6feb; padding-bottom: 2px; color: #1f6feb; page-break-before: always; mso-break-type: section-break; }
+                        .summary-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+                        .summary-box { border: 1px solid #333333; border-radius: 4px; padding: 6px; font-size: 9px; background: #f9fafb !important; }
+                        .summary-box h3 { margin: 0 0 4px 0; font-size: 10px; color: #1f6feb; }
                     </style>
                 </head>
                 <body>
@@ -1041,7 +1044,7 @@
                         <h1>Mátrix Labor — Hivatalos Vezénylési Jelentés</h1>
                         <div class="subtitle">Univerzális Rendszer Export</div>
                         
-                        <div style="font-size: 12px; font-weight: bold; margin-top: 10px; margin-bottom: 8px; border-bottom: 2px solid #1f6feb; padding-bottom: 3px; color: #1f6feb;">1. <b>${year}. ${currentMonthName}</b> — Havi Vezénylési Táblázat</div>
+                        <div style="font-size: 11px; font-weight: bold; margin-top: 10px; margin-bottom: 6px; border-bottom: 2px solid #1f6feb; padding-bottom: 2px; color: #1f6feb;">1. <b>${year}. ${currentMonthName}</b> — Havi Vezénylési Táblázat</div>
                         <div>${tableHtml}</div>
                         
                         <div class="section-title">2. Éves Göngyölített Szabadságkezelő</div>
