@@ -937,9 +937,9 @@
             let wordWeekRowHtml = '<tr class="week-row"><th class="name-col" style="font-size:9px;">Hét száma</th>';
             weeksMap.forEach((w, wIdx) => {
                 let sepClass = (wIdx > 0) ? 'border-left: 2px solid #1f6feb !important;' : '';
-                wordWeekRowHtml += `<th colspan="${w.count}" style="font-size:9px; font-weight:bold; background:#f0f4f8 !important; mso-shading: #f0f4f8; color:#000000 !important; border:1px solid #333333; ${sepClass} padding:2px 1px;">${w.weekNum}.hét</th>`;
+                wordWeekRowHtml += `<th colspan="${w.count}" style="font-size:9px; font-weight:bold; background:#f0f4f8 !important; mso-shading: #f0f4f8; color:#000000 !important; border:1px solid #333333; ${sepClass} padding:1px 0px;">${w.weekNum}.hét</th>`;
             });
-            wordWeekRowHtml += '<th class="hours-col" style="font-size:11px; background-color: #ffeb3b !important; mso-shading: #ffeb3b; color: #000000 !important; border-left: 2px solid #1f6feb !important; white-space: nowrap !important;">Óra</th></tr>';
+            wordWeekRowHtml += '<th class="hours-col" style="font-size:10px; background-color: #ffeb3b !important; mso-shading: #ffeb3b; color: #000000 !important; border-left: 2px solid #1f6feb !important; white-space: nowrap !important;">Óra</th></tr>';
 
             let originalHeaderRows = tempThead.querySelectorAll('tr');
             if(originalHeaderRows.length >= 3) {
@@ -966,13 +966,12 @@
                 }
             });
 
-            // VÉGLEGES MEGOLDÁS A TÚLLÓGÁSRA: Minden cellára milliméter-alapú pontszélességet adunk, amivel a teljes táblázat pontosan 780 pont széles lesz, így tökéletesen kifér a fekvő A4-es lapra margóstul!
+            // ABSZOLÚT PONTOSÍTOTT MÉRETEZÉS: Összesen pontosan 710 pontra kényszerítjük a táblázatot! Név = 75pt, Óra = 22pt, a maradék 613pt pedig pontosan elosztva a 34 nap között (~18pt / nap). Így garantáltan nem lóg ki semmi!
             let tempRows = tempTable.querySelectorAll('tr');
             tempRows.forEach((row, rIdx) => {
                 let cells = row.querySelectorAll('th, td');
-                let totalDaysCount = days.length; // pl. 34 oszlop
-                // 780 pontból vonjuk ki a nevet (90pt) meg az órát (26pt) = 664pt marad a napoknak
-                let dayColWidthPt = Math.floor(664 / totalDaysCount);
+                let totalDaysCount = days.length; 
+                let dayColWidthPt = Math.floor((710 - 75 - 22) / totalDaysCount);
 
                 cells.forEach((cell, cIndex) => {
                     let dObj = days[cIndex - 1];
@@ -983,17 +982,14 @@
                     }
                     
                     if (cIndex === cells.length - 1) {
-                        // Utolsó sárga Óra oszlop: fix 26pt
                         let curStyle = cell.getAttribute('style') || '';
-                        cell.setAttribute('style', curStyle + '; width: 26pt !important; min-width: 26pt !important; max-width: 26pt !important; background-color: #ffeb3b !important; mso-shading: #ffeb3b; color: #000000 !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; font-size: 11px !important; font-weight: 900 !important; white-space: nowrap !important;');
+                        cell.setAttribute('style', curStyle + '; width: 22pt !important; min-width: 22pt !important; max-width: 22pt !important; background-color: #ffeb3b !important; mso-shading: #ffeb3b; color: #000000 !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; font-size: 10px !important; font-weight: 900 !important; white-space: nowrap !important; padding: 1px 0px !important;');
                     } else if (cIndex === 0 || cell.classList.contains('name-col')) {
-                        // Név oszlop: fix 90pt
                         let curStyle = cell.getAttribute('style') || '';
-                        cell.setAttribute('style', curStyle + '; width: 90pt !important; min-width: 90pt !important; max-width: 90pt !important; text-align: left !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important;');
+                        cell.setAttribute('style', curStyle + '; width: 75pt !important; min-width: 75pt !important; max-width: 75pt !important; text-align: left !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; padding: 1px 2px !important;');
                     } else {
-                        // Naptári napok oszlopai: egyenletes osztott pontszélesség
                         let curStyle = cell.getAttribute('style') || '';
-                        cell.setAttribute('style', curStyle + '; width: ' + dayColWidthPt + 'pt !important; min-width: ' + dayColWidthPt + 'pt !important; max-width: ' + dayColWidthPt + 'pt !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; font-size: 11px !important; font-weight: 900 !important;');
+                        cell.setAttribute('style', curStyle + '; width: ' + dayColWidthPt + 'pt !important; min-width: ' + dayColWidthPt + 'pt !important; max-width: ' + dayColWidthPt + 'pt !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; font-size: 10px !important; font-weight: 900 !important; padding: 1px 0px !important;');
                     }
                 });
             });
@@ -1011,40 +1007,40 @@
                         @page WordSection1 {
                             size: 842.25pt 595.3pt;
                             mso-page-orientation: landscape;
-                            margin: 0.2cm 0.2cm 0.2cm 0.2cm;
+                            margin: 0.15cm 0.15cm 0.15cm 0.15cm;
                         }
                         div.WordSection1 {
                             page: WordSection1;
                         }
-                        body { font-family: 'Segoe UI', Arial, sans-serif; background: #ffffff; color: #000000; margin: 0px; font-size: 11px; }
-                        .header-container { width: 100% !important; text-align: center !important; margin-bottom: 4px; }
-                        h1 { text-align: center !important; font-size: 13px; color: #1f6feb; margin: 0 0 2px 0; width: 100%; }
-                        .subtitle { text-align: center !important; font-size: 8px; margin-bottom: 4px; color: #555555; width: 100%; }
-                        .month-title { font-size: 10px; font-weight: bold; margin-top: 2px; margin-bottom: 3px; border-bottom: 2px solid #1f6feb; padding-bottom: 2px; color: #1f6feb; text-align: left; }
+                        body { font-family: 'Segoe UI', Arial, sans-serif; background: #ffffff; color: #000000; margin: 0px; font-size: 10px; }
+                        .header-container { width: 100% !important; text-align: center !important; margin-bottom: 2px; }
+                        h1 { text-align: center !important; font-size: 12px; color: #1f6feb; margin: 0 0 1px 0; width: 100%; }
+                        .subtitle { text-align: center !important; font-size: 8px; margin-bottom: 2px; color: #555555; width: 100%; }
+                        .month-title { font-size: 10px; font-weight: bold; margin-top: 2px; margin-bottom: 2px; border-bottom: 2px solid #1f6feb; padding-bottom: 1px; color: #1f6feb; text-align: left; }
                         
-                        table { width: 780pt !important; max-width: 780pt !important; table-layout: fixed !important; border-collapse: collapse; text-align: center; margin-bottom: 6px; }
+                        table { width: 710pt !important; max-width: 710pt !important; table-layout: fixed !important; border-collapse: collapse; text-align: center; margin-bottom: 4px; }
                         
-                        th, td { border: 1px solid #333333; padding: 2px 0px; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; overflow: hidden; }
-                        th { background: #f0f4f8 !important; color: #000000 !important; font-weight: bold; font-size: 8px; }
+                        th, td { border: 1px solid #333333; padding: 1px 0px; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; overflow: hidden; }
+                        th { background: #f0f4f8 !important; color: #000000 !important; font-weight: bold; font-size: 7px; }
                         
-                        .name-col { width: 90pt !important; font-size: 10px; font-weight: bold; text-align: left !important; padding-left: 3px; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; }
+                        .name-col { width: 75pt !important; font-size: 9px; font-weight: bold; text-align: left !important; padding-left: 2px; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; }
                         
-                        .hours-col { width: 26pt !important; font-size: 11px !important; font-weight: 900 !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; background-color: #ffeb3b !important; mso-shading: #ffeb3b; color: #000000 !important; white-space: nowrap !important; }
-                        td.cell-default, td[class*="pos-"] { font-size: 11px !important; font-weight: 900 !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; }
+                        .hours-col { width: 22pt !important; font-size: 10px !important; font-weight: 900 !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; background-color: #ffeb3b !important; mso-shading: #ffeb3b; color: #000000 !important; white-space: nowrap !important; }
+                        td.cell-default, td[class*="pos-"] { font-size: 10px !important; font-weight: 900 !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; }
                         
-                        .total-row td { background-color: #e2e8f0 !important; mso-shading: #e2e8f0; color: #000000 !important; font-weight: 900; font-size: 11px !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; white-space: nowrap !important; }
+                        .total-row td { background-color: #e2e8f0 !important; mso-shading: #e2e8f0; color: #000000 !important; font-weight: 900; font-size: 10px !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; white-space: nowrap !important; }
                         
-                        .cell-locked { background-color: #bfdbfe !important; mso-shading: #bfdbfe; color: #1e40af !important; font-weight: bold; font-size: 10px !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; }
+                        .cell-locked { background-color: #bfdbfe !important; mso-shading: #bfdbfe; color: #1e40af !important; font-weight: bold; font-size: 9px !important; text-align: center !important; vertical-align: middle !important; mso-cell-vertical-alignment: center !important; }
                         .pos-np { background-color: #238636 !important; mso-shading: #238636; color: white !important; font-weight: bold; }
                         .pos-ep { background-color: #da3633 !important; mso-shading: #da3633; color: white !important; font-weight: bold; }
                         .pos-nep { background-color: #8957e5 !important; mso-shading: #8957e5; color: white !important; font-weight: bold; }
                         .pos-szb { background-color: #9e6a03 !important; mso-shading: #9e6a03; color: white !important; font-weight: bold; }
                         .pos-szab { background-color: #1f6feb !important; mso-shading: #1f6feb; color: white !important; font-weight: bold; }
 
-                        .section-title { font-size: 10px; font-weight: bold; margin-top: 10px; margin-bottom: 3px; border-bottom: 2px solid #1f6feb; padding-bottom: 2px; color: #1f6feb; page-break-before: always; mso-break-type: section-break; text-align: left; }
-                        .summary-row { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 6px; }
-                        .summary-box { border: 1px solid #333333; border-radius: 4px; padding: 4px; font-size: 9px; background: #f9fafb !important; }
-                        .summary-box h3 { margin: 0 0 2px 0; font-size: 9px; color: #1f6feb; }
+                        .section-title { font-size: 10px; font-weight: bold; margin-top: 8px; margin-bottom: 2px; border-bottom: 2px solid #1f6feb; padding-bottom: 1px; color: #1f6feb; page-break-before: always; mso-break-type: section-break; text-align: left; }
+                        .summary-row { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 4px; }
+                        .summary-box { border: 1px solid #333333; border-radius: 4px; padding: 3px; font-size: 8px; background: #f9fafb !important; }
+                        .summary-box h3 { margin: 0 0 1px 0; font-size: 8px; color: #1f6feb; }
                     </style>
                 </head>
                 <body>
@@ -1093,7 +1089,7 @@
             let savedMonth = localStorage.getItem('matrix_last_month');
 
             if (savedYear !== null && document.getElementById('yearSelect')) {
-                document.getElementById('yearSelect').value = savedYear;
+                document.getElementById('yearSelect'].value = savedYear;
             }
             if (savedMonth !== null && document.getElementById('monthSelect')) {
                 document.getElementById('monthSelect').value = savedMonth;
