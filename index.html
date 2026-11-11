@@ -528,7 +528,7 @@
                     reqRowHtml += `<th class="${sepClass}" style="background:#1f6feb; color:white;">-</th>`;
                 } else {
                     let reqVal = savedRequired[dKey] !== undefined ? savedRequired[dKey] : 2;
-                    reqRowHtml += `<th class="${sepClass}"><input type="number" min="0" max="20" value="${reqVal}" data-date="${dKey}" onchange="updateRequired(this)" style="width:28px; height:28px; text-align:center; background:#ffffff; color:#1f6feb; border:1px solid var(--border-color); border-radius:3px; font-weight:bold; font-size:0.8rem; padding:1px;"></th>`;
+                    reqRowHtml += `<th class="${sepClass}"><input type="number" min="0" max="20" value="${reqVal}" data-date="${dKey}" onchange="updateRequired(this)" style="width: 100% !important; min-width: 24px !important; height: 24px; text-align: center; background: #ffffff !important; color: #1f6feb !important; border: 1.5px solid #1f6feb !important; border-radius: 4px; font-weight: 900; font-size: 0.85rem; padding: 0px; box-sizing: border-box;"></th>`;
                 }
                 let headerClass = "day-normal-header";
                 if (isHoliday(d)) {
