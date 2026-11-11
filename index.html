@@ -470,7 +470,24 @@
                 days.push({ date: d, isExtra: false });
             }
 
+            // Hetek csoportosítása colspan-nel a fejlécben
+            let weeksMap = [];
+            days.forEach((item) => {
+                let wNum = getISOWeekNumber(item.date);
+                let lastGroup = weeksMap[weeksMap.length - 1];
+                if(lastGroup && lastGroup.weekNum === wNum) {
+                    lastGroup.count++;
+                } else {
+                    weeksMap.push({ weekNum: wNum, count: 1 });
+                }
+            });
+
             let weekRowHtml = '<tr class="week-row"><th class="name-col">Hét száma</th>';
+            weeksMap.forEach(w => {
+                weekRowHtml += `<th colspan="${w.count}">${w.weekNum}.hét</th>`;
+            });
+            weekRowHtml += '<th class="hours-col">Óra</th></tr>';
+
             let reqRowHtml = '<tr class="req-row"><th class="name-col">Elvárt Létszám</th>';
             let dayRowHtml = '<tr class="day-row"><th class="name-col">Név / Dátum</th>';
             let savedRequired = JSON.parse(localStorage.getItem(`matrix_required_${year}_${month}`)) || {};
@@ -480,15 +497,12 @@
                 let d = item.date;
                 let dayIndex = d.getDay();
                 let dayLetter = dayNames[dayIndex];
-                let weekNum = getISOWeekNumber(d);
                 let dateStr = `${d.getMonth()+1}.${d.getDate()}.`;
                 let dKey = getDateKey(d);
                 
                 let isMonday = (dayIndex === 1);
                 let sepClass = (isMonday && index > 0) ? 'week-separator' : '';
                 
-                weekRowHtml += `<th class="${sepClass}">${weekNum}.hét</th>`;
-
                 if (item.isExtra) {
                     reqRowHtml += `<th class="${sepClass}" style="background:#1f6feb;">-</th>`;
                 } else {
@@ -508,7 +522,6 @@
                 let ledHtml = item.isExtra ? '' : `<span id="led-${dKey}"><span class="led-ok" title="Létszám rendben"></span></span>`;
                 dayRowHtml += `<th id="th-day-${dKey}" class="${sepClass} ${headerClass}" style="${extraHeaderStyle}" data-holiday="${isHoliday(d) ? '1' : '0'}" data-saturday="${dayIndex === 6 ? '1' : '0'}" data-sunday="${dayIndex === 0 ? '1' : '0'}">${dateStr}<br><small style="font-size:0.6rem; font-weight:bold;">${dayLetter}</small>${ledHtml}</th>`;
             });
-            weekRowHtml += '<th class="hours-col">Óra</th></tr>';
             reqRowHtml += '<th class="hours-col">Cél</th></tr>';
             dayRowHtml += '<th class="hours-col">Keret</th></tr>';
             
@@ -873,8 +886,49 @@
             });
             cleanVacationHtml += '</div>';
 
+            // Klónozzuk a táblázatot a Word exportra
             let tableContainerClone = document.querySelector('.table-container').cloneNode(true);
-            let dayThs = tableContainerClone.querySelectorAll('.day-row th');
+            let tempTable = tableContainerClone.querySelector('table');
+            let tempThead = tempTable.querySelector('thead');
+            
+            // Újraépítjük a Word exportban is a heti fejlécet colspan-nel, hogy pontosan illeszkedjen
+            let days = [];
+            let currentMonthDays = new Date(year, month + 1, 0).getDate();
+            let pYear = month === 0 ? year - 1 : year;
+            let pMonth = month === 0 ? 11 : month - 1;
+            let prevMonthLastDate = new Date(pYear, pMonth + 1, 0).getDate();
+            for(let i = 2; i >= 0; i--) {
+                days.push({ date: new Date(pYear, pMonth, prevMonthLastDate - i), isExtra: true });
+            }
+            for(let i = 1; i <= currentMonthDays; i++) {
+                days.push({ date: new Date(year, month, i), isExtra: false });
+            }
+
+            let weeksMap = [];
+            days.forEach((item) => {
+                let wNum = getISOWeekNumber(item.date);
+                let lastGroup = weeksMap[weeksMap.length - 1];
+                if(lastGroup && lastGroup.weekNum === wNum) {
+                    lastGroup.count++;
+                } else {
+                    weeksMap.push({ weekNum: wNum, count: 1 });
+                }
+            });
+
+            let wordWeekRowHtml = '<tr class="week-row"><th class="name-col" style="font-size:9px;">Hét száma</th>';
+            weeksMap.forEach(w => {
+                wordWeekRowHtml += `<th colspan="${w.count}" style="font-size:10px; font-weight:bold; background:#f0f4f8 !important; mso-shading: #f0f4f8; color:#000000 !important; border:1px solid #333333; padding:3px 1px;">${w.weekNum}.hét</th>`;
+            });
+            wordWeekRowHtml += '<th class="hours-col" style="font-size:9px;">Óra</th></tr>';
+
+            let originalHeaderRows = tempThead.querySelectorAll('tr');
+            if(originalHeaderRows.length >= 3) {
+                let reqRowHtml = originalHeaderRows[1].outerHTML;
+                let dayRowHtml = originalHeaderRows[2].outerHTML;
+                tempThead.innerHTML = wordWeekRowHtml + reqRowHtml + dayRowHtml;
+            }
+
+            let dayThs = tempThead.querySelectorAll('.day-row th');
             dayThs.forEach(th => {
                 let isSat = th.dataset.saturday === '1';
                 let isHol = th.dataset.holiday === '1' || th.classList.contains('day-sunday-holiday-header');
@@ -891,6 +945,7 @@
                     th.setAttribute('style', th.getAttribute('style') + '; background-color: #f0f4f8 !important; mso-shading: #f0f4f8; color: #000000 !important;');
                 }
             });
+
             let tableHtml = tableContainerClone.innerHTML;
             let auditHtml = document.getElementById('auditReport').innerHTML;
             let holidayHtml = document.getElementById('holidayReport').innerHTML;
@@ -914,25 +969,28 @@
                         .subtitle { text-align: center; font-size: 10px; margin-bottom: 15px; color: #555555; }
                         table { width: 100%; border-collapse: collapse; text-align: center; margin-bottom: 15px; font-size: 8px; }
                         
-                        /* A cellák mérete fix marad és pici, hogy kényelmesen elférjen a papíron */
+                        /* A cellák mérete fix és pici marad, hogy kényelmesen elférjen a lapon */
                         th, td { border: 1px solid #333333; padding: 2px 1px; height: 16px; }
                         th { background: #f0f4f8 !important; color: #000000 !important; font-weight: bold; font-size: 8px; }
                         
                         .name-col { min-width: 165px; max-width: 165px; font-size: 10px; font-weight: bold; text-align: left; padding-left: 4px; }
-                        .hours-col { min-width: 45px; max-width: 45px; width: 45px; font-size: 11px; font-weight: 900; }
-
-                        .section-title { font-size: 12px; font-weight: bold; margin-top: 25px; margin-bottom: 8px; border-bottom: 2px solid #1f6feb; padding-bottom: 3px; color: #1f6feb; page-break-before: always; mso-break-type: section-break; }
-                        .total-row td { background-color: #e2e8f0 !important; mso-shading: #e2e8f0; color: #000000 !important; font-weight: 900; font-size: 11px; }
                         
-                        /* Itt csak a betűméret nő meg 13px-re, így a kis cellákban nagyméretű, kitöltő betűk lesznek szétnyomósodás nélkül */
+                        /* Itt növeljük a betűméretet 13px-re a naptárcellákban és az óráknál, hogy kitöltsék a fix cellát */
+                        .hours-col { min-width: 45px; max-width: 45px; width: 45px; font-size: 13px !important; font-weight: 900 !important; }
                         td.cell-default, td[class*="pos-"] { font-size: 13px !important; font-weight: 900 !important; }
                         
-                        .cell-locked { background-color: #bfdbfe !important; mso-shading: #bfdbfe; color: #1e40af !important; font-weight: bold; font-size: 10px !important; }
+                        .total-row td { background-color: #e2e8f0 !important; mso-shading: #e2e8f0; color: #000000 !important; font-weight: 900; font-size: 13px !important; }
+                        
+                        .cell-locked { background-color: #bfdbfe !important; mso-shading: #bfdbfe; color: #1e40af !important; font-weight: bold; font-size: 11px !important; }
                         .pos-np { background-color: #238636 !important; mso-shading: #238636; color: white !important; font-weight: bold; }
                         .pos-ep { background-color: #da3633 !important; mso-shading: #da3633; color: white !important; font-weight: bold; }
                         .pos-nep { background-color: #8957e5 !important; mso-shading: #8957e5; color: white !important; font-weight: bold; }
                         .pos-szb { background-color: #9e6a03 !important; mso-shading: #9e6a03; color: white !important; font-weight: bold; }
                         .pos-szab { background-color: #1f6feb !important; mso-shading: #1f6feb; color: white !important; font-weight: bold; }
+                        
+                        .week-separator { border-left: 2px solid #1f6feb !important; mso-border-left-alt: solid #1f6feb 1.5pt; }
+
+                        .section-title { font-size: 12px; font-weight: bold; margin-top: 25px; margin-bottom: 8px; border-bottom: 2px solid #1f6feb; padding-bottom: 3px; color: #1f6feb; page-break-before: always; mso-break-type: section-break; }
                         .summary-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
                         .summary-box { border: 1px solid #333333; border-radius: 4px; padding: 8px; font-size: 10px; background: #f9fafb !important; }
                         .summary-box h3 { margin: 0 0 5px 0; font-size: 11px; color: #1f6feb; }
