@@ -157,6 +157,7 @@
             width: 55px;
             font-size: 1.1rem !important;
             font-weight: 900 !important;
+            background-color: #332900 !important;
         }
         .total-row td {
             background-color: #1f2937 !important;
@@ -165,7 +166,7 @@
             font-size: 1.1rem !important;
         }
         .week-separator {
-            border-left: 2px solid #58a6ff !important;
+            border-left: 3px solid #1f6feb !important;
         }
         td.cell-default, td[class*="pos-"] {
             font-size: 0.95rem !important; 
@@ -931,10 +932,10 @@
 
             let wordWeekRowHtml = '<tr class="week-row"><th class="name-col" style="font-size:9px;">Hét száma</th>';
             weeksMap.forEach((w, wIdx) => {
-                let sepClass = (wIdx > 0) ? 'border-left: 2px solid #1f6feb !important;' : '';
+                let sepClass = (wIdx > 0) ? 'border-left: 3px solid #1f6feb !important;' : '';
                 wordWeekRowHtml += `<th colspan="${w.count}" style="font-size:10px; font-weight:bold; background:#f0f4f8 !important; mso-shading: #f0f4f8; color:#000000 !important; border:1px solid #333333; ${sepClass} padding:3px 1px;">${w.weekNum}.hét</th>`;
             });
-            wordWeekRowHtml += '<th class="hours-col" style="font-size:9px; background-color: #ffeb3b !important; mso-shading: #ffeb3b;">Óra</th></tr>';
+            wordWeekRowHtml += '<th class="hours-col" style="font-size:9px; background-color: #ffeb3b !important; mso-shading: #ffeb3b; border-left: 3px solid #1f6feb !important;">Óra</th></tr>';
 
             let originalHeaderRows = tempThead.querySelectorAll('tr');
             if(originalHeaderRows.length >= 3) {
@@ -961,7 +962,7 @@
                 }
             });
 
-            // Utolsó oszlop (Óra / Keret) citromsárga háttér a klónozott táblázatban is
+            // Utolsó oszlop (Óra / Keret) citromsárga háttér és a heti elválasztók átvitele a törzsbe is
             let tempRows = tempTable.querySelectorAll('tr');
             tempRows.forEach((row, rIdx) => {
                 let cells = row.querySelectorAll('th, td');
@@ -996,17 +997,17 @@
                         .subtitle { text-align: center; font-size: 10px; margin-bottom: 15px; color: #555555; }
                         table { width: 100%; border-collapse: collapse; text-align: center; margin-bottom: 15px; font-size: 8px; }
                         
-                        /* Fix pici cellák, de középre igazítva és hatalmas betűkkel, amik kitöltik a teret */
+                        /* Fix pici cellák, de középre igazítva és hatalmas betűkkel, amik kitöltik a cellát */
                         th, td { border: 1px solid #333333; padding: 2px 1px; height: 16px; text-align: center; vertical-align: middle; }
                         th { background: #f0f4f8 !important; color: #000000 !important; font-weight: bold; font-size: 8px; }
                         
                         .name-col { min-width: 165px; max-width: 165px; font-size: 10px; font-weight: bold; text-align: left !important; padding-left: 4px; }
                         
-                        /* Naptárcellák és óra oszlop: középre igazított, hatalmas 15px betűméret, amik kitöltik a cellát */
-                        .hours-col { min-width: 45px; max-width: 45px; width: 45px; font-size: 15px !important; font-weight: 900 !important; text-align: center !important; }
-                        td.cell-default, td[class*="pos-"] { font-size: 15px !important; font-weight: 900 !important; text-align: center !important; }
+                        /* Naptárcellák és óra oszlop: hatalmas 16px betűméret, amik maximálisan kitöltik a teret */
+                        .hours-col { min-width: 45px; max-width: 45px; width: 45px; font-size: 16px !important; font-weight: 900 !important; text-align: center !important; background-color: #ffeb3b !important; mso-shading: #ffeb3b; }
+                        td.cell-default, td[class*="pos-"] { font-size: 16px !important; font-weight: 900 !important; text-align: center !important; }
                         
-                        .total-row td { background-color: #e2e8f0 !important; mso-shading: #e2e8f0; color: #000000 !important; font-weight: 900; font-size: 15px !important; text-align: center !important; }
+                        .total-row td { background-color: #e2e8f0 !important; mso-shading: #e2e8f0; color: #000000 !important; font-weight: 900; font-size: 16px !important; text-align: center !important; }
                         
                         .cell-locked { background-color: #bfdbfe !important; mso-shading: #bfdbfe; color: #1e40af !important; font-weight: bold; font-size: 12px !important; text-align: center !important; }
                         .pos-np { background-color: #238636 !important; mso-shading: #238636; color: white !important; font-weight: bold; }
@@ -1015,7 +1016,7 @@
                         .pos-szb { background-color: #9e6a03 !important; mso-shading: #9e6a03; color: white !important; font-weight: bold; }
                         .pos-szab { background-color: #1f6feb !important; mso-shading: #1f6feb; color: white !important; font-weight: bold; }
                         
-                        .week-separator { border-left: 2px solid #1f6feb !important; mso-border-left-alt: solid #1f6feb 1.5pt; }
+                        .week-separator { border-left: 3px solid #1f6feb !important; mso-border-left-alt: solid #1f6feb 2pt; }
 
                         .section-title { font-size: 12px; font-weight: bold; margin-top: 25px; margin-bottom: 8px; border-bottom: 2px solid #1f6feb; padding-bottom: 3px; color: #1f6feb; page-break-before: always; mso-break-type: section-break; }
                         .summary-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
